@@ -14,11 +14,10 @@ using System.Threading.Tasks;
 namespace Shatulsky_Farm {
     public class Qiwi {
         private const string BASE = "https://edge.qiwi.com/";
-        private string _phone;
         private string _token;
         private readonly WebClient _webClient;
         private FixedSizedQueue<long> _handledTransactions = new FixedSizedQueue<long>(50);
-        
+
         public Qiwi(string token) {
             _token = token;
             _webClient = new WebClient {
@@ -28,7 +27,7 @@ namespace Shatulsky_Farm {
 
         public async Task<bool> SendMoneyToWallet(string phone, string amount, string comment = null) {
             var request = new MoneyTransfer {
-                Id = (1000*DateTimeOffset.Now.ToUnixTimeSeconds()).ToString(),
+                Id = (1000 * DateTimeOffset.Now.ToUnixTimeSeconds()).ToString(),
                 Sum = new Sum {
                     Amount = amount,
                     Currency = "643"
@@ -51,7 +50,7 @@ namespace Shatulsky_Farm {
                     ContractResolver = new CamelCasePropertyNamesContractResolver()
                 }));
                 return response.Contains("Accepted");
-            } catch (Exception ex){
+            } catch (Exception ex) {
                 return false;
             }
         }
