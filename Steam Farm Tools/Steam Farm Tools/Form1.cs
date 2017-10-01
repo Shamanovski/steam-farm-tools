@@ -41,9 +41,6 @@ namespace Shatulsky_Farm {
                 Database.BOTS_LOADING = new List<bool>();
                 Database.GAMES_LINKS_TO_BUY_UNSORTED = new Dictionary<string, double>();
                 Database.WASTED_MONEY = 0;
-                Database.BLACKLIST = new List<string>();
-                Database.BLACKLIST.Add("506670");
-                Database.BLACKLIST.Add("581670");
             });
             #endregion
 
@@ -383,6 +380,10 @@ namespace Shatulsky_Farm {
             QiwiTokenBox.Text = json.QiwiToken;
             for(int i=0;i < json.VDSs.Count; i++) {
                 ServersRichTextBox.AppendText(json.VDSs[i].Value+"\n");
+            }
+            Database.BLACKLIST = new List<string>();
+            for (int i = 0; i < json.BlacklistAppids.Count; i++) {
+                Database.BLACKLIST.Add(json.BlacklistAppids[i].Value);
             }
         }
 
