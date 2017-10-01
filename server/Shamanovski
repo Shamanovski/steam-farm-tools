@@ -12,7 +12,7 @@ from payments import WmPayment
 
 wm = WmPayment('database')
 steam_client = SteamClient()
-steam_client.login('immunepzw', 'arigold4172409', {'shared_secret': 'D1K9csGclMsyV884OXs8pQSWva0='})
+steam_client.login('immunepzw', '', {'shared_secret': '='})
 
 
 def main():
