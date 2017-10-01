@@ -52,9 +52,14 @@
             this.WastedManeyLable = new System.Windows.Forms.Label();
             this.ActivateUnusedKeysButton = new System.Windows.Forms.Button();
             this.ActivateKeysButton = new System.Windows.Forms.Button();
+            this.tabControl = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.tabControl.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             this.SuspendLayout();
             // 
             // ServersRichTextBox
@@ -62,7 +67,7 @@
             this.ServersRichTextBox.Location = new System.Drawing.Point(6, 37);
             this.ServersRichTextBox.Name = "ServersRichTextBox";
             this.ServersRichTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.ServersRichTextBox.Size = new System.Drawing.Size(211, 131);
+            this.ServersRichTextBox.Size = new System.Drawing.Size(211, 103);
             this.ServersRichTextBox.TabIndex = 0;
             this.ServersRichTextBox.Text = "";
             // 
@@ -70,15 +75,19 @@
             // 
             this.groupBox1.Controls.Add(this.GotoCatalogLable);
             this.groupBox1.Controls.Add(this.GotoCatalogBox);
+            this.groupBox1.Controls.Add(this.QiwiTokenLable);
             this.groupBox1.Controls.Add(this.KeysShopLable);
+            this.groupBox1.Controls.Add(this.QiwiTokenBox);
+            this.groupBox1.Controls.Add(this.EmailLabel);
             this.groupBox1.Controls.Add(this.KeysShopKey);
+            this.groupBox1.Controls.Add(this.EmailBox);
             this.groupBox1.Controls.Add(this.ApikeyLable);
             this.groupBox1.Controls.Add(this.ApikeyBox);
             this.groupBox1.Controls.Add(this.ServersLabel);
             this.groupBox1.Controls.Add(this.ServersRichTextBox);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Location = new System.Drawing.Point(7, 6);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(226, 301);
+            this.groupBox1.Size = new System.Drawing.Size(226, 353);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Дедики/Каталог";
@@ -86,7 +95,7 @@
             // GotoCatalogLable
             // 
             this.GotoCatalogLable.AutoSize = true;
-            this.GotoCatalogLable.Location = new System.Drawing.Point(6, 256);
+            this.GotoCatalogLable.Location = new System.Drawing.Point(6, 226);
             this.GotoCatalogLable.Name = "GotoCatalogLable";
             this.GotoCatalogLable.Size = new System.Drawing.Size(100, 13);
             this.GotoCatalogLable.TabIndex = 8;
@@ -94,7 +103,7 @@
             // 
             // GotoCatalogBox
             // 
-            this.GotoCatalogBox.Location = new System.Drawing.Point(6, 272);
+            this.GotoCatalogBox.Location = new System.Drawing.Point(6, 242);
             this.GotoCatalogBox.Name = "GotoCatalogBox";
             this.GotoCatalogBox.PasswordChar = '*';
             this.GotoCatalogBox.Size = new System.Drawing.Size(211, 20);
@@ -103,7 +112,7 @@
             // KeysShopLable
             // 
             this.KeysShopLable.AutoSize = true;
-            this.KeysShopLable.Location = new System.Drawing.Point(6, 215);
+            this.KeysShopLable.Location = new System.Drawing.Point(6, 185);
             this.KeysShopLable.Name = "KeysShopLable";
             this.KeysShopLable.Size = new System.Drawing.Size(98, 13);
             this.KeysShopLable.TabIndex = 6;
@@ -111,7 +120,7 @@
             // 
             // KeysShopKey
             // 
-            this.KeysShopKey.Location = new System.Drawing.Point(6, 231);
+            this.KeysShopKey.Location = new System.Drawing.Point(6, 201);
             this.KeysShopKey.Name = "KeysShopKey";
             this.KeysShopKey.PasswordChar = '*';
             this.KeysShopKey.Size = new System.Drawing.Size(211, 20);
@@ -120,7 +129,7 @@
             // ApikeyLable
             // 
             this.ApikeyLable.AutoSize = true;
-            this.ApikeyLable.Location = new System.Drawing.Point(6, 174);
+            this.ApikeyLable.Location = new System.Drawing.Point(6, 144);
             this.ApikeyLable.Name = "ApikeyLable";
             this.ApikeyLable.Size = new System.Drawing.Size(64, 13);
             this.ApikeyLable.TabIndex = 4;
@@ -128,7 +137,7 @@
             // 
             // ApikeyBox
             // 
-            this.ApikeyBox.Location = new System.Drawing.Point(6, 190);
+            this.ApikeyBox.Location = new System.Drawing.Point(6, 160);
             this.ApikeyBox.Name = "ApikeyBox";
             this.ApikeyBox.PasswordChar = '*';
             this.ApikeyBox.Size = new System.Drawing.Size(214, 20);
@@ -167,9 +176,9 @@
             // 
             this.BuyGamesButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.BuyGamesButton.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.BuyGamesButton.Location = new System.Drawing.Point(476, 246);
+            this.BuyGamesButton.Location = new System.Drawing.Point(272, 278);
             this.BuyGamesButton.Name = "BuyGamesButton";
-            this.BuyGamesButton.Size = new System.Drawing.Size(122, 81);
+            this.BuyGamesButton.Size = new System.Drawing.Size(155, 81);
             this.BuyGamesButton.TabIndex = 2;
             this.BuyGamesButton.Text = "Покупать игры";
             this.BuyGamesButton.UseVisualStyleBackColor = true;
@@ -177,10 +186,10 @@
             // 
             // LogBox
             // 
-            this.LogBox.Location = new System.Drawing.Point(476, 12);
+            this.LogBox.Location = new System.Drawing.Point(486, 18);
             this.LogBox.Name = "LogBox";
             this.LogBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.LogBox.Size = new System.Drawing.Size(252, 228);
+            this.LogBox.Size = new System.Drawing.Size(260, 376);
             this.LogBox.TabIndex = 7;
             this.LogBox.Text = "";
             this.LogBox.TextChanged += new System.EventHandler(this.LogBox_TextChanged);
@@ -189,15 +198,11 @@
             // 
             this.groupBox2.Controls.Add(this.MaxMoneyLable);
             this.groupBox2.Controls.Add(this.MaxMoneyBox);
-            this.groupBox2.Controls.Add(this.QiwiTokenLable);
-            this.groupBox2.Controls.Add(this.QiwiTokenBox);
-            this.groupBox2.Controls.Add(this.EmailLabel);
-            this.groupBox2.Controls.Add(this.EmailBox);
             this.groupBox2.Controls.Add(this.MaxGameCostLable);
             this.groupBox2.Controls.Add(this.MaxGameCostBox);
-            this.groupBox2.Location = new System.Drawing.Point(244, 12);
+            this.groupBox2.Location = new System.Drawing.Point(239, 6);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(226, 228);
+            this.groupBox2.Size = new System.Drawing.Size(226, 104);
             this.groupBox2.TabIndex = 7;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Настройки оплаты";
@@ -221,7 +226,7 @@
             // QiwiTokenLable
             // 
             this.QiwiTokenLable.AutoSize = true;
-            this.QiwiTokenLable.Location = new System.Drawing.Point(6, 142);
+            this.QiwiTokenLable.Location = new System.Drawing.Point(6, 306);
             this.QiwiTokenLable.Name = "QiwiTokenLable";
             this.QiwiTokenLable.Size = new System.Drawing.Size(65, 13);
             this.QiwiTokenLable.TabIndex = 16;
@@ -229,7 +234,7 @@
             // 
             // QiwiTokenBox
             // 
-            this.QiwiTokenBox.Location = new System.Drawing.Point(6, 157);
+            this.QiwiTokenBox.Location = new System.Drawing.Point(6, 321);
             this.QiwiTokenBox.Name = "QiwiTokenBox";
             this.QiwiTokenBox.PasswordChar = '*';
             this.QiwiTokenBox.Size = new System.Drawing.Size(214, 20);
@@ -238,7 +243,7 @@
             // EmailLabel
             // 
             this.EmailLabel.AutoSize = true;
-            this.EmailLabel.Location = new System.Drawing.Point(6, 100);
+            this.EmailLabel.Location = new System.Drawing.Point(6, 224);
             this.EmailLabel.Name = "EmailLabel";
             this.EmailLabel.Size = new System.Drawing.Size(32, 13);
             this.EmailLabel.TabIndex = 12;
@@ -246,7 +251,7 @@
             // 
             // EmailBox
             // 
-            this.EmailBox.Location = new System.Drawing.Point(6, 115);
+            this.EmailBox.Location = new System.Drawing.Point(6, 279);
             this.EmailBox.Name = "EmailBox";
             this.EmailBox.Size = new System.Drawing.Size(214, 20);
             this.EmailBox.TabIndex = 11;
@@ -273,7 +278,7 @@
             this.groupBox3.Controls.Add(this.WastedManeyLable);
             this.groupBox3.Controls.Add(this.BotsLoadedCountLable);
             this.groupBox3.Controls.Add(this.BotsLoadedLabel);
-            this.groupBox3.Location = new System.Drawing.Point(244, 246);
+            this.groupBox3.Location = new System.Drawing.Point(239, 116);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(226, 67);
             this.groupBox3.TabIndex = 17;
@@ -301,9 +306,9 @@
             // 
             // ActivateUnusedKeysButton
             // 
-            this.ActivateUnusedKeysButton.Location = new System.Drawing.Point(606, 288);
+            this.ActivateUnusedKeysButton.Location = new System.Drawing.Point(272, 192);
             this.ActivateUnusedKeysButton.Name = "ActivateUnusedKeysButton";
-            this.ActivateUnusedKeysButton.Size = new System.Drawing.Size(122, 39);
+            this.ActivateUnusedKeysButton.Size = new System.Drawing.Size(155, 39);
             this.ActivateUnusedKeysButton.TabIndex = 18;
             this.ActivateUnusedKeysButton.Text = "Активировать UNUSEDKEYS.TXT";
             this.ActivateUnusedKeysButton.UseVisualStyleBackColor = true;
@@ -311,31 +316,62 @@
             // 
             // ActivateKeysButton
             // 
-            this.ActivateKeysButton.Location = new System.Drawing.Point(606, 246);
+            this.ActivateKeysButton.Location = new System.Drawing.Point(272, 235);
             this.ActivateKeysButton.Name = "ActivateKeysButton";
-            this.ActivateKeysButton.Size = new System.Drawing.Size(122, 39);
+            this.ActivateKeysButton.Size = new System.Drawing.Size(155, 39);
             this.ActivateKeysButton.TabIndex = 19;
             this.ActivateKeysButton.Text = "Активировать ключи из /activate/";
             this.ActivateKeysButton.UseVisualStyleBackColor = true;
             this.ActivateKeysButton.Click += new System.EventHandler(this.ActivateKeysButton_Click);
             // 
+            // tabControl
+            // 
+            this.tabControl.Controls.Add(this.tabPage1);
+            this.tabControl.Controls.Add(this.tabPage2);
+            this.tabControl.Location = new System.Drawing.Point(-1, -1);
+            this.tabControl.Name = "tabControl";
+            this.tabControl.SelectedIndex = 0;
+            this.tabControl.Size = new System.Drawing.Size(481, 397);
+            this.tabControl.TabIndex = 20;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.groupBox1);
+            this.tabPage1.Controls.Add(this.ActivateKeysButton);
+            this.tabPage1.Controls.Add(this.groupBox2);
+            this.tabPage1.Controls.Add(this.ActivateUnusedKeysButton);
+            this.tabPage1.Controls.Add(this.groupBox3);
+            this.tabPage1.Controls.Add(this.BuyGamesButton);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(473, 371);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Автозапупка";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(473, 371);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "QIWI";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(737, 330);
-            this.Controls.Add(this.ActivateKeysButton);
-            this.Controls.Add(this.ActivateUnusedKeysButton);
-            this.Controls.Add(this.groupBox3);
+            this.ClientSize = new System.Drawing.Size(745, 393);
+            this.Controls.Add(this.tabControl);
             this.Controls.Add(this.LogBox);
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.BuyGamesButton);
-            this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "MainForm";
-            this.Text = "Shatulsky Farm";
+            this.Text = "Steam Farm Tools";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -343,6 +379,8 @@
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.tabControl.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -377,6 +415,9 @@
         public System.Windows.Forms.Label WastedManeyLable;
         public System.Windows.Forms.Button ActivateUnusedKeysButton;
         public System.Windows.Forms.Button ActivateKeysButton;
+        private System.Windows.Forms.TabControl tabControl;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
     }
 }
 
