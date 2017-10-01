@@ -54,6 +54,7 @@
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.label1 = new System.Windows.Forms.Label();
             this.QIWIStartButton = new System.Windows.Forms.Button();
             this.QIWILoginsBox = new System.Windows.Forms.RichTextBox();
             this.QIWIGroupBox = new System.Windows.Forms.GroupBox();
@@ -229,6 +230,7 @@
             // 
             this.LogBox.Location = new System.Drawing.Point(486, 18);
             this.LogBox.Name = "LogBox";
+            this.LogBox.ReadOnly = true;
             this.LogBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
             this.LogBox.Size = new System.Drawing.Size(260, 376);
             this.LogBox.TabIndex = 7;
@@ -360,6 +362,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.label1);
             this.tabPage2.Controls.Add(this.QIWIStartButton);
             this.tabPage2.Controls.Add(this.QIWILoginsBox);
             this.tabPage2.Controls.Add(this.QIWIGroupBox);
@@ -370,6 +373,14 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "QIWI";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(10, 10);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(178, 30);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Список логинов для пополнения (каждый с новой строки)";
             // 
             // QIWIStartButton
             // 
@@ -384,10 +395,10 @@
             // 
             // QIWILoginsBox
             // 
-            this.QIWILoginsBox.Location = new System.Drawing.Point(9, 20);
+            this.QIWILoginsBox.Location = new System.Drawing.Point(9, 40);
             this.QIWILoginsBox.Name = "QIWILoginsBox";
             this.QIWILoginsBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.QIWILoginsBox.Size = new System.Drawing.Size(225, 340);
+            this.QIWILoginsBox.Size = new System.Drawing.Size(225, 320);
             this.QIWILoginsBox.TabIndex = 1;
             this.QIWILoginsBox.Text = "";
             // 
@@ -397,7 +408,7 @@
             this.QIWIGroupBox.Controls.Add(this.QIWIDonateBox);
             this.QIWIGroupBox.Controls.Add(this.QiwiTokenLable2);
             this.QIWIGroupBox.Controls.Add(this.QiwiTokenBox2);
-            this.QIWIGroupBox.Location = new System.Drawing.Point(240, 20);
+            this.QIWIGroupBox.Location = new System.Drawing.Point(240, 40);
             this.QIWIGroupBox.Name = "QIWIGroupBox";
             this.QIWIGroupBox.Size = new System.Drawing.Size(227, 112);
             this.QIWIGroupBox.TabIndex = 0;
@@ -504,6 +515,7 @@
         public System.Windows.Forms.TextBox QiwiTokenBox2;
         public System.Windows.Forms.Label QIWIDonateLable;
         public System.Windows.Forms.TextBox QIWIDonateBox;
+        private System.Windows.Forms.Label label1;
     }
 }
 
