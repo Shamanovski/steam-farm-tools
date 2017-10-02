@@ -31,7 +31,6 @@
             this.QiwiTokenLable = new System.Windows.Forms.Label();
             this.KeysShopLable = new System.Windows.Forms.Label();
             this.QiwiTokenBox = new System.Windows.Forms.TextBox();
-            this.EmailLabel = new System.Windows.Forms.Label();
             this.KeysShopKey = new System.Windows.Forms.TextBox();
             this.EmailBox = new System.Windows.Forms.TextBox();
             this.ApikeyLable = new System.Windows.Forms.Label();
@@ -62,6 +61,7 @@
             this.QIWIDonateBox = new System.Windows.Forms.TextBox();
             this.QiwiTokenLable2 = new System.Windows.Forms.Label();
             this.QiwiTokenBox2 = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -82,12 +82,12 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.GotoCatalogLable);
             this.groupBox1.Controls.Add(this.GotoCatalogBox);
             this.groupBox1.Controls.Add(this.QiwiTokenLable);
             this.groupBox1.Controls.Add(this.KeysShopLable);
             this.groupBox1.Controls.Add(this.QiwiTokenBox);
-            this.groupBox1.Controls.Add(this.EmailLabel);
             this.groupBox1.Controls.Add(this.KeysShopKey);
             this.groupBox1.Controls.Add(this.EmailBox);
             this.groupBox1.Controls.Add(this.ApikeyLable);
@@ -143,15 +143,6 @@
             this.QiwiTokenBox.PasswordChar = '*';
             this.QiwiTokenBox.Size = new System.Drawing.Size(214, 20);
             this.QiwiTokenBox.TabIndex = 15;
-            // 
-            // EmailLabel
-            // 
-            this.EmailLabel.AutoSize = true;
-            this.EmailLabel.Location = new System.Drawing.Point(6, 224);
-            this.EmailLabel.Name = "EmailLabel";
-            this.EmailLabel.Size = new System.Drawing.Size(32, 13);
-            this.EmailLabel.TabIndex = 12;
-            this.EmailLabel.Text = "Email";
             // 
             // KeysShopKey
             // 
@@ -228,6 +219,8 @@
             // 
             // LogBox
             // 
+            this.LogBox.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.LogBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.LogBox.Location = new System.Drawing.Point(486, 18);
             this.LogBox.Name = "LogBox";
             this.LogBox.ReadOnly = true;
@@ -338,6 +331,7 @@
             // 
             this.tabControl.Controls.Add(this.tabPage1);
             this.tabControl.Controls.Add(this.tabPage2);
+            this.tabControl.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.tabControl.Location = new System.Drawing.Point(-1, -1);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
@@ -380,7 +374,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(178, 30);
             this.label1.TabIndex = 3;
-            this.label1.Text = "Список логинов для пополнения (каждый с новой строки)";
+            this.label1.Text = "Список логинов для пополнения (каждый логин с новой строки)";
             // 
             // QIWIStartButton
             // 
@@ -448,11 +442,20 @@
             this.QiwiTokenBox2.Size = new System.Drawing.Size(214, 20);
             this.QiwiTokenBox2.TabIndex = 17;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 265);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(100, 13);
+            this.label2.TabIndex = 17;
+            this.label2.Text = "Key из gotoCatalog";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(745, 393);
+            this.ClientSize = new System.Drawing.Size(745, 404);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.LogBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -494,7 +497,6 @@
         public System.Windows.Forms.TextBox GotoCatalogBox;
         public System.Windows.Forms.Label MaxGameCostLable;
         public System.Windows.Forms.TextBox MaxGameCostBox;
-        public System.Windows.Forms.Label EmailLabel;
         public System.Windows.Forms.TextBox EmailBox;
         public System.Windows.Forms.Label QiwiTokenLable;
         public System.Windows.Forms.TextBox QiwiTokenBox;
@@ -516,6 +518,7 @@
         public System.Windows.Forms.Label QIWIDonateLable;
         public System.Windows.Forms.TextBox QIWIDonateBox;
         private System.Windows.Forms.Label label1;
+        public System.Windows.Forms.Label label2;
     }
 }
 

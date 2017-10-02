@@ -184,6 +184,7 @@ namespace Shatulsky_Farm {
                                 var fileName = $"{appid} - {DateTime.Now}";
                                 fileName = fileName.Replace('.', '-');
                                 fileName = fileName.Replace(':', '-');
+                                Directory.CreateDirectory("keys");
                                 File.Move("downloaded.txt", $"keys\\{fileName}.txt");
                                 Program.GetForm.MyMainForm.AddLog($"Файл {fileName}.txt сохранен.");
                                 Thread.Sleep(1000);
@@ -275,6 +276,7 @@ namespace Shatulsky_Farm {
             Program.GetForm.MyMainForm.QIWIGroupBox.Enabled = false;
             Program.GetForm.MyMainForm.QIWIStartButton.Enabled = false;
             Program.GetForm.MyMainForm.QIWILoginsBox.Enabled = false;
+            
         }
         public void UnblockAll() {
             if (InvokeRequired)
@@ -287,6 +289,7 @@ namespace Shatulsky_Farm {
             Program.GetForm.MyMainForm.QIWIGroupBox.Enabled = true;
             Program.GetForm.MyMainForm.QIWIStartButton.Enabled = true;
             Program.GetForm.MyMainForm.QIWILoginsBox.Enabled = true;
+            
         }
         private class DescendingComparer : IComparer<string> {
             int IComparer<string>.Compare(string a, string b) {
@@ -440,6 +443,7 @@ namespace Shatulsky_Farm {
             #endregion
 
             #region Активация
+            Directory.CreateDirectory("activate");
             var files = Directory.GetFiles("activate");
             foreach (var file in files) {
                 var appid = file.Split('\\')[1].Split('.')[0];
@@ -511,13 +515,3 @@ namespace Shatulsky_Farm {
         }
     }
 }
-
-
-
-
-/*
- string Servers="";
- Invoke((ThreadStart)delegate () {
-    Servers = Program.GetForm.MyMainForm.ServersRichTextBox.Text;
- });  
- */
