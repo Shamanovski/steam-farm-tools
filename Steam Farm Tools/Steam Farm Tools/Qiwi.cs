@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 namespace Shatulsky_Farm {
     public class Qiwi {
         private const string BASE = "https://edge.qiwi.com/";
+        private string _phone;
         private string _token;
         private readonly WebClient _webClient;
         private FixedSizedQueue<long> _handledTransactions = new FixedSizedQueue<long>(50);
@@ -23,6 +24,14 @@ namespace Shatulsky_Farm {
             _webClient = new WebClient {
                 Encoding = Encoding.UTF8
             };
+        }
+        private static Uri BuildUrl(string additionalUrl, Dictionary<string, string> parameters = null) {
+            var urlBuilder = new UriBuilder(BASE + additionalUrl);
+            if (parameters != null) {
+                urlBuilder.Query = string.Join("&", parameters.Select(kvp =>
+                    string.Format("{0}={1}", kvp.Key, kvp.Value)));
+            }
+            return urlBuilder.Uri;
         }
 
         public async Task<bool> SendMoneyToWallet(string phone, string amount, string comment = null) {
@@ -54,14 +63,34 @@ namespace Shatulsky_Farm {
                 return false;
             }
         }
+        public async Task<bool> SendMoneyToSteam(string login, string amount) {
+            var request = new MoneyTransfer {
+                Id = (1000 * DateTimeOffset.Now.ToUnixTimeSeconds()).ToString(),
+                Sum = new Sum {
+                    Amount = amount,
+                    Currency = "643"
+                },
+                PaymentMethod = new PaymentMethod {
+                    Type = "Account",
+                    AccountId = "643"
+                },
+                Fields = new Fields {
+                    Account = login
+                }
+            };
 
-        private static Uri BuildUrl(string additionalUrl, Dictionary<string, string> parameters = null) {
-            var urlBuilder = new UriBuilder(BASE + additionalUrl);
-            if (parameters != null) {
-                urlBuilder.Query = string.Join("&", parameters.Select(kvp =>
-                    string.Format("{0}={1}", kvp.Key, kvp.Value)));
+            _webClient.Headers["Authorization"] = $"Bearer {_token}";
+            _webClient.Headers["Content-Type"] = "application/json";
+            _webClient.Headers["Accept"] = "application/json";
+            var url = BuildUrl("sinap/api/v2/terms/25549/payments");
+            try {
+                var response = await _webClient.UploadStringTaskAsync(url, JsonConvert.SerializeObject(request, new JsonSerializerSettings {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                }));
+                return response.Contains("Accepted");
+            } catch (Exception ex) {
+                return false;
             }
-            return urlBuilder.Uri;
         }
     }
 }

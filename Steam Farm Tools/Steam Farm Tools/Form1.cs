@@ -41,9 +41,6 @@ namespace Shatulsky_Farm {
                 Database.BOTS_LOADING = new List<bool>();
                 Database.GAMES_LINKS_TO_BUY_UNSORTED = new Dictionary<string, double>();
                 Database.WASTED_MONEY = 0;
-                Database.BLACKLIST = new List<string>();
-                Database.BLACKLIST.Add("506670");
-                Database.BLACKLIST.Add("581670");
             });
             #endregion
 
@@ -187,6 +184,7 @@ namespace Shatulsky_Farm {
                                 var fileName = $"{appid} - {DateTime.Now}";
                                 fileName = fileName.Replace('.', '-');
                                 fileName = fileName.Replace(':', '-');
+                                Directory.CreateDirectory("keys");
                                 File.Move("downloaded.txt", $"keys\\{fileName}.txt");
                                 Program.GetForm.MyMainForm.AddLog($"Файл {fileName}.txt сохранен.");
                                 Thread.Sleep(1000);
@@ -214,7 +212,7 @@ namespace Shatulsky_Farm {
 
                                             if (response.Contains("OK/NoDetail") == false) {
                                                 Program.GetForm.MyMainForm.AddLog($"Ошибка при активации ключей для {bot.vds},{bot.login},{key},{response.Replace('\r', ' ').Replace('\n', ' ')}");
-                                                File.AppendAllText("UNUSEDKEYS.TXT", $"{bot.vds},{bot.login},{key},{response.Replace('\r',' ').Replace('\n', ' ')}\n");
+                                                File.AppendAllText("UNUSEDKEYS.TXT", $"{bot.vds},{bot.login},{key},{response.Replace('\r', ' ').Replace('\n', ' ')}\n");
                                                 //Thread.Sleep(Timeout.Infinite);
                                             }
                                             else {
@@ -245,13 +243,6 @@ namespace Shatulsky_Farm {
             UnblockAll();
         }
 
-        private void MafileFolderButton_Click(object sender, EventArgs e) {
-            FolderBrowserDialog MafileFolderBrowserDialog = new FolderBrowserDialog();
-
-            if (MafileFolderBrowserDialog.ShowDialog() == DialogResult.OK) {
-                ApikeyBox.Text = MafileFolderBrowserDialog.SelectedPath;
-            }
-        }
         public void IncreaseBotsCount() {
             if (InvokeRequired)
                 Invoke((Action)IncreaseBotsCount);
@@ -259,7 +250,6 @@ namespace Shatulsky_Farm {
                 Program.GetForm.MyMainForm.BotsLoadedCountLable.Text = (Database.BOT_LIST.Count + 1).ToString();
             }
         }
-
         public void UpdateWastedMoney() {
             if (InvokeRequired)
                 Invoke((Action)UpdateWastedMoney);
@@ -282,8 +272,11 @@ namespace Shatulsky_Farm {
             Program.GetForm.MyMainForm.groupBox2.Enabled = false;
             Program.GetForm.MyMainForm.BuyGamesButton.Enabled = false;
             Program.GetForm.MyMainForm.ActivateKeysButton.Enabled = false;
-            Program.GetForm.MyMainForm.ActivateUnusedKeysButton.Enabled = false; 
-
+            Program.GetForm.MyMainForm.ActivateUnusedKeysButton.Enabled = false;
+            Program.GetForm.MyMainForm.QIWIGroupBox.Enabled = false;
+            Program.GetForm.MyMainForm.QIWIStartButton.Enabled = false;
+            Program.GetForm.MyMainForm.QIWILoginsBox.Enabled = false;
+            
         }
         public void UnblockAll() {
             if (InvokeRequired)
@@ -293,6 +286,10 @@ namespace Shatulsky_Farm {
             Program.GetForm.MyMainForm.BuyGamesButton.Enabled = true;
             Program.GetForm.MyMainForm.ActivateKeysButton.Enabled = true;
             Program.GetForm.MyMainForm.ActivateUnusedKeysButton.Enabled = true;
+            Program.GetForm.MyMainForm.QIWIGroupBox.Enabled = true;
+            Program.GetForm.MyMainForm.QIWIStartButton.Enabled = true;
+            Program.GetForm.MyMainForm.QIWILoginsBox.Enabled = true;
+            
         }
         private class DescendingComparer : IComparer<string> {
             int IComparer<string>.Compare(string a, string b) {
@@ -381,8 +378,13 @@ namespace Shatulsky_Farm {
             MaxMoneyBox.Text = json.MaxMoneySpent;
             EmailBox.Text = json.Email;
             QiwiTokenBox.Text = json.QiwiToken;
-            for(int i=0;i < json.VDSs.Count; i++) {
-                ServersRichTextBox.AppendText(json.VDSs[i].Value+"\n");
+            QiwiTokenBox2.Text = json.QiwiToken;
+            for (int i = 0; i < json.VDSs.Count; i++) {
+                ServersRichTextBox.AppendText(json.VDSs[i].Value + "\n");
+            }
+            Database.BLACKLIST = new List<string>();
+            for (int i = 0; i < json.BlacklistAppids.Count; i++) {
+                Database.BLACKLIST.Add(json.BlacklistAppids[i].Value);
             }
         }
 
@@ -406,7 +408,7 @@ namespace Shatulsky_Farm {
                 Database.BLACKLIST.Add("581670");
             });
             #endregion
-            
+
             #region Загрузка VDS
             var VDSs = ServersRichTextBox.Text.Split('\n').ToList();
             #region удалить пустые строки
@@ -439,13 +441,14 @@ namespace Shatulsky_Farm {
                 }
             });
             #endregion
-            
+
             #region Активация
+            Directory.CreateDirectory("activate");
             var files = Directory.GetFiles("activate");
             foreach (var file in files) {
                 var appid = file.Split('\\')[1].Split('.')[0];
                 var keys = File.ReadAllLines(file);
-                for(int i=0; i< keys.Count(); i++) {
+                for (int i = 0; i < keys.Count(); i++) {
                     if (keys[i] != String.Empty) {
                         foreach (var bot in Database.BOT_LIST) {
                             if (bot.gamesNeed.Contains(appid)) {
@@ -479,17 +482,36 @@ namespace Shatulsky_Farm {
                 }
             }
             #endregion
+
+            UnblockAll();
+        }
+
+        private async void button1_Click(object sender, EventArgs e) {
+            BlockAll();
+            await Task.Run(async () => {
+                string text = "";
+                Invoke((Action)(() => {
+                    text = Program.GetForm.MyMainForm.QIWILoginsBox.Text.Clone().ToString();
+                }));
+
+                var inputBots = text.Replace("\r", "").Split('\n');
+
+                int processStatus = 0;
+                Qiwi qiwiAccount = new Qiwi(Program.GetForm.MyMainForm.QiwiTokenBox2.Text);
+                var money = Program.GetForm.MyMainForm.QIWIDonateBox.Text.Replace(',', '.');
+                foreach (var bot in inputBots) {
+                    if (bot != String.Empty) {
+                        var paymentDone = await qiwiAccount.SendMoneyToSteam(bot, money);
+                        if (!paymentDone) {
+                            Program.GetForm.MyMainForm.AddLog($"[{++processStatus}/{inputBots.Count()}] {bot} ОШИБКА ПОПОЛНЕНИЯ!");
+                            break;
+                        }
+                        Program.GetForm.MyMainForm.AddLog($"[{++processStatus}/{inputBots.Count()-1}] {bot} пополнение на сумму {money}руб успешно проведено.");
+                        Thread.Sleep(1111);
+                    }
+                }
+            });
             UnblockAll();
         }
     }
 }
-
-
-
-
-/*
- string Servers="";
- Invoke((ThreadStart)delegate () {
-    Servers = Program.GetForm.MyMainForm.ServersRichTextBox.Text;
- });  
- */
