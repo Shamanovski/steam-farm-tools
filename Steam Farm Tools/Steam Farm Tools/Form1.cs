@@ -9,6 +9,8 @@ using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.Net.NetworkInformation;
 using System.Management;
+using System.Text;
+using System.Net;
 
 namespace Shatulsky_Farm {
     public partial class MainForm : Form {
@@ -84,7 +86,8 @@ namespace Shatulsky_Farm {
 
                 #region Обработка Json каталога
                 Program.GetForm.MyMainForm.AddLog("Загрузка списка всех доступных игр");
-                var response = Request.getResponse("https://shamanovski.pythonanywhere.com/catalogue", $"uid={Database.UID}", $"key={Database.KEY}");
+
+                var response = Request.GetCatalog();
                 var json = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(response);
                 foreach (var item in json) {
                     string appid = item.Path;
@@ -379,7 +382,7 @@ namespace Shatulsky_Farm {
 
             string check = $"uid={uid}&key={Database.KEY}";
             string[] ok;
-            var postResponse = Request.POST("https://shamanovski.pythonanywhere.com", check, out ok);
+            var postResponse = Request.POST("https://shamanovski.pythonanywhere.com/check_license", check, out ok);
             var postJson = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(postResponse);
             if (postJson.success == false) {
                 DialogResult res = new DialogResult();
