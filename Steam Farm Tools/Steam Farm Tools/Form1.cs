@@ -377,7 +377,7 @@ namespace Shatulsky_Farm {
             var uid = (from nic in NetworkInterface.GetAllNetworkInterfaces()
                        where nic.OperationalStatus == OperationalStatus.Up
                        select nic.GetPhysicalAddress().ToString()).FirstOrDefault();
-            uid = "0x485ab6c24e8e";
+           
             Database.UID = uid;
 
             string check = $"uid={uid}&key={Database.KEY}";
@@ -505,7 +505,8 @@ namespace Shatulsky_Farm {
                             Program.GetForm.MyMainForm.AddLog($"[{++processStatus}/{inputBots.Count()}] {bot} ОШИБКА ПОПОЛНЕНИЯ!");
                             break;
                         }
-                        Program.GetForm.MyMainForm.AddLog($"[{++processStatus}/{inputBots.Count()}] {bot} пополнение на сумму {money} руб успешно проведено.");
+                        Program.GetForm.MyMainForm.AddLog($"[{++processStatus}/{inputBots.Count()-1}] {bot} пополнение на сумму {money} руб успешно проведено.");
+                        File.AppendAllText("QIWI.txt", $"{DateTime.Now} - {bot},{money}");
                         Thread.Sleep(1111);
                     }
                 }
