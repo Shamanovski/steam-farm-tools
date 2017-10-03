@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 namespace Shatulsky_Farm {
     public class Qiwi {
         private const string BASE = "https://edge.qiwi.com/";
-        private string _phone;
         private string _token;
         private readonly WebClient _webClient;
         private FixedSizedQueue<long> _handledTransactions = new FixedSizedQueue<long>(50);
@@ -59,7 +58,7 @@ namespace Shatulsky_Farm {
                     ContractResolver = new CamelCasePropertyNamesContractResolver()
                 }));
                 return response.Contains("Accepted");
-            } catch (Exception ex) {
+            } catch {
                 return false;
             }
         }
@@ -88,7 +87,7 @@ namespace Shatulsky_Farm {
                     ContractResolver = new CamelCasePropertyNamesContractResolver()
                 }));
                 return response.Contains("Accepted");
-            } catch (Exception ex) {
+            } catch {
                 return false;
             }
         }

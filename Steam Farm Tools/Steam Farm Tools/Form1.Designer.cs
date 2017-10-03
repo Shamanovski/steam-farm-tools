@@ -26,6 +26,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.ServersRichTextBox = new System.Windows.Forms.RichTextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.GotoCatalogLable = new System.Windows.Forms.Label();
             this.GotoCatalogBox = new System.Windows.Forms.TextBox();
             this.QiwiTokenLable = new System.Windows.Forms.Label();
@@ -61,7 +62,6 @@
             this.QIWIDonateBox = new System.Windows.Forms.TextBox();
             this.QiwiTokenLable2 = new System.Windows.Forms.Label();
             this.QiwiTokenBox2 = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -100,6 +100,15 @@
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Дедики/Каталог";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 265);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(100, 13);
+            this.label2.TabIndex = 17;
+            this.label2.Text = "Key из gotoCatalog";
             // 
             // GotoCatalogLable
             // 
@@ -313,7 +322,7 @@
             this.ActivateUnusedKeysButton.Name = "ActivateUnusedKeysButton";
             this.ActivateUnusedKeysButton.Size = new System.Drawing.Size(155, 39);
             this.ActivateUnusedKeysButton.TabIndex = 18;
-            this.ActivateUnusedKeysButton.Text = "Активировать UNUSEDKEYS.TXT";
+            this.ActivateUnusedKeysButton.Text = "Активировать ключи из UNUSEDKEYS.TXT";
             this.ActivateUnusedKeysButton.UseVisualStyleBackColor = true;
             this.ActivateUnusedKeysButton.Click += new System.EventHandler(this.LootButton_Click);
             // 
@@ -323,7 +332,7 @@
             this.ActivateKeysButton.Name = "ActivateKeysButton";
             this.ActivateKeysButton.Size = new System.Drawing.Size(155, 39);
             this.ActivateKeysButton.TabIndex = 19;
-            this.ActivateKeysButton.Text = "Активировать ключи из /activate/";
+            this.ActivateKeysButton.Text = "Активировать ключи из папки activate";
             this.ActivateKeysButton.UseVisualStyleBackColor = true;
             this.ActivateKeysButton.Click += new System.EventHandler(this.ActivateKeysButton_Click);
             // 
@@ -441,15 +450,6 @@
             this.QiwiTokenBox2.PasswordChar = '*';
             this.QiwiTokenBox2.Size = new System.Drawing.Size(214, 20);
             this.QiwiTokenBox2.TabIndex = 17;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 265);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(100, 13);
-            this.label2.TabIndex = 17;
-            this.label2.Text = "Key из gotoCatalog";
             // 
             // MainForm
             // 

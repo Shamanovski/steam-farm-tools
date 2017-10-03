@@ -10,7 +10,6 @@ namespace Shatulsky_Farm {
         public string steamID;
         public string vds;
         public List<string> gamesHave;
-        public List<string> gamesNeed;
 
         public Bot(string login, string steamID, string VDS) {
             this.login = login;
@@ -27,19 +26,6 @@ namespace Shatulsky_Farm {
             }
             #endregion
 
-            #region Игры которых нет
-            gamesNeed = new List<string>();
-            foreach (var game in Database.ALL_GAMES) {
-                if (gamesHave.Contains(game) == false)
-                    gamesNeed.Add(game);
-            }
-            #endregion
-
-            #region Запись в общий список игр которых нет
-            foreach (var game in gamesNeed) {
-                Database.ALL_NEEDS_FOR_SHOP[game] = int.Parse(Database.ALL_NEEDS_FOR_SHOP[game].ToString()) + 1;
-            }
-            #endregion
             Program.GetForm.MyMainForm.IncreaseBotsCount();
         }
 
@@ -60,7 +46,7 @@ namespace Shatulsky_Farm {
             }
         }
 
-        public static void AllBotsToDatabase(string VDS, string fl) {
+        public static void AllBotsToDatabaseNoSteamID(string VDS) {
             var command = $"http://{VDS}/IPC?command=";
             var response = Request.getResponse(command + "!api asf");
             var json = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(response);
