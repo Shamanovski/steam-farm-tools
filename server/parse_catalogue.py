@@ -1,3 +1,5 @@
+#!/usr/bin/python3.6
+
 import re
 import logging
 import json
@@ -30,6 +32,7 @@ def main():
     with open('catalogue.json', 'w', encoding='utf-8') as f:
         json.dump(catalogue_items, f)
 
+    logging.info("Successfully updated catalogue")
 
 def get_catalogue(soup_obj):
     rows = soup_obj.select("table.ttt.dataTable.no-footer")[0].find_all('tr')
@@ -48,7 +51,7 @@ def get_catalogue(soup_obj):
         try:
             lequeshop_id = re.search(r'type=(\d+)\&', tds[2].find(class_='qckp')['href']).group(1)
         except (AttributeError, TypeError) as err:
-            logging.error("Couldn't identify lequeshop product %s", tds[2])
+            logging.error("Couldn't identify product %s", game_name)
             lequeshop_id = None
         try:
             amount = int(amount)
