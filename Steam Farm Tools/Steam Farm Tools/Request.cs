@@ -1,26 +1,21 @@
-﻿using OpenQA.Selenium;
-using QiwiApi.Requests;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Shatulsky_Farm {
     static class Request {
         public static string FilePath { get; private set; }
 
-        public static string getResponse(string uri, string cookies = "") {
+        public static string getResponse(string uri, string cookies1 = "") {
             System.Net.WebClient web = new System.Net.WebClient();
             web.Encoding = UTF8Encoding.UTF8;
             web.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36");
-            if (cookies != "")
-                web.Headers.Add(HttpRequestHeader.Cookie, cookies);
+            if (cookies1 != "")
+                web.Headers.Add(HttpRequestHeader.Cookie, cookies1);
             string html = web.DownloadString(uri);
             return html;
         }
+
         public static bool DownloadFile(string url, string cookies, string filename) {
             try {
                 // Construct HTTP request to get the file
@@ -60,6 +55,16 @@ namespace Shatulsky_Farm {
 
 
             return returnValue;
+        }
+
+        public static string GetCatalog() {
+            System.Net.WebClient web = new System.Net.WebClient();
+            web.Encoding = UTF8Encoding.UTF8;
+            web.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36");
+            web.Headers.Add("uid", Database.UID);
+            web.Headers.Add("key", Database.KEY);
+            string html = web.DownloadString("http://shamanovski.pythonanywhere.com/catalogue");
+            return html;
         }
     }
 }

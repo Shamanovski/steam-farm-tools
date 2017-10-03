@@ -26,14 +26,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.ServersRichTextBox = new System.Windows.Forms.RichTextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.GotoCatalogLable = new System.Windows.Forms.Label();
-            this.GotoCatalogBox = new System.Windows.Forms.TextBox();
             this.QiwiTokenLable = new System.Windows.Forms.Label();
-            this.KeysShopLable = new System.Windows.Forms.Label();
+            this.CouponsKeyLable = new System.Windows.Forms.Label();
             this.QiwiTokenBox = new System.Windows.Forms.TextBox();
-            this.KeysShopKey = new System.Windows.Forms.TextBox();
-            this.EmailBox = new System.Windows.Forms.TextBox();
+            this.CouponsKeyBox = new System.Windows.Forms.TextBox();
             this.ApikeyLable = new System.Windows.Forms.Label();
             this.ApikeyBox = new System.Windows.Forms.TextBox();
             this.ServersLabel = new System.Windows.Forms.Label();
@@ -62,6 +58,8 @@
             this.QIWIDonateBox = new System.Windows.Forms.TextBox();
             this.QiwiTokenLable2 = new System.Windows.Forms.Label();
             this.QiwiTokenBox2 = new System.Windows.Forms.TextBox();
+            this.EmailLable = new System.Windows.Forms.Label();
+            this.EmailBox = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -82,96 +80,61 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.GotoCatalogLable);
-            this.groupBox1.Controls.Add(this.GotoCatalogBox);
-            this.groupBox1.Controls.Add(this.QiwiTokenLable);
-            this.groupBox1.Controls.Add(this.KeysShopLable);
-            this.groupBox1.Controls.Add(this.QiwiTokenBox);
-            this.groupBox1.Controls.Add(this.KeysShopKey);
+            this.groupBox1.Controls.Add(this.EmailLable);
             this.groupBox1.Controls.Add(this.EmailBox);
+            this.groupBox1.Controls.Add(this.QiwiTokenLable);
+            this.groupBox1.Controls.Add(this.CouponsKeyLable);
+            this.groupBox1.Controls.Add(this.QiwiTokenBox);
+            this.groupBox1.Controls.Add(this.CouponsKeyBox);
             this.groupBox1.Controls.Add(this.ApikeyLable);
             this.groupBox1.Controls.Add(this.ApikeyBox);
             this.groupBox1.Controls.Add(this.ServersLabel);
             this.groupBox1.Controls.Add(this.ServersRichTextBox);
             this.groupBox1.Location = new System.Drawing.Point(7, 6);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(226, 353);
+            this.groupBox1.Size = new System.Drawing.Size(226, 325);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Дедики/Каталог";
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 265);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(100, 13);
-            this.label2.TabIndex = 17;
-            this.label2.Text = "Key из gotoCatalog";
-            // 
-            // GotoCatalogLable
-            // 
-            this.GotoCatalogLable.AutoSize = true;
-            this.GotoCatalogLable.Location = new System.Drawing.Point(6, 226);
-            this.GotoCatalogLable.Name = "GotoCatalogLable";
-            this.GotoCatalogLable.Size = new System.Drawing.Size(100, 13);
-            this.GotoCatalogLable.TabIndex = 8;
-            this.GotoCatalogLable.Text = "Key из gotoCatalog";
-            // 
-            // GotoCatalogBox
-            // 
-            this.GotoCatalogBox.Location = new System.Drawing.Point(6, 242);
-            this.GotoCatalogBox.Name = "GotoCatalogBox";
-            this.GotoCatalogBox.PasswordChar = '*';
-            this.GotoCatalogBox.Size = new System.Drawing.Size(211, 20);
-            this.GotoCatalogBox.TabIndex = 7;
-            // 
             // QiwiTokenLable
             // 
             this.QiwiTokenLable.AutoSize = true;
-            this.QiwiTokenLable.Location = new System.Drawing.Point(6, 306);
+            this.QiwiTokenLable.Location = new System.Drawing.Point(6, 235);
             this.QiwiTokenLable.Name = "QiwiTokenLable";
             this.QiwiTokenLable.Size = new System.Drawing.Size(65, 13);
             this.QiwiTokenLable.TabIndex = 16;
             this.QiwiTokenLable.Text = "Токен киви";
             // 
-            // KeysShopLable
+            // CouponsKeyLable
             // 
-            this.KeysShopLable.AutoSize = true;
-            this.KeysShopLable.Location = new System.Drawing.Point(6, 185);
-            this.KeysShopLable.Name = "KeysShopLable";
-            this.KeysShopLable.Size = new System.Drawing.Size(98, 13);
-            this.KeysShopLable.TabIndex = 6;
-            this.KeysShopLable.Text = "steamkeys.ovh API";
+            this.CouponsKeyLable.AutoSize = true;
+            this.CouponsKeyLable.Location = new System.Drawing.Point(6, 191);
+            this.CouponsKeyLable.Name = "CouponsKeyLable";
+            this.CouponsKeyLable.Size = new System.Drawing.Size(173, 13);
+            this.CouponsKeyLable.TabIndex = 6;
+            this.CouponsKeyLable.Text = "Ключ для скидок - steamkeys.ovh";
             // 
             // QiwiTokenBox
             // 
-            this.QiwiTokenBox.Location = new System.Drawing.Point(6, 321);
+            this.QiwiTokenBox.Location = new System.Drawing.Point(6, 250);
             this.QiwiTokenBox.Name = "QiwiTokenBox";
             this.QiwiTokenBox.PasswordChar = '*';
             this.QiwiTokenBox.Size = new System.Drawing.Size(214, 20);
             this.QiwiTokenBox.TabIndex = 15;
             // 
-            // KeysShopKey
+            // CouponsKeyBox
             // 
-            this.KeysShopKey.Location = new System.Drawing.Point(6, 201);
-            this.KeysShopKey.Name = "KeysShopKey";
-            this.KeysShopKey.PasswordChar = '*';
-            this.KeysShopKey.Size = new System.Drawing.Size(211, 20);
-            this.KeysShopKey.TabIndex = 5;
-            // 
-            // EmailBox
-            // 
-            this.EmailBox.Location = new System.Drawing.Point(6, 279);
-            this.EmailBox.Name = "EmailBox";
-            this.EmailBox.Size = new System.Drawing.Size(214, 20);
-            this.EmailBox.TabIndex = 11;
+            this.CouponsKeyBox.Location = new System.Drawing.Point(6, 207);
+            this.CouponsKeyBox.Name = "CouponsKeyBox";
+            this.CouponsKeyBox.PasswordChar = '*';
+            this.CouponsKeyBox.Size = new System.Drawing.Size(211, 20);
+            this.CouponsKeyBox.TabIndex = 5;
             // 
             // ApikeyLable
             // 
             this.ApikeyLable.AutoSize = true;
-            this.ApikeyLable.Location = new System.Drawing.Point(6, 144);
+            this.ApikeyLable.Location = new System.Drawing.Point(6, 147);
             this.ApikeyLable.Name = "ApikeyLable";
             this.ApikeyLable.Size = new System.Drawing.Size(64, 13);
             this.ApikeyLable.TabIndex = 4;
@@ -179,7 +142,7 @@
             // 
             // ApikeyBox
             // 
-            this.ApikeyBox.Location = new System.Drawing.Point(6, 160);
+            this.ApikeyBox.Location = new System.Drawing.Point(6, 163);
             this.ApikeyBox.Name = "ApikeyBox";
             this.ApikeyBox.PasswordChar = '*';
             this.ApikeyBox.Size = new System.Drawing.Size(214, 20);
@@ -220,7 +183,7 @@
             this.BuyGamesButton.ForeColor = System.Drawing.SystemColors.ControlText;
             this.BuyGamesButton.Location = new System.Drawing.Point(272, 278);
             this.BuyGamesButton.Name = "BuyGamesButton";
-            this.BuyGamesButton.Size = new System.Drawing.Size(155, 81);
+            this.BuyGamesButton.Size = new System.Drawing.Size(155, 53);
             this.BuyGamesButton.TabIndex = 2;
             this.BuyGamesButton.Text = "Покупать игры";
             this.BuyGamesButton.UseVisualStyleBackColor = true;
@@ -234,7 +197,7 @@
             this.LogBox.Name = "LogBox";
             this.LogBox.ReadOnly = true;
             this.LogBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.LogBox.Size = new System.Drawing.Size(260, 376);
+            this.LogBox.Size = new System.Drawing.Size(260, 350);
             this.LogBox.TabIndex = 7;
             this.LogBox.Text = "";
             this.LogBox.TextChanged += new System.EventHandler(this.LogBox_TextChanged);
@@ -344,7 +307,7 @@
             this.tabControl.Location = new System.Drawing.Point(-1, -1);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(481, 397);
+            this.tabControl.Size = new System.Drawing.Size(481, 369);
             this.tabControl.TabIndex = 20;
             // 
             // tabPage1
@@ -358,7 +321,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(473, 371);
+            this.tabPage1.Size = new System.Drawing.Size(473, 343);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Автозапупка";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -372,7 +335,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(473, 371);
+            this.tabPage2.Size = new System.Drawing.Size(473, 343);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "QIWI";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -388,9 +351,9 @@
             // QIWIStartButton
             // 
             this.QIWIStartButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.QIWIStartButton.Location = new System.Drawing.Point(276, 166);
+            this.QIWIStartButton.Location = new System.Drawing.Point(276, 180);
             this.QIWIStartButton.Name = "QIWIStartButton";
-            this.QIWIStartButton.Size = new System.Drawing.Size(155, 81);
+            this.QIWIStartButton.Size = new System.Drawing.Size(155, 49);
             this.QIWIStartButton.TabIndex = 2;
             this.QIWIStartButton.Text = "Пополнить аккаутны";
             this.QIWIStartButton.UseVisualStyleBackColor = true;
@@ -451,11 +414,27 @@
             this.QiwiTokenBox2.Size = new System.Drawing.Size(214, 20);
             this.QiwiTokenBox2.TabIndex = 17;
             // 
+            // EmailLable
+            // 
+            this.EmailLable.AutoSize = true;
+            this.EmailLable.Location = new System.Drawing.Point(6, 278);
+            this.EmailLable.Name = "EmailLable";
+            this.EmailLable.Size = new System.Drawing.Size(32, 13);
+            this.EmailLable.TabIndex = 18;
+            this.EmailLable.Text = "Email";
+            // 
+            // EmailBox
+            // 
+            this.EmailBox.Location = new System.Drawing.Point(6, 293);
+            this.EmailBox.Name = "EmailBox";
+            this.EmailBox.Size = new System.Drawing.Size(214, 20);
+            this.EmailBox.TabIndex = 17;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(745, 404);
+            this.ClientSize = new System.Drawing.Size(745, 379);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.LogBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -487,17 +466,14 @@
         public System.Windows.Forms.Button BuyGamesButton;
         public System.Windows.Forms.TextBox ApikeyBox;
         public System.Windows.Forms.Label ApikeyLable;
-        public System.Windows.Forms.Label KeysShopLable;
-        public System.Windows.Forms.TextBox KeysShopKey;
+        public System.Windows.Forms.Label CouponsKeyLable;
+        public System.Windows.Forms.TextBox CouponsKeyBox;
         public System.Windows.Forms.Label BotsLoadedLabel;
         public System.Windows.Forms.Label BotsLoadedCountLable;
         public System.Windows.Forms.RichTextBox LogBox;
         public System.Windows.Forms.GroupBox groupBox2;
-        public System.Windows.Forms.Label GotoCatalogLable;
-        public System.Windows.Forms.TextBox GotoCatalogBox;
         public System.Windows.Forms.Label MaxGameCostLable;
         public System.Windows.Forms.TextBox MaxGameCostBox;
-        public System.Windows.Forms.TextBox EmailBox;
         public System.Windows.Forms.Label QiwiTokenLable;
         public System.Windows.Forms.TextBox QiwiTokenBox;
         private System.Windows.Forms.GroupBox groupBox3;
@@ -518,7 +494,8 @@
         public System.Windows.Forms.Label QIWIDonateLable;
         public System.Windows.Forms.TextBox QIWIDonateBox;
         private System.Windows.Forms.Label label1;
-        public System.Windows.Forms.Label label2;
+        public System.Windows.Forms.Label EmailLable;
+        public System.Windows.Forms.TextBox EmailBox;
     }
 }
 
