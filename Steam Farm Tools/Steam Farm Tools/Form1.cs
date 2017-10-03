@@ -118,12 +118,14 @@ namespace Shatulsky_Farm {
                 foreach (var game in Database.ALL_GAMES_LIST) {
 
                     #region Пост запрос в магазин
+                    string[] setCookies;
+
                     var postData = "email=" + Program.GetForm.MyMainForm.EmailBox.Text.Replace("@", "%40");
                     postData += "&count=" + game.count;
                     postData += "&type=" + game.lequeshop_id;
                     postData += "&forms=%7B%7D&fund=4";
                     postData += "&copupon=";
-                    var order = Request.POST(game.store + "/order", postData);
+                    var order = Request.POST(game.store + "/order", postData, out setCookies);
 
                     var jsonOrder = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(order);
                     #endregion
@@ -133,7 +135,7 @@ namespace Shatulsky_Farm {
                         if (jsonOrder.error.Value.Contains("Такого количества товара нет в наличии.")) {
                             var keysLeft = jsonOrder.error.Value.Split(new[] { "Доступно: " }, StringSplitOptions.None)[1].Split(new[] { " Шт" }, StringSplitOptions.None)[0];
                             postData = postData.Replace($"count={game.count}", $"count={keysLeft}");
-                            order = Request.POST(game.store + "/order", postData);
+                            order = Request.POST(game.store + "/order", postData, out setCookies);
                             jsonOrder = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(order);
                         }
                     } catch { }
@@ -166,7 +168,10 @@ namespace Shatulsky_Farm {
 
                     var oneItemPrice = allPrice / count;
                     var maxAllowedPrice = double.Parse(Program.GetForm.MyMainForm.MaxGameCostBox.Text.Replace('.', ','));
-                    if (oneItemPrice >= maxAllowedPrice) continue; //пропускаем элемент если его цена увеличилась выше допустимой
+                    if (oneItemPrice >= maxAllowedPrice) {
+                        Program.GetForm.MyMainForm.AddLog($"Пропускаем игру {game.game_name} ({game.appid}) так как ее цена стала выше допустимой - {oneItemPrice}");
+                        continue; //пропускаем элемент если его цена увеличилась выше допустимой
+                    }
                     #endregion
 
                     #region Оплата
@@ -183,8 +188,29 @@ namespace Shatulsky_Farm {
                     #endregion
 
                     #region Загрузка файла
+
+                    #region Получить куки
+                    string cookies = "";
+                    if (setCookies.Count() > 0) {
+                        var cookiesDictionary = new Dictionary<string, string>();
+                        var setCookiesString = "";
+                        foreach (var item in setCookies) {
+                            setCookiesString += item;
+                        }
+                        foreach (var item in setCookiesString.Split(';')) {
+                            try {
+                                var splItem = item.Split('=');
+                                cookiesDictionary.Add(splItem[0].Replace(" ", ""), splItem[1].Replace(" ", ""));
+                            } catch { }
+                        }
+                        cookies = "PHPSESSID=" + cookiesDictionary["PHPSESSID"];
+                    }
+
+                    #endregion
+
                     try { File.Delete("downloaded.txt"); } catch { };
-                    var fileDownloaded = Request.DownloadFile(buyLink.Replace("/order/", "/order/get/") + "/saved/", "downloaded.txt");
+                    Request.getResponse(buyLink, cookies);
+                    var fileDownloaded = Request.DownloadFile(buyLink.Replace("/order/", "/order/get/") + "/saved/", cookies, "downloaded.txt");
                     //if (!fileDownloaded) throw new Exception($"Не удалось скачать файл {downloadLink}");
                     Thread.Sleep(1000);
                     var fileName = $"{appid} {game.game_name} - {DateTime.Now}";
@@ -206,19 +232,19 @@ namespace Shatulsky_Farm {
                                 var key = regex.Match(line);
                                 var command = $"http://{bot.vds}/IPC?command=";
                                 command += $"!redeem^ {bot.login} SD,SF {key}";
-                                var responsee = Request.getResponse(command);
-                                File.AppendAllText($"responses.txt", $"\n{DateTime.Now} {bot.vds} {bot.login} {appid} {buyLink} - {responsee}");
+                                var keysResponse = Request.getResponse(command);
+                                File.AppendAllText($"responses.txt", $"\n{DateTime.Now} {bot.vds} {bot.login} {appid} {buyLink} - {keysResponse}");
 
-                                if (response.Contains("Timeout")) {
+                                if (keysResponse.Contains("Timeout")) {
                                     Thread.Sleep(10000);
                                     var botResponse = Request.getResponse($"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={Program.GetForm.MyMainForm.ApikeyBox.Text}&steamid={bot.steamID}&format=json");
                                     if (botResponse.Contains(appid))
-                                        response += "Ложный таймаут. OK/NoDetail";
+                                        keysResponse += "Ложный таймаут. OK/NoDetail";
                                 }
 
-                                if (response.Contains("OK/NoDetail") == false) {
-                                    Program.GetForm.MyMainForm.AddLog($"Ошибка при активации ключей для {bot.vds},{bot.login},{key},{response.Replace('\r', ' ').Replace('\n', ' ')}");
-                                    File.AppendAllText("UNUSEDKEYS.TXT", $"{bot.vds},{bot.login},{key},{response.Replace('\r', ' ').Replace('\n', ' ')}\n");
+                                if (keysResponse.Contains("OK/NoDetail") == false) {
+                                    Program.GetForm.MyMainForm.AddLog($"Ошибка при активации ключей для {bot.vds},{bot.login},{key},{keysResponse.Replace('\r', ' ').Replace('\n', ' ')}");
+                                    File.AppendAllText("UNUSEDKEYS.TXT", $"{bot.vds},{bot.login},{key},{keysResponse.Replace('\r', ' ').Replace('\n', ' ')}\n");
                                 }
                                 else {
                                     bot.gamesHave.Add(appid);
@@ -230,8 +256,9 @@ namespace Shatulsky_Farm {
                     Program.GetForm.MyMainForm.AddLog($"Ожидание 30 секунд до следующей покупки");
                     Thread.Sleep(30000);
                     Program.GetForm.MyMainForm.AddLog($"-----------------------------------");
+                    #endregion
                 }
-                #endregion
+
             });
             Program.GetForm.MyMainForm.AddLog($"Покупки завершены");
             UnblockAll();
