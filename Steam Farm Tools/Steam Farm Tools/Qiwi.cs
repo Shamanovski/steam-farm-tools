@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 namespace Shatulsky_Farm {
     public class Qiwi {
         private const string BASE = "https://edge.qiwi.com/";
-        private string _phone;
         private string _token;
         private readonly WebClient _webClient;
         private FixedSizedQueue<long> _handledTransactions = new FixedSizedQueue<long>(50);

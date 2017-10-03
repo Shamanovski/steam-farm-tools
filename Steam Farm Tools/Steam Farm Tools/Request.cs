@@ -37,5 +37,24 @@ namespace Shatulsky_Farm {
                 return false;
             }
         }
+
+        public static string POST(string Url, string postData) {
+            var request = (HttpWebRequest)WebRequest.Create(Url);
+
+            var data = Encoding.ASCII.GetBytes(postData);
+
+            request.Method = "POST";
+            request.UserAgent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36";
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.ContentLength = data.Length;
+
+            using (var stream = request.GetRequestStream()) {
+                stream.Write(data, 0, data.Length);
+            }
+
+            var response1 = (HttpWebResponse)request.GetResponse();
+
+            return new StreamReader(response1.GetResponseStream()).ReadToEnd();
+        }
     }
 }
