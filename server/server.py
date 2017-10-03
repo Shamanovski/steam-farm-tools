@@ -46,6 +46,27 @@ def handle_request():
     return json.dumps({'success': success}), 200
 
 
+@app.route('/skin-to-buy', methods=['GET'])
+def read_skin_to_buy():
+    with open("skin_to_buy.txt", 'r', encoding='utf-8') as f:
+        return f.readline().strip(), 200
+
+
+@app.route('/catalogue', methods=['GET'])
+def get_catalogue():
+    key, uid = request.headers['key'], request.headers['uid']
+    with shelve.open('clients') as db:
+        try:
+            client_data = db[key]
+        except KeyError:
+            return 'Not allowed', 403
+    if client_data['uid'] != uid:
+        return 'Not allowed', 403
+
+    with open("my_server/catalogue.json", 'r', encoding='utf-8') as f:
+        return f.read(), 200
+
+
 def get_city_from_ip(ip_address):
     try:
         resp = requests.get('http://ip-api.com/json/%s' % ip_address).json()
@@ -63,6 +84,7 @@ def check_device(data, db_data, ip):
     if data['uid'] != db_data['uid']:
         logger.warning('UID is different (%s). The request has been declined: %s', data['uid'], db_data)
         return False
+
     stored_ip, stored_city = db_data['ip']
     if ip != stored_ip:
         city = get_city_from_ip(ip)
