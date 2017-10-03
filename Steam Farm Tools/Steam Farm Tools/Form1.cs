@@ -94,7 +94,7 @@ namespace Shatulsky_Farm {
                 #region Поиск нужных игр
                 foreach (var game in Database.ALL_GAMES_LIST) {
                     foreach (var bot in Database.BOT_LIST) {
-                        if (bot.gamesNeed.Contains(game.appid))
+                        if (!bot.gamesHave.Contains(game.appid))
                             game.count += 1;
                     }
                 }
@@ -119,7 +119,6 @@ namespace Shatulsky_Farm {
 
                     #region Пост запрос в магазин
                     var postData = "email=" + Program.GetForm.MyMainForm.EmailBox.Text.Replace("@", "%40");
-                    if (game.count < game.amount) game.count = (int)game.amount; //если ключей не хватаел то купить сколько осталось 
                     postData += "&count=" + game.count;
                     postData += "&type=" + game.lequeshop_id;
                     postData += "&forms=%7B%7D&fund=4";
@@ -129,8 +128,17 @@ namespace Shatulsky_Farm {
                     var jsonOrder = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(order);
                     #endregion
 
+                    #region Если товара не хватает
+                    if (jsonOrder.error.Value.Contains("Такого количества товара нет в наличии.")) {
+                        var keysLeft = jsonOrder.error.Value.Split(new[] { "Доступно: " }, StringSplitOptions.None)[1].Split(new[] { " Шт" }, StringSplitOptions.None)[0];
+                        postData = postData.Replace($"count={game.count}", $"count={keysLeft}");
+                        order = Request.POST(game.store + "/order", postData);
+                        jsonOrder = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(order);
+                    }
+                    #endregion
+
                     #region Данные заказа
-                    var allPrice = jsonOrder.price.Value.Split(new[] { " QIWI" }, StringSplitOptions.None)[0];
+                    var allPrice = double.Parse(jsonOrder.price.Value.Split(new[] { " QIWI" }, StringSplitOptions.None)[0].Replace('.',','));
                     var reciever = jsonOrder.fund.Value.Split('>')[1].Split('<')[0];
                     var comment = jsonOrder.bill.Value.Split('>')[1].Split('<')[0];
                     var buyLink = jsonOrder.check_url.Value.Replace("\\", "");
@@ -162,9 +170,8 @@ namespace Shatulsky_Farm {
                     #endregion
 
                     #region Загрузка файла
-                    var downloadLink = "";
                     try { File.Delete("downloaded.txt"); } catch { };
-                    //var fileDownloaded = Request.DownloadFile(downloadLink, Browser, "downloaded.txt");
+                    var fileDownloaded = Request.DownloadFile(buyLink, "downloaded.txt");
                     //if (!fileDownloaded) throw new Exception($"Не удалось скачать файл {downloadLink}");
                     Thread.Sleep(1000);
                     var fileName = $"{appid} {game.game_name} - {DateTime.Now}";
@@ -181,7 +188,7 @@ namespace Shatulsky_Farm {
                     Program.GetForm.MyMainForm.AddLog($"Активация {keysList.Count()} ключей {game.game_name} ({appid})");
                     foreach (var line in keysList) {
                         foreach (var bot in Database.BOT_LIST) {
-                            if (bot.gamesNeed.Contains(appid)) {
+                            if (!bot.gamesHave.Contains(appid)) {
                                 Regex regex = new Regex(@"\w{5}-\w{5}-\w{5}");
                                 var key = regex.Match(line);
                                 var command = $"http://{bot.vds}/IPC?command=";
@@ -201,7 +208,7 @@ namespace Shatulsky_Farm {
                                     File.AppendAllText("UNUSEDKEYS.TXT", $"{bot.vds},{bot.login},{key},{response.Replace('\r', ' ').Replace('\n', ' ')}\n");
                                 }
                                 else {
-                                    bot.gamesNeed.Remove(appid);
+                                    bot.gamesHave.Add(appid);
                                 }
                                 break;
                             }
@@ -213,7 +220,7 @@ namespace Shatulsky_Farm {
                 }
                 #endregion
             });
-            
+
             UnblockAll();
         }
 
@@ -368,7 +375,7 @@ namespace Shatulsky_Farm {
                 for (int i = 0; i < keys.Count(); i++) {
                     if (keys[i] != String.Empty) {
                         foreach (var bot in Database.BOT_LIST) {
-                            if (bot.gamesNeed.Contains(appid)) {
+                            if (!bot.gamesHave.Contains(appid)) {
 
                                 Regex regex = new Regex(@"\w{5}-\w{5}-\w{5}");
                                 var key = regex.Match(keys[i]);
@@ -390,6 +397,7 @@ namespace Shatulsky_Farm {
                                 else {
                                     keys[i] = string.Empty;
                                     File.WriteAllText(file, keys.ToString());
+                                    bot.gamesHave.Add(appid);
                                 }
                                 break;
                             }
