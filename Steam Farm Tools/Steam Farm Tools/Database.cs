@@ -4,6 +4,9 @@ using System.Collections.Generic;
 namespace Shatulsky_Farm {
     public static class Database {
         public static string KEY;
+        public static string UID;
+
+
         public static List<Bot> BOT_LIST;
         public static List<bool> BOTS_LOADING;
 

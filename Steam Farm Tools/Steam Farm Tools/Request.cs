@@ -6,12 +6,15 @@ namespace Shatulsky_Farm {
     static class Request {
         public static string FilePath { get; private set; }
 
-        public static string getResponse(string uri, string cookies = "") {
+        public static string getResponse(string uri, string cookies1 = "", string cookies2 = "") {
             System.Net.WebClient web = new System.Net.WebClient();
             web.Encoding = UTF8Encoding.UTF8;
             web.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36");
-            if (cookies != "")
-                web.Headers.Add(HttpRequestHeader.Cookie, cookies);
+            if (cookies1 != "")
+                web.Headers.Add(HttpRequestHeader.Cookie, cookies1);
+            if (cookies2 != "")
+                web.Headers.Add(HttpRequestHeader.Cookie, cookies2);
+
             string html = web.DownloadString(uri);
             return html;
         }

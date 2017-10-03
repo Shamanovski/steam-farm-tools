@@ -84,7 +84,7 @@ namespace Shatulsky_Farm {
 
                 #region Обработка Json каталога
                 Program.GetForm.MyMainForm.AddLog("Загрузка списка всех доступных игр");
-                var response = Request.getResponse("http://shamanovski.pythonanywhere.com/catalogue");
+                var response = Request.getResponse("https://shamanovski.pythonanywhere.com/catalogue", $"uid={Database.UID}", $"key={Database.KEY}");
                 var json = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(response);
                 foreach (var item in json) {
                     string appid = item.Path;
@@ -370,19 +370,12 @@ namespace Shatulsky_Farm {
                 Database.BLACKLIST.Add(json.BlacklistAppids[i].Value);
             }
             LogBox.Text = $"Программа запущена {System.DateTime.Now}\n";
+
             var uid = (from nic in NetworkInterface.GetAllNetworkInterfaces()
                        where nic.OperationalStatus == OperationalStatus.Up
                        select nic.GetPhysicalAddress().ToString()).FirstOrDefault();
-            //uid = "0x485ab6c24e8e";
-            String serial = "";
-
-            ManagementObjectSearcher mos = new ManagementObjectSearcher("SELECT SerialNumber FROM Win32_BaseBoard");
-            ManagementObjectCollection moc = mos.Get();
-
-            foreach (ManagementObject mo in moc) {
-                serial = mo["SerialNumber"].ToString();
-            }
-
+            uid = "0x485ab6c24e8e";
+            Database.UID = uid;
 
             string check = $"uid={uid}&key={Database.KEY}";
             string[] ok;
