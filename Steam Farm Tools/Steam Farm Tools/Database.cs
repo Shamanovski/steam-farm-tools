@@ -1,23 +1,16 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Support.UI;
 
 namespace Shatulsky_Farm {
     public static class Database {
+        public static string KEY;
         public static List<Bot> BOT_LIST;
         public static List<bool> BOTS_LOADING;
 
         public static double WASTED_MONEY;
         public static List<string> BLACKLIST;
 
+        public static Dictionary<string,Tuple<string,int>> COUPONS;
         public static List<Game> ALL_GAMES_LIST;
 
     }

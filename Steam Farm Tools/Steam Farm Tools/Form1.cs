@@ -1,26 +1,14 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using OpenQA;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Support.UI;
-using OpenQA.Selenium;
-using System.Xml;
-using System.Xml.XPath;
-using OpenQA.Selenium.PhantomJS;
-using System.Net;
 using System.Text.RegularExpressions;
-using System.Net.Http;
-using System.Collections.Specialized;
+using System.Net.NetworkInformation;
+using System.Management;
 
 namespace Shatulsky_Farm {
     public partial class MainForm : Form {
@@ -31,12 +19,30 @@ namespace Shatulsky_Farm {
         private async void StartButton_Click(object sender, EventArgs e) {
             BlockAll();
 
-            #region Обнуление Database
+            #region Настройки Database
             await Task.Run(() => {
                 Database.BOT_LIST = new List<Bot>();
                 Database.BOTS_LOADING = new List<bool>();
                 Database.WASTED_MONEY = 0;
                 Database.ALL_GAMES_LIST = new List<Game>();
+                Database.COUPONS = new Dictionary<string, Tuple<string, int>>();
+                #region Загрузка купонов
+                if (Program.GetForm.MyMainForm.CouponsKeyBox.Text != "") {
+                    var couponResponse = Request.getResponse($"http://steamkeys.ovh/user.php?key={Program.GetForm.MyMainForm.CouponsKeyBox.Text}");
+                    var splCoupons = couponResponse.Split(new[] { "<div style='min-weight:", }, StringSplitOptions.None);
+                    for (int i = 1; i < splCoupons.Count(); i++) {
+                        var coupon = splCoupons[i];
+
+                        var shop = coupon.Split(new[] { "<div title=" }, StringSplitOptions.None)[1];
+                        shop = "http://" + shop.Split('>')[1].Split('<')[0];
+                        var text = "";
+                        try { text = coupon.Split(new[] { "Купон'value='" }, StringSplitOptions.None)[1].Split('\'')[0]; } catch { }
+                        int percent = 0;
+                        try { percent = int.Parse(coupon.Split(new[] { "Скидка'value='" }, StringSplitOptions.None)[1].Split('%')[0]); } catch { }
+                        Database.COUPONS.Add(shop, new Tuple<string, int>(text, percent));
+                    }
+                }
+                #endregion
             });
             #endregion
 
@@ -125,6 +131,9 @@ namespace Shatulsky_Farm {
                     postData += "&type=" + game.lequeshop_id;
                     postData += "&forms=%7B%7D&fund=4";
                     postData += "&copupon=";
+                    if (Program.GetForm.MyMainForm.CouponsKeyBox.Text != "")
+                        postData += Database.COUPONS[game.store].Item1;
+
                     var order = Request.POST(game.store + "/order", postData, out setCookies);
 
                     var jsonOrder = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(order);
@@ -169,7 +178,7 @@ namespace Shatulsky_Farm {
                     var oneItemPrice = allPrice / count;
                     var maxAllowedPrice = double.Parse(Program.GetForm.MyMainForm.MaxGameCostBox.Text.Replace('.', ','));
                     if (oneItemPrice >= maxAllowedPrice) {
-                        Program.GetForm.MyMainForm.AddLog($"Пропускаем игру {game.game_name} ({game.appid}) так как ее цена стала выше допустимой - {oneItemPrice}");
+                        Program.GetForm.MyMainForm.AddLog($"Пропускаем игру {game.game_name} ({game.appid}) так как ее цена стала выше допустимой - {Math.Round(oneItemPrice, 2)}");
                         continue; //пропускаем элемент если его цена увеличилась выше допустимой
                     }
                     #endregion
@@ -258,6 +267,7 @@ namespace Shatulsky_Farm {
                     Program.GetForm.MyMainForm.AddLog($"-----------------------------------");
                     #endregion
                 }
+                #endregion
 
             });
             Program.GetForm.MyMainForm.AddLog($"Покупки завершены");
@@ -341,23 +351,51 @@ namespace Shatulsky_Farm {
         }
 
         private void MainForm_Load(object sender, EventArgs e) {
-            LogBox.Text = $"Программа запущена {System.DateTime.Now}\n";
             var settings = File.ReadAllText("settings.txt");
             var json = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(settings);
             ApikeyBox.Text = json.SteamAPI;
-            KeysShopKey.Text = json.SteamkeysAPI;
-            GotoCatalogBox.Text = json.GoToCatalogAPI;
+            CouponsKeyBox.Text = json.SteamkeysAPI;
             MaxGameCostBox.Text = json.MaxGameCost;
             MaxMoneyBox.Text = json.MaxMoneySpent;
             EmailBox.Text = json.Email;
+            CouponsKeyBox.Text = json.CouponsKey;
             QiwiTokenBox.Text = json.QiwiToken;
             QiwiTokenBox2.Text = json.QiwiToken;
+            Database.KEY = json.LicenseKey;
             for (int i = 0; i < json.VDSs.Count; i++) {
                 ServersRichTextBox.AppendText(json.VDSs[i].Value + "\n");
             }
             Database.BLACKLIST = new List<string>();
             for (int i = 0; i < json.BlacklistAppids.Count; i++) {
                 Database.BLACKLIST.Add(json.BlacklistAppids[i].Value);
+            }
+            LogBox.Text = $"Программа запущена {System.DateTime.Now}\n";
+            var uid = (from nic in NetworkInterface.GetAllNetworkInterfaces()
+                       where nic.OperationalStatus == OperationalStatus.Up
+                       select nic.GetPhysicalAddress().ToString()).FirstOrDefault();
+            //uid = "0x485ab6c24e8e";
+            String serial = "";
+
+            ManagementObjectSearcher mos = new ManagementObjectSearcher("SELECT SerialNumber FROM Win32_BaseBoard");
+            ManagementObjectCollection moc = mos.Get();
+
+            foreach (ManagementObject mo in moc) {
+                serial = mo["SerialNumber"].ToString();
+            }
+
+
+            string check = $"uid={uid}&key={Database.KEY}";
+            string[] ok;
+            var postResponse = Request.POST("https://shamanovski.pythonanywhere.com", check, out ok);
+            var postJson = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(postResponse);
+            if (postJson.success == false) {
+                DialogResult res = new DialogResult();
+                res = MessageBox.Show("Проверка лицензии не пройдена!",
+                                                 "Ошибка лицензии",
+                                                 MessageBoxButtons.OK,
+                                                 MessageBoxIcon.Error);
+                if (res == DialogResult.OK) { Close(); }
+                else { Close(); }
             }
         }
 
@@ -478,6 +516,7 @@ namespace Shatulsky_Farm {
             });
             UnblockAll();
         }
+
     }
 }
-#endregion
+

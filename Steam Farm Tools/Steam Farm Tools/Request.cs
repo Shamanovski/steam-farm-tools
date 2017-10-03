@@ -1,12 +1,6 @@
-﻿using OpenQA.Selenium;
-using QiwiApi.Requests;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Shatulsky_Farm {
     static class Request {
