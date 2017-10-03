@@ -19,10 +19,27 @@ logger.addHandler(file_handler)
 app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
-def handle_request():
+def check_license_autoreg():
     with open('keys.txt', 'r') as f:
-        keys = [i.rstrip() for i in f.readlines()]
+        autoreg_keys = [i.rstrip() for i in f.readlines()]
 
+    with open('farmtools_keys.txt', 'r') as f:
+        farmtools_keys = [i.rstrip() for i in f.readlines()]
+
+    success = check_license(autoreg_keys + farmtools_keys)
+    return json.dumps({'success': success}), 200
+
+
+@app.route('/check_license', methods=['POST'])
+def check_license_farmtools():
+    with open('farmtools_keys.txt', 'r') as f:
+        farmtools_keys = [i.rstrip() for i in f.readlines()]
+
+    success = check_license(farmtools_keys)
+    return json.dumps({'success': success}), 200
+
+
+def check_license(keys):
     success = False
     data = {key: value for key, value in request.form.items()}
     ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
@@ -43,7 +60,7 @@ def handle_request():
     finally:
         db.close()
 
-    return json.dumps({'success': success}), 200
+    return success
 
 
 @app.route('/skin-to-buy', methods=['GET'])
