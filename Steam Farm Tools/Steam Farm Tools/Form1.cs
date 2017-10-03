@@ -129,21 +129,33 @@ namespace Shatulsky_Farm {
                     #endregion
 
                     #region Если товара не хватает
-                    if (jsonOrder.error.Value.Contains("Такого количества товара нет в наличии.")) {
-                        var keysLeft = jsonOrder.error.Value.Split(new[] { "Доступно: " }, StringSplitOptions.None)[1].Split(new[] { " Шт" }, StringSplitOptions.None)[0];
-                        postData = postData.Replace($"count={game.count}", $"count={keysLeft}");
-                        order = Request.POST(game.store + "/order", postData);
-                        jsonOrder = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(order);
-                    }
+                    try {
+                        if (jsonOrder.error.Value.Contains("Такого количества товара нет в наличии.")) {
+                            var keysLeft = jsonOrder.error.Value.Split(new[] { "Доступно: " }, StringSplitOptions.None)[1].Split(new[] { " Шт" }, StringSplitOptions.None)[0];
+                            postData = postData.Replace($"count={game.count}", $"count={keysLeft}");
+                            order = Request.POST(game.store + "/order", postData);
+                            jsonOrder = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(order);
+                        }
+                    } catch { }
                     #endregion
 
                     #region Данные заказа
-                    var allPrice = double.Parse(jsonOrder.price.Value.Split(new[] { " QIWI" }, StringSplitOptions.None)[0].Replace('.',','));
-                    var reciever = jsonOrder.fund.Value.Split('>')[1].Split('<')[0];
-                    var comment = jsonOrder.bill.Value.Split('>')[1].Split('<')[0];
-                    var buyLink = jsonOrder.check_url.Value.Replace("\\", "");
-                    var count = jsonOrder.count.Value;
-                    var appid = game.appid;
+                    double allPrice = 0;
+                    var reciever = "";
+                    var comment = "";
+                    var buyLink = "";
+                    double count = 0;
+                    var appid = "";
+                    try {
+                        allPrice = double.Parse(jsonOrder.price.Value.Split(new[] { " QIWI" }, StringSplitOptions.None)[0].Replace('.', ','));
+                        reciever = jsonOrder.fund.Value.Split('>')[1].Split('<')[0];
+                        comment = jsonOrder.bill.Value.Split('>')[1].Split('<')[0];
+                        buyLink = jsonOrder.check_url.Value.Replace("\\", "");
+                        count = jsonOrder.count.Value;
+                        appid = game.appid;
+                    } catch {
+                        continue;
+                    }
                     #endregion
 
                     #region Проверки
@@ -153,7 +165,8 @@ namespace Shatulsky_Farm {
                     }
 
                     var oneItemPrice = allPrice / count;
-                    if (oneItemPrice < double.Parse(Program.GetForm.MyMainForm.MaxGameCostBox.Text.Replace('.', ','))) continue; //пропускаем элемент если его цена увеличилась выше допустимой
+                    var maxAllowedPrice = double.Parse(Program.GetForm.MyMainForm.MaxGameCostBox.Text.Replace('.', ','));
+                    if (oneItemPrice >= maxAllowedPrice) continue; //пропускаем элемент если его цена увеличилась выше допустимой
                     #endregion
 
                     #region Оплата
@@ -162,7 +175,7 @@ namespace Shatulsky_Farm {
                     Qiwi qiwiAccount = new Qiwi(Program.GetForm.MyMainForm.QiwiTokenBox.Text);
                     var paymentDone = await qiwiAccount.SendMoneyToWallet(reciever, totalPrice, comment);
                     if (!paymentDone) throw new Exception($"Не удалось оплатить {reciever} {comment} {appid} {totalPrice} руб. {buyLink}");
-                    File.WriteAllText("buylinks.txt", $"{DateTime.Now} - {buyLink}");
+                    File.AppendAllText("buylinks.txt", $"{DateTime.Now} - {buyLink}");
                     Database.WASTED_MONEY += allPrice;
                     UpdateWastedMoney();
                     Program.GetForm.MyMainForm.AddLog($"Оплачено {totalPrice} руб, на номер {reciever}");
@@ -171,7 +184,7 @@ namespace Shatulsky_Farm {
 
                     #region Загрузка файла
                     try { File.Delete("downloaded.txt"); } catch { };
-                    var fileDownloaded = Request.DownloadFile(buyLink, "downloaded.txt");
+                    var fileDownloaded = Request.DownloadFile(buyLink.Replace("/order/", "/order/get/") + "/saved/", "downloaded.txt");
                     //if (!fileDownloaded) throw new Exception($"Не удалось скачать файл {downloadLink}");
                     Thread.Sleep(1000);
                     var fileName = $"{appid} {game.game_name} - {DateTime.Now}";
@@ -194,7 +207,7 @@ namespace Shatulsky_Farm {
                                 var command = $"http://{bot.vds}/IPC?command=";
                                 command += $"!redeem^ {bot.login} SD,SF {key}";
                                 var responsee = Request.getResponse(command);
-                                File.AppendAllText($"responses.txt", $"\n{DateTime.Now} {bot.vds} {bot.login} {appid} {downloadLink} - {responsee}");
+                                File.AppendAllText($"responses.txt", $"\n{DateTime.Now} {bot.vds} {bot.login} {appid} {buyLink} - {responsee}");
 
                                 if (response.Contains("Timeout")) {
                                     Thread.Sleep(10000);
@@ -220,7 +233,7 @@ namespace Shatulsky_Farm {
                 }
                 #endregion
             });
-
+            Program.GetForm.MyMainForm.AddLog($"Покупки завершены");
             UnblockAll();
         }
 

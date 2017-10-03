@@ -31,7 +31,7 @@ namespace Shatulsky_Farm {
                 client.DownloadFile(url, $"{filename}");
 
                 return true;
-            } catch (Exception ex) {
+            } catch {
                 return false;
             }
         }

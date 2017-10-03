@@ -58,7 +58,7 @@ namespace Shatulsky_Farm {
                     ContractResolver = new CamelCasePropertyNamesContractResolver()
                 }));
                 return response.Contains("Accepted");
-            } catch (Exception ex) {
+            } catch {
                 return false;
             }
         }
@@ -87,7 +87,7 @@ namespace Shatulsky_Farm {
                     ContractResolver = new CamelCasePropertyNamesContractResolver()
                 }));
                 return response.Contains("Accepted");
-            } catch (Exception ex) {
+            } catch {
                 return false;
             }
         }
