@@ -3,7 +3,7 @@ import logging
 import shelve
 import requests
 
-from flask import Flask, request
+from flask import Flask, request, render_template
 
 # disable flask and requests info logs
 logging.getLogger('werkzeug').setLevel(logging.ERROR)
@@ -37,6 +37,12 @@ def check_license_farmtools():
 
     success = check_license(farmtools_keys, 'farmtools')
     return json.dumps({'success': success}), 200
+
+
+@app.route('/showdb', methods=['GET'])
+def show_db():
+    with shelve.open('farmtools_db') as db:
+        return render_template('my_server/farmtools_db.html', dict(db)), 200
 
 
 def check_license(keys, app_name):
