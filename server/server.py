@@ -2,7 +2,6 @@ import json
 import logging
 import shelve
 import requests
-import os
 
 from flask import Flask, request
 
@@ -46,7 +45,12 @@ def check_license(keys, app_name):
     data = {key: value for key, value in request.form.items()}
     ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
     key = data['key']
-    db = shelve.open('clients')
+    if app_name == 'autoreg':
+        db_name = 'clients'
+    elif app_name == 'farmtools':
+        db_name = 'farmtools_db'
+    db = shelve.open(db_name)
+
     try:
         if key in keys:
             if not db.get(key, None):
