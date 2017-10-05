@@ -221,9 +221,9 @@ namespace Shatulsky_Farm {
                     #endregion
 
                     try { File.Delete("downloaded.txt"); } catch { };
-                    Request.getResponse(buyLink, cookies);
+                    response = Request.getResponse(buyLink, cookies).ToString();
                     var fileDownloaded = Request.DownloadFile(buyLink.Replace("/order/", "/order/get/") + "/saved/", cookies, "downloaded.txt");
-                    //if (!fileDownloaded) throw new Exception($"Не удалось скачать файл {downloadLink}");
+                    if (!fileDownloaded) throw new Exception($"Не удалось скачать файл {buyLink}");
                     Thread.Sleep(1000);
                     var fileName = $"{appid} {game.game_name} - {DateTime.Now}";
                     fileName = fileName.Replace('.', '-');
