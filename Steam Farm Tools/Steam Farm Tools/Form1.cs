@@ -11,6 +11,7 @@ using System.Net.NetworkInformation;
 using System.Management;
 using System.Text;
 using System.Net;
+using System.ComponentModel;
 
 namespace Shatulsky_Farm {
     public partial class MainForm : Form {
@@ -337,19 +338,24 @@ namespace Shatulsky_Farm {
         }
 
         private void LootButton_Click(object sender, EventArgs e) {
-            var unusedKeys = File.ReadAllLines("UNUSEDKEYS.TXT");
+            var unusedKeys = File.ReadAllLines("UNUSEDKEYS.TXT").ToList<string>();
             foreach (var line in unusedKeys) {
                 var data = line.Split(',');
-                //{ bot.vds},{ bot.login},{ key},{ response.Replace('\r', ' ').Replace('\n', ' ')}
+                //{bot.vds},{bot.login},{key},{response}
                 var vds = data[0];
                 var login = data[1];
                 var key = data[1];
-                var command = $"http://{vds}/IPC?command=!redeem {login} {key}";
+                var command = $"http://{vds}/IPC?command=";
+                command += $"!redeem^ {login} SD,SF {key}";
                 var response = Request.getResponse(command);
                 Program.GetForm.MyMainForm.AddLog(response);
-                if (response.Contains("OK/NoDetail") == false || response.Contains("RateLimited")) {
+                if (response.Contains("OK/NoDetail") == false) {
                     File.WriteAllText("UNUSEDKEYS.TXT", $"{vds},{login},{key},{response.Replace('\r', ' ').Replace('\n', ' ')}");
                 }
+
+                var outList = File.ReadAllLines("UNUSEDKEYS.TXT").ToList<string>();
+                outList.Remove(line);
+                File.WriteAllLines("UNUSEDKEYS.TXT", outList);
             }
         }
 
@@ -374,10 +380,20 @@ namespace Shatulsky_Farm {
             }
             LogBox.Text = $"Программа запущена {System.DateTime.Now}\n";
 
-            var uid = (from nic in NetworkInterface.GetAllNetworkInterfaces()
-                       where nic.OperationalStatus == OperationalStatus.Up
-                       select nic.GetPhysicalAddress().ToString()).FirstOrDefault();
-           
+            string uid = string.Empty;
+            ManagementClass mc = new ManagementClass("win32_processor");
+            ManagementObjectCollection moc = mc.GetInstances();
+            foreach (ManagementObject mo in moc) {
+                uid = mo.Properties["processorID"].Value.ToString();
+                break;
+            }
+            try {
+                ManagementObject dsk = new ManagementObject(
+                    @"win32_logicaldisk.deviceid=""" + "C" + @":""");
+                dsk.Get();
+                uid += dsk["VolumeSerialNumber"].ToString();
+            } catch { }
+
             Database.UID = uid;
 
             string check = $"uid={uid}&key={Database.KEY}";
@@ -393,6 +409,7 @@ namespace Shatulsky_Farm {
                 if (res == DialogResult.OK) { Close(); }
                 else { Close(); }
             }
+            
         }
 
         private async void ActivateKeysButton_Click(object sender, EventArgs e) {
@@ -454,7 +471,7 @@ namespace Shatulsky_Farm {
                                 Regex regex = new Regex(@"\w{5}-\w{5}-\w{5}");
                                 var key = regex.Match(keys[i]);
                                 var command = $"http://{bot.vds}/IPC?command=";
-                                command += $"!redeem {bot.login} {key}";
+                                command += $"!redeem^ {bot.login} SD,SF {key}";
                                 var response = Request.getResponse(command);
                                 Program.GetForm.MyMainForm.AddLog($"{bot.vds} - {response}\n");
                                 File.AppendAllText($"responses.txt", $"\n{DateTime.Now} {bot.vds} {bot.login} {appid} - {response}");
@@ -469,8 +486,10 @@ namespace Shatulsky_Farm {
                                     //Thread.Sleep(Timeout.Infinite);
                                 }
                                 else {
-                                    keys[i] = string.Empty;
-                                    File.WriteAllText(file, keys.ToString());
+                                    var outList = new List<string>(keys);
+                                    outList.Remove(keys[i]);
+                                    File.WriteAllLines(file, outList);
+
                                     bot.gamesHave.Add(appid);
                                 }
                                 break;
@@ -493,7 +512,14 @@ namespace Shatulsky_Farm {
                     text = Program.GetForm.MyMainForm.QIWILoginsBox.Text.Clone().ToString();
                 }));
 
-                var inputBots = text.Replace("\r", "").Split('\n');
+                List<string> inputBots = text.Replace("\r", "").Split('\n').ToList<string>();
+                for (int i = 0; i < inputBots.Count; i++) {
+                    var item = inputBots[i];
+                    if (item == string.Empty || item == "") {
+                        inputBots.Remove(item);
+                        i--;
+                    }
+                }
 
                 int processStatus = 0;
                 Qiwi qiwiAccount = new Qiwi(Program.GetForm.MyMainForm.QiwiTokenBox2.Text);
@@ -502,10 +528,10 @@ namespace Shatulsky_Farm {
                     if (bot != String.Empty) {
                         var paymentDone = await qiwiAccount.SendMoneyToSteam(bot, money);
                         if (!paymentDone) {
-                            Program.GetForm.MyMainForm.AddLog($"[{++processStatus}/{inputBots.Count()}] {bot} ОШИБКА ПОПОЛНЕНИЯ!");
+                            Program.GetForm.MyMainForm.AddLog($"[{++processStatus}/{inputBots.Count}] {bot} ОШИБКА ПОПОЛНЕНИЯ!");
                             break;
                         }
-                        Program.GetForm.MyMainForm.AddLog($"[{++processStatus}/{inputBots.Count()-1}] {bot} пополнение на сумму {money} руб успешно проведено.");
+                        Program.GetForm.MyMainForm.AddLog($"[{++processStatus}/{inputBots.Count}] {bot} пополнение на сумму {money} руб успешно проведено.");
                         File.AppendAllText("QIWI.txt", $"{DateTime.Now} - {bot},{money}");
                         Thread.Sleep(1111);
                     }
@@ -513,7 +539,6 @@ namespace Shatulsky_Farm {
             });
             UnblockAll();
         }
-
     }
 }
 

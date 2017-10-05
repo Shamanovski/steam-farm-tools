@@ -26,6 +26,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.ServersRichTextBox = new System.Windows.Forms.RichTextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.EmailLable = new System.Windows.Forms.Label();
+            this.EmailBox = new System.Windows.Forms.TextBox();
             this.QiwiTokenLable = new System.Windows.Forms.Label();
             this.CouponsKeyLable = new System.Windows.Forms.Label();
             this.QiwiTokenBox = new System.Windows.Forms.TextBox();
@@ -58,8 +60,6 @@
             this.QIWIDonateBox = new System.Windows.Forms.TextBox();
             this.QiwiTokenLable2 = new System.Windows.Forms.Label();
             this.QiwiTokenBox2 = new System.Windows.Forms.TextBox();
-            this.EmailLable = new System.Windows.Forms.Label();
-            this.EmailBox = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -95,7 +95,23 @@
             this.groupBox1.Size = new System.Drawing.Size(226, 325);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Дедики/Каталог";
+            this.groupBox1.Text = "Настройки";
+            // 
+            // EmailLable
+            // 
+            this.EmailLable.AutoSize = true;
+            this.EmailLable.Location = new System.Drawing.Point(6, 278);
+            this.EmailLable.Name = "EmailLable";
+            this.EmailLable.Size = new System.Drawing.Size(32, 13);
+            this.EmailLable.TabIndex = 18;
+            this.EmailLable.Text = "Email";
+            // 
+            // EmailBox
+            // 
+            this.EmailBox.Location = new System.Drawing.Point(6, 293);
+            this.EmailBox.Name = "EmailBox";
+            this.EmailBox.Size = new System.Drawing.Size(214, 20);
+            this.EmailBox.TabIndex = 17;
             // 
             // QiwiTokenLable
             // 
@@ -346,7 +362,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(178, 30);
             this.label1.TabIndex = 3;
-            this.label1.Text = "Список логинов для пополнения (каждый логин с новой строки)";
+            this.label1.Text = "Список логинов для пополнения (каждый логин, с новой строки)";
             // 
             // QIWIStartButton
             // 
@@ -364,7 +380,7 @@
             this.QIWILoginsBox.Location = new System.Drawing.Point(9, 40);
             this.QIWILoginsBox.Name = "QIWILoginsBox";
             this.QIWILoginsBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.QIWILoginsBox.Size = new System.Drawing.Size(225, 320);
+            this.QIWILoginsBox.Size = new System.Drawing.Size(225, 283);
             this.QIWILoginsBox.TabIndex = 1;
             this.QIWILoginsBox.Text = "";
             // 
@@ -414,22 +430,6 @@
             this.QiwiTokenBox2.Size = new System.Drawing.Size(214, 20);
             this.QiwiTokenBox2.TabIndex = 17;
             // 
-            // EmailLable
-            // 
-            this.EmailLable.AutoSize = true;
-            this.EmailLable.Location = new System.Drawing.Point(6, 278);
-            this.EmailLable.Name = "EmailLable";
-            this.EmailLable.Size = new System.Drawing.Size(32, 13);
-            this.EmailLable.TabIndex = 18;
-            this.EmailLable.Text = "Email";
-            // 
-            // EmailBox
-            // 
-            this.EmailBox.Location = new System.Drawing.Point(6, 293);
-            this.EmailBox.Name = "EmailBox";
-            this.EmailBox.Size = new System.Drawing.Size(214, 20);
-            this.EmailBox.TabIndex = 17;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -441,7 +441,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "MainForm";
-            this.Text = "Steam Farm Tools";
+            this.Text = "Steam Farm Tools v1.0";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
