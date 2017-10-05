@@ -24,6 +24,7 @@ namespace Shatulsky_Farm {
                 MyMainForm = new MainForm();
             }
 
+
         }
     }
 }
