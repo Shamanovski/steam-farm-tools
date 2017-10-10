@@ -73,7 +73,8 @@
             this.InventoryToScanBox = new System.Windows.Forms.ComboBox();
             this.CommandsGroupBox = new System.Windows.Forms.GroupBox();
             this.ManualCommandsGroupBox = new System.Windows.Forms.GroupBox();
-            this.button2 = new System.Windows.Forms.Button();
+            this.ManualCommandButton = new System.Windows.Forms.Button();
+            this.ManualCommandBox = new System.Windows.Forms.ComboBox();
             this.IPC1GruopBox.SuspendLayout();
             this.PaymentGroupBox.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -359,7 +360,7 @@
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(473, 343);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Purchase";
+            this.tabPage1.Text = "Game keys";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // tabPage3
@@ -580,7 +581,8 @@
             // 
             // ManualCommandsGroupBox
             // 
-            this.ManualCommandsGroupBox.Controls.Add(this.button2);
+            this.ManualCommandsGroupBox.Controls.Add(this.ManualCommandBox);
+            this.ManualCommandsGroupBox.Controls.Add(this.ManualCommandButton);
             this.ManualCommandsGroupBox.Location = new System.Drawing.Point(239, 236);
             this.ManualCommandsGroupBox.Name = "ManualCommandsGroupBox";
             this.ManualCommandsGroupBox.Size = new System.Drawing.Size(226, 95);
@@ -588,14 +590,30 @@
             this.ManualCommandsGroupBox.TabStop = false;
             this.ManualCommandsGroupBox.Text = "Manual commands";
             // 
-            // button2
+            // ManualCommandButton
             // 
-            this.button2.Location = new System.Drawing.Point(119, 64);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(101, 25);
-            this.button2.TabIndex = 0;
-            this.button2.Text = "Status of all farms";
-            this.button2.UseVisualStyleBackColor = true;
+            this.ManualCommandButton.Location = new System.Drawing.Point(80, 54);
+            this.ManualCommandButton.Name = "ManualCommandButton";
+            this.ManualCommandButton.Size = new System.Drawing.Size(73, 25);
+            this.ManualCommandButton.TabIndex = 0;
+            this.ManualCommandButton.Text = "Send";
+            this.ManualCommandButton.UseVisualStyleBackColor = true;
+            this.ManualCommandButton.Click += new System.EventHandler(this.ManualCommandButton_Click);
+            // 
+            // ManualCommandBox
+            // 
+            this.ManualCommandBox.FormattingEnabled = true;
+            this.ManualCommandBox.Items.AddRange(new object[] {
+            "farm asf",
+            "pause asf",
+            "resume asf",
+            "restart asf",
+            "addlicense asf "});
+            this.ManualCommandBox.Location = new System.Drawing.Point(9, 27);
+            this.ManualCommandBox.Name = "ManualCommandBox";
+            this.ManualCommandBox.Size = new System.Drawing.Size(211, 21);
+            this.ManualCommandBox.TabIndex = 13;
+            this.ManualCommandBox.Text = "farm asf";
             // 
             // MainForm
             // 
@@ -682,8 +700,9 @@
         public System.Windows.Forms.TextBox InventoryToScanBox2;
         private System.Windows.Forms.ComboBox InventoryToScanBox;
         private System.Windows.Forms.GroupBox ManualCommandsGroupBox;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button ManualCommandButton;
         private System.Windows.Forms.GroupBox CommandsGroupBox;
+        private System.Windows.Forms.ComboBox ManualCommandBox;
     }
 }
 

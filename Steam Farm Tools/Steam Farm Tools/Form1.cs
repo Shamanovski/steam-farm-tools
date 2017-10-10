@@ -736,6 +736,30 @@ namespace Shatulsky_Farm {
             });
             UnblockAll();
         }
+
+        private async void ManualCommandButton_Click(object sender, EventArgs e) {
+            BlockAll();
+            #region Загрузка VDS
+            var VDSs = ServersRichTextBox.Text.Split('\n').ToList();
+            #region удалить пустые строки
+            for (int i = 0; i < VDSs.Count; i++) {
+                if (VDSs[i] == "" || VDSs[i] == "\n")
+                    VDSs.RemoveAt(i--);
+            }
+            #endregion
+            #endregion
+            var commandFromBox = Program.GetForm.MyMainForm.ManualCommandBox.Text;
+
+            await Task.Run(() => {
+                foreach (var VDS in VDSs) {
+                    var command = $"http://{VDS}/IPC?command=!" + commandFromBox;
+                    var response = Request.getResponse(command);
+                    Program.GetForm.MyMainForm.AddLog(response);
+                }
+            });
+            UnblockAll();
+
+        }
     }
 }
 
