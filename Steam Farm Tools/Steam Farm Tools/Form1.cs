@@ -770,9 +770,9 @@ namespace Shatulsky_Farm {
         private void SteamBuyButton_Click(object sender, EventArgs e) {
 
             #region Данные аккаунта
-            var login = "00bpg";
-            var password = "jbbv644VMR";
-            var sharedSecret = "SY+v/IP6QE22/bmJnYbz4gQjE0k=";
+            var login = "1addy";
+            var password = "unameddWALKERadd11";
+            var sharedSecret = "raTfvjLRdVOw+BUPbv9721JUmkA=";
             #endregion
 
             #region Steam login
@@ -789,8 +789,25 @@ namespace Shatulsky_Farm {
             steamCookies.Add("steamLoginSecure", steamLogin.Session.SteamLoginSecure);
             #endregion
 
-            var test = Request.getSteamResponse("http://store.steampowered.com/buyitem/578080/35100001/2", steamCookies);
+            var response = Request.getSteamResponse("http://store.steampowered.com/buyitem/578080/35100001/1", steamCookies);
 
+            Regex regex1 = new Regex(@"name=""returnurl"" value=""(.+)""");
+            var returnUrl = regex1.Match(response);
+
+            Regex regex2 = new Regex(@"name=""transaction_id"" value=""(.+)""");
+            var transId = regex2.Match(response);
+
+            var postData = "transaction_id=" + transId;
+            postData += "&sessionid=" + steamLogin.Session.SessionID;
+            postData += "&approved=1";
+            postData += "&returnurl=" + returnUrl;
+
+            string[] setCookies;
+            string cookies = "";
+            foreach (var item in steamCookies) {
+                cookies += item.Key + "=" + item.Value;
+            }
+            var postResponse = Request.cookiesPOST("https://store.steampowered.com/checkout/approvetxnsubmit", postData, out setCookies, cookies);
         }
     }
 }
