@@ -789,8 +789,22 @@ namespace Shatulsky_Farm {
             steamCookies.Add("steamLoginSecure", steamLogin.Session.SteamLoginSecure);
             #endregion
 
-            var test = Request.getSteamResponse("http://store.steampowered.com/buyitem/578080/35100001/2", steamCookies);
-
+            var response = Request.getSteamResponse("http://store.steampowered.com/buyitem/578080/35100001/2", steamCookies);
+            Regex regex1 = new Regex(@"name=""returnurl"" value=""(.+)""");
+            var returnUrl = regex1.Match(response);
+            Regex regex2 = new Regex(@"name=""transaction_id"" value=""(.+)""");
+            var transId = regex2.Match(response);
+            var postData = "transaction_id=" + transId;
+            postData += "&sessionid=" + steamLogin.Session.SessionID;
+            postData += "&approved=1";
+            postData += "&returnurl=" + returnUrl;
+            string[] setCookies;
+            string cookies = "";
+            foreach (var item in steamCookies)
+            {
+                cookies += item.Key + "=" + item.Value;
+            }
+            Request.POST("https://store.steampowered.com/checkout/approvetxnsubmit", postData, out setCookies, cookies);
         }
     }
 }

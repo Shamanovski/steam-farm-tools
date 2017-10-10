@@ -40,27 +40,21 @@ namespace Shatulsky_Farm {
             }
         }
 
-        public static string POST(string Url, string postData, out string[] setCookies) {
-            var request = (HttpWebRequest)WebRequest.Create(Url);
-
-            var data = Encoding.ASCII.GetBytes(postData);
-
-            request.Method = "POST";
-            request.UserAgent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36";
-            request.ContentType = "application/x-www-form-urlencoded";
-            request.ContentLength = data.Length;
-
-            using (var stream = request.GetRequestStream()) {
-                stream.Write(data, 0, data.Length);
+        public static string POST(string Url, string postData, out string[] setCookies, string cookies1 = "") {
+            System.Net.WebClient web = new System.Net.WebClient();
+            web.Encoding = UTF8Encoding.UTF8;
+            web.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36");
+            if (cookies1 != "")
+                web.Headers.Add(HttpRequestHeader.Cookie, cookies1);
+            string response = "";
+            try { response = web.UploadString(Url, postData); }
+            catch
+            {
+                System.Threading.Thread.Sleep(10000);
+                response = POST(Url, postData, out setCookies, cookies1 = "");
             }
-
-            var response1 = (HttpWebResponse)request.GetResponse();
-
-            var returnValue = new StreamReader(response1.GetResponseStream()).ReadToEnd();
-            setCookies = response1.Headers.GetValues("Set-Cookie");
-
-
-            return returnValue;
+            setCookies = web.Headers.GetValues("Set-Cookie");
+            return response;
         }
 
         public static string GetCatalog() {
@@ -88,6 +82,7 @@ namespace Shatulsky_Farm {
                 return htmlCode;
             }
         }
+
         public static bool TryAddCookie(this WebRequest webRequest, Cookie cookie) {
             HttpWebRequest httpRequest = webRequest as HttpWebRequest;
             if (httpRequest == null) {
@@ -101,6 +96,5 @@ namespace Shatulsky_Farm {
             httpRequest.CookieContainer.Add(cookie);
             return true;
         }
-
     }
 }
