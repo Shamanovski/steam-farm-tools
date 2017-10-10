@@ -16,6 +16,7 @@ namespace Shatulsky_Farm {
         public static Dictionary<string,Tuple<string,int>> COUPONS;
         public static List<Game> ALL_GAMES_LIST;
 
+        public static Dictionary<string, string> ALL_BOTS_STEAMID_LOGIN;
     }
     public class Game :IComparable<Game> {
         public string appid;

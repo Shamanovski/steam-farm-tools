@@ -14,15 +14,19 @@ namespace Shatulsky_Farm {
 
             #region Игры которые есть
             var response = Request.getResponse($"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={Program.GetForm.MyMainForm.ApikeyBox.Text}&steamid={steamID}&format=json");
-            var json = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(response);
-            var games = json.response.games;
-            gamesHave = new List<string>();
-            foreach (var item in games) {
-                gamesHave.Add(item.appid.ToString());
+            if (response == "{\n\t\"response\": {\n\n\t}\n}") {
+                Program.GetForm.MyMainForm.AddLog($"Bot parse error - {login} {VDS}");
             }
-            #endregion
-
-            Program.GetForm.MyMainForm.IncreaseBotsCount();
+            else {
+                var json = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(response);
+                var games = json.response.games;
+                gamesHave = new List<string>();
+                foreach (var item in games) {
+                    gamesHave.Add(item.appid.ToString());
+                }
+                #endregion
+                Program.GetForm.MyMainForm.IncreaseBotsCount();
+            }
         }
 
         public Bot(string login, string VDS) {

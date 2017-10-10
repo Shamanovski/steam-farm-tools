@@ -32,6 +32,7 @@ namespace Shatulsky_Farm {
         }
 
         public async Task<bool> SendMoneyToWallet(string phone, string amount, string comment = null) {
+            amount = amount.Replace(',', '.');
             var request = new MoneyTransfer {
                 Id = (1000 * DateTimeOffset.Now.ToUnixTimeSeconds()).ToString(),
                 Sum = new Sum {
@@ -61,6 +62,7 @@ namespace Shatulsky_Farm {
             }
         }
         public async Task<bool> SendMoneyToSteam(string login, string amount) {
+            amount = amount.Replace(',', '.');
             var request = new MoneyTransfer {
                 Id = (1000 * DateTimeOffset.Now.ToUnixTimeSeconds()).ToString(),
                 Sum = new Sum {

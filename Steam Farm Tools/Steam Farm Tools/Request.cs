@@ -12,7 +12,11 @@ namespace Shatulsky_Farm {
             web.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36");
             if (cookies1 != "")
                 web.Headers.Add(HttpRequestHeader.Cookie, cookies1);
-            string html = web.DownloadString(uri);
+            string html = "";
+            try { html = web.DownloadString(uri); } catch {
+                System.Threading.Thread.Sleep(10000);
+                html = getResponse(uri);
+            }
             return html;
         }
 
