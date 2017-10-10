@@ -13,6 +13,7 @@ using System.Text;
 using System.Net;
 using System.ComponentModel;
 using System.Globalization;
+using SteamAuth;
 
 namespace Shatulsky_Farm {
     public partial class MainForm : Form {
@@ -380,27 +381,31 @@ namespace Shatulsky_Farm {
             LogBox.SelectionStart = LogBox.TextLength;
             LogBox.ScrollToCaret();
         }
-        private void LootButton_Click(object sender, EventArgs e) {
-            var unusedKeys = File.ReadAllLines("UNUSEDKEYS.TXT").ToList<string>();
-            for (int i = 0; i < unusedKeys.Count(); i++) {
-                var line = unusedKeys[i];
-                var data = line.Split(',');
-                var vds = data[0];
-                var login = data[1];
-                var key = data[2];
-                var command = $"http://{vds}/IPC?command=";
-                command += $"!redeem^ {login} SD,SF {key}";
-                var response = Request.getResponse(command);
-                Program.GetForm.MyMainForm.AddLog(response);
-                if (response.Contains("OK/NoDetail")) {
-                    unusedKeys.Remove(line);
-                    File.WriteAllLines("UNUSEDKEYS.TXT", unusedKeys);
-                    Thread.Sleep(1000);
+        private async void LootButton_Click(object sender, EventArgs e) {
+            BlockAll();
+            await Task.Run(() => {
+                var unusedKeys = File.ReadAllLines("UNUSEDKEYS.TXT").ToList<string>();
+                for (int i = 0; i < unusedKeys.Count(); i++) {
+                    var line = unusedKeys[i];
+                    var data = line.Split(',');
+                    var vds = data[0];
+                    var login = data[1];
+                    var key = data[2];
+                    var command = $"http://{vds}/IPC?command=";
+                    command += $"!redeem^ {login} SD,SF {key}";
+                    var response = Request.getResponse(command);
+                    Program.GetForm.MyMainForm.AddLog(response);
+                    if (response.Contains("OK/NoDetail")) {
+                        unusedKeys.Remove(line);
+                        File.WriteAllLines("UNUSEDKEYS.TXT", unusedKeys);
+                        Thread.Sleep(1000);
+                    }
+                    else {
+                        File.WriteAllText("UNUSEDKEYS.TXT", $"{vds},{login},{key},{response.Replace('\r', ' ').Replace('\n', ' ')}");
+                    }
                 }
-                else {
-                    File.WriteAllText("UNUSEDKEYS.TXT", $"{vds},{login},{key},{response.Replace('\r', ' ').Replace('\n', ' ')}");
-                }
-            }
+            });
+            UnblockAll();
         }
         private void MainForm_Load(object sender, EventArgs e) {
             var settings = File.ReadAllText("settings.txt");
@@ -759,6 +764,32 @@ namespace Shatulsky_Farm {
                 }
             });
             UnblockAll();
+
+        }
+
+        private void SteamBuyButton_Click(object sender, EventArgs e) {
+
+            #region Данные аккаунта
+            var login = "00bpg";
+            var password = "jbbv644VMR";
+            var sharedSecret = "SY+v/IP6QE22/bmJnYbz4gQjE0k=";
+            #endregion
+
+            #region Steam login
+            var steamLogin = new UserLogin(login, password);
+            var bot = new SteamGuardAccount();
+            bot.SharedSecret = sharedSecret;
+            steamLogin.TwoFactorCode = bot.GenerateSteamGuardCode();
+            steamLogin.DoLogin();
+            if (!steamLogin.LoggedIn) throw new Exception($"Cant login - {login}");
+
+            var steamCookies = new Dictionary<string, string>();
+            steamCookies.Add("sessionid", steamLogin.Session.SessionID);
+            steamCookies.Add("steamLogin", steamLogin.Session.SteamLogin);
+            steamCookies.Add("steamLoginSecure", steamLogin.Session.SteamLoginSecure);
+            #endregion
+
+            var test = Request.getSteamResponse("http://store.steampowered.com/buyitem/578080/35100001/2", steamCookies);
 
         }
     }

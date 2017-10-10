@@ -52,15 +52,20 @@
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.ManualCommandsGroupBox = new System.Windows.Forms.GroupBox();
+            this.ManualCommandBox = new System.Windows.Forms.ComboBox();
+            this.ManualCommandButton = new System.Windows.Forms.Button();
+            this.CommandsGroupBox = new System.Windows.Forms.GroupBox();
             this.LootAllFarmButton = new System.Windows.Forms.Button();
+            this.FarmStatusButton = new System.Windows.Forms.Button();
             this.ScanGroupBox = new System.Windows.Forms.GroupBox();
+            this.InventoryToScanBox = new System.Windows.Forms.ComboBox();
             this.InventoryToScanBox2 = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.InventoryItemsButton = new System.Windows.Forms.Button();
             this.IPC2GruopBox = new System.Windows.Forms.GroupBox();
             this.label6 = new System.Windows.Forms.Label();
             this.ServersRichTextBox2 = new System.Windows.Forms.RichTextBox();
-            this.FarmStatusButton = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.QIWITextBox = new System.Windows.Forms.Label();
             this.QIWIStartButton = new System.Windows.Forms.Button();
@@ -70,23 +75,21 @@
             this.QIWIDonateBox = new System.Windows.Forms.TextBox();
             this.QiwiTokenLable2 = new System.Windows.Forms.Label();
             this.QiwiTokenBox2 = new System.Windows.Forms.TextBox();
-            this.InventoryToScanBox = new System.Windows.Forms.ComboBox();
-            this.CommandsGroupBox = new System.Windows.Forms.GroupBox();
-            this.ManualCommandsGroupBox = new System.Windows.Forms.GroupBox();
-            this.ManualCommandButton = new System.Windows.Forms.Button();
-            this.ManualCommandBox = new System.Windows.Forms.ComboBox();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.SteamBuyButton = new System.Windows.Forms.Button();
             this.IPC1GruopBox.SuspendLayout();
             this.PaymentGroupBox.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            this.ManualCommandsGroupBox.SuspendLayout();
+            this.CommandsGroupBox.SuspendLayout();
             this.ScanGroupBox.SuspendLayout();
             this.IPC2GruopBox.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.QIWIGroupBox.SuspendLayout();
-            this.CommandsGroupBox.SuspendLayout();
-            this.ManualCommandsGroupBox.SuspendLayout();
+            this.tabPage4.SuspendLayout();
             this.SuspendLayout();
             // 
             // ServersRichTextBox
@@ -340,6 +343,7 @@
             this.tabControl.Controls.Add(this.tabPage1);
             this.tabControl.Controls.Add(this.tabPage3);
             this.tabControl.Controls.Add(this.tabPage2);
+            this.tabControl.Controls.Add(this.tabPage4);
             this.tabControl.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.tabControl.Location = new System.Drawing.Point(-1, -1);
             this.tabControl.Name = "tabControl";
@@ -376,6 +380,53 @@
             this.tabPage3.Text = "IPC";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // ManualCommandsGroupBox
+            // 
+            this.ManualCommandsGroupBox.Controls.Add(this.ManualCommandBox);
+            this.ManualCommandsGroupBox.Controls.Add(this.ManualCommandButton);
+            this.ManualCommandsGroupBox.Location = new System.Drawing.Point(239, 236);
+            this.ManualCommandsGroupBox.Name = "ManualCommandsGroupBox";
+            this.ManualCommandsGroupBox.Size = new System.Drawing.Size(226, 95);
+            this.ManualCommandsGroupBox.TabIndex = 11;
+            this.ManualCommandsGroupBox.TabStop = false;
+            this.ManualCommandsGroupBox.Text = "Manual commands";
+            // 
+            // ManualCommandBox
+            // 
+            this.ManualCommandBox.FormattingEnabled = true;
+            this.ManualCommandBox.Items.AddRange(new object[] {
+            "farm asf",
+            "pause asf",
+            "resume asf",
+            "restart asf",
+            "addlicense asf "});
+            this.ManualCommandBox.Location = new System.Drawing.Point(9, 27);
+            this.ManualCommandBox.Name = "ManualCommandBox";
+            this.ManualCommandBox.Size = new System.Drawing.Size(211, 21);
+            this.ManualCommandBox.TabIndex = 13;
+            this.ManualCommandBox.Text = "farm asf";
+            // 
+            // ManualCommandButton
+            // 
+            this.ManualCommandButton.Location = new System.Drawing.Point(80, 54);
+            this.ManualCommandButton.Name = "ManualCommandButton";
+            this.ManualCommandButton.Size = new System.Drawing.Size(73, 25);
+            this.ManualCommandButton.TabIndex = 0;
+            this.ManualCommandButton.Text = "Send";
+            this.ManualCommandButton.UseVisualStyleBackColor = true;
+            this.ManualCommandButton.Click += new System.EventHandler(this.ManualCommandButton_Click);
+            // 
+            // CommandsGroupBox
+            // 
+            this.CommandsGroupBox.Controls.Add(this.LootAllFarmButton);
+            this.CommandsGroupBox.Controls.Add(this.FarmStatusButton);
+            this.CommandsGroupBox.Location = new System.Drawing.Point(239, 118);
+            this.CommandsGroupBox.Name = "CommandsGroupBox";
+            this.CommandsGroupBox.Size = new System.Drawing.Size(226, 111);
+            this.CommandsGroupBox.TabIndex = 10;
+            this.CommandsGroupBox.TabStop = false;
+            this.CommandsGroupBox.Text = "Commands";
+            // 
             // LootAllFarmButton
             // 
             this.LootAllFarmButton.Location = new System.Drawing.Point(56, 61);
@@ -385,6 +436,16 @@
             this.LootAllFarmButton.Text = "Loot all farms through ASF";
             this.LootAllFarmButton.UseVisualStyleBackColor = true;
             this.LootAllFarmButton.Click += new System.EventHandler(this.LootAllFarmButton_Click);
+            // 
+            // FarmStatusButton
+            // 
+            this.FarmStatusButton.Location = new System.Drawing.Point(56, 19);
+            this.FarmStatusButton.Name = "FarmStatusButton";
+            this.FarmStatusButton.Size = new System.Drawing.Size(117, 36);
+            this.FarmStatusButton.TabIndex = 0;
+            this.FarmStatusButton.Text = "Status of all farms";
+            this.FarmStatusButton.UseVisualStyleBackColor = true;
+            this.FarmStatusButton.Click += new System.EventHandler(this.FarmStatusButton_Click);
             // 
             // ScanGroupBox
             // 
@@ -398,6 +459,21 @@
             this.ScanGroupBox.TabIndex = 8;
             this.ScanGroupBox.TabStop = false;
             this.ScanGroupBox.Text = "Scan";
+            // 
+            // InventoryToScanBox
+            // 
+            this.InventoryToScanBox.FormattingEnabled = true;
+            this.InventoryToScanBox.Items.AddRange(new object[] {
+            "Steam",
+            "CS GO",
+            "PUBG",
+            "TF"});
+            this.InventoryToScanBox.Location = new System.Drawing.Point(6, 36);
+            this.InventoryToScanBox.Name = "InventoryToScanBox";
+            this.InventoryToScanBox.Size = new System.Drawing.Size(107, 21);
+            this.InventoryToScanBox.TabIndex = 12;
+            this.InventoryToScanBox.Text = "Steam";
+            this.InventoryToScanBox.SelectedIndexChanged += new System.EventHandler(this.InventoryToScanBox_SelectedIndexChanged);
             // 
             // InventoryToScanBox2
             // 
@@ -454,16 +530,6 @@
             this.ServersRichTextBox2.Size = new System.Drawing.Size(211, 282);
             this.ServersRichTextBox2.TabIndex = 0;
             this.ServersRichTextBox2.Text = "";
-            // 
-            // FarmStatusButton
-            // 
-            this.FarmStatusButton.Location = new System.Drawing.Point(56, 19);
-            this.FarmStatusButton.Name = "FarmStatusButton";
-            this.FarmStatusButton.Size = new System.Drawing.Size(117, 36);
-            this.FarmStatusButton.TabIndex = 0;
-            this.FarmStatusButton.Text = "Status of all farms";
-            this.FarmStatusButton.UseVisualStyleBackColor = true;
-            this.FarmStatusButton.Click += new System.EventHandler(this.FarmStatusButton_Click);
             // 
             // tabPage2
             // 
@@ -553,67 +619,25 @@
             this.QiwiTokenBox2.Size = new System.Drawing.Size(214, 20);
             this.QiwiTokenBox2.TabIndex = 17;
             // 
-            // InventoryToScanBox
+            // tabPage4
             // 
-            this.InventoryToScanBox.FormattingEnabled = true;
-            this.InventoryToScanBox.Items.AddRange(new object[] {
-            "Steam",
-            "CS GO",
-            "PUBG",
-            "TF"});
-            this.InventoryToScanBox.Location = new System.Drawing.Point(6, 36);
-            this.InventoryToScanBox.Name = "InventoryToScanBox";
-            this.InventoryToScanBox.Size = new System.Drawing.Size(107, 21);
-            this.InventoryToScanBox.TabIndex = 12;
-            this.InventoryToScanBox.Text = "Steam";
-            this.InventoryToScanBox.SelectedIndexChanged += new System.EventHandler(this.InventoryToScanBox_SelectedIndexChanged);
+            this.tabPage4.Controls.Add(this.SteamBuyButton);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Size = new System.Drawing.Size(473, 343);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "Steam buy";
+            this.tabPage4.UseVisualStyleBackColor = true;
             // 
-            // CommandsGroupBox
+            // SteamBuyButton
             // 
-            this.CommandsGroupBox.Controls.Add(this.LootAllFarmButton);
-            this.CommandsGroupBox.Controls.Add(this.FarmStatusButton);
-            this.CommandsGroupBox.Location = new System.Drawing.Point(239, 118);
-            this.CommandsGroupBox.Name = "CommandsGroupBox";
-            this.CommandsGroupBox.Size = new System.Drawing.Size(226, 111);
-            this.CommandsGroupBox.TabIndex = 10;
-            this.CommandsGroupBox.TabStop = false;
-            this.CommandsGroupBox.Text = "Commands";
-            // 
-            // ManualCommandsGroupBox
-            // 
-            this.ManualCommandsGroupBox.Controls.Add(this.ManualCommandBox);
-            this.ManualCommandsGroupBox.Controls.Add(this.ManualCommandButton);
-            this.ManualCommandsGroupBox.Location = new System.Drawing.Point(239, 236);
-            this.ManualCommandsGroupBox.Name = "ManualCommandsGroupBox";
-            this.ManualCommandsGroupBox.Size = new System.Drawing.Size(226, 95);
-            this.ManualCommandsGroupBox.TabIndex = 11;
-            this.ManualCommandsGroupBox.TabStop = false;
-            this.ManualCommandsGroupBox.Text = "Manual commands";
-            // 
-            // ManualCommandButton
-            // 
-            this.ManualCommandButton.Location = new System.Drawing.Point(80, 54);
-            this.ManualCommandButton.Name = "ManualCommandButton";
-            this.ManualCommandButton.Size = new System.Drawing.Size(73, 25);
-            this.ManualCommandButton.TabIndex = 0;
-            this.ManualCommandButton.Text = "Send";
-            this.ManualCommandButton.UseVisualStyleBackColor = true;
-            this.ManualCommandButton.Click += new System.EventHandler(this.ManualCommandButton_Click);
-            // 
-            // ManualCommandBox
-            // 
-            this.ManualCommandBox.FormattingEnabled = true;
-            this.ManualCommandBox.Items.AddRange(new object[] {
-            "farm asf",
-            "pause asf",
-            "resume asf",
-            "restart asf",
-            "addlicense asf "});
-            this.ManualCommandBox.Location = new System.Drawing.Point(9, 27);
-            this.ManualCommandBox.Name = "ManualCommandBox";
-            this.ManualCommandBox.Size = new System.Drawing.Size(211, 21);
-            this.ManualCommandBox.TabIndex = 13;
-            this.ManualCommandBox.Text = "farm asf";
+            this.SteamBuyButton.Location = new System.Drawing.Point(132, 124);
+            this.SteamBuyButton.Name = "SteamBuyButton";
+            this.SteamBuyButton.Size = new System.Drawing.Size(176, 69);
+            this.SteamBuyButton.TabIndex = 0;
+            this.SteamBuyButton.Text = "КУПИТЬ ЧТО-ТО В СТИМ";
+            this.SteamBuyButton.UseVisualStyleBackColor = true;
+            this.SteamBuyButton.Click += new System.EventHandler(this.SteamBuyButton_Click);
             // 
             // MainForm
             // 
@@ -637,6 +661,8 @@
             this.tabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
+            this.ManualCommandsGroupBox.ResumeLayout(false);
+            this.CommandsGroupBox.ResumeLayout(false);
             this.ScanGroupBox.ResumeLayout(false);
             this.ScanGroupBox.PerformLayout();
             this.IPC2GruopBox.ResumeLayout(false);
@@ -644,8 +670,7 @@
             this.tabPage2.ResumeLayout(false);
             this.QIWIGroupBox.ResumeLayout(false);
             this.QIWIGroupBox.PerformLayout();
-            this.CommandsGroupBox.ResumeLayout(false);
-            this.ManualCommandsGroupBox.ResumeLayout(false);
+            this.tabPage4.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -703,6 +728,8 @@
         private System.Windows.Forms.Button ManualCommandButton;
         private System.Windows.Forms.GroupBox CommandsGroupBox;
         private System.Windows.Forms.ComboBox ManualCommandBox;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.Button SteamBuyButton;
     }
 }
 

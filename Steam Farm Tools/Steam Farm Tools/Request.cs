@@ -1,10 +1,12 @@
-﻿using System.IO;
+﻿using SteamAuth;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Text;
 
 namespace Shatulsky_Farm {
     static class Request {
-        public static string FilePath { get; private set; }
 
         public static string getResponse(string uri, string cookies1 = "") {
             System.Net.WebClient web = new System.Net.WebClient();
@@ -70,5 +72,35 @@ namespace Shatulsky_Farm {
             string html = web.DownloadString("http://shamanovski.pythonanywhere.com/catalogue");
             return html;
         }
+        
+        public static string getSteamResponse(string url, IDictionary<string, string> cookieNameValues) {
+            var encoding = Encoding.UTF8;
+            using (var webClient = new WebClient()) {
+                var uri = new Uri(url);
+                var webRequest = WebRequest.Create(uri);
+                foreach (var nameValue in cookieNameValues) {
+                    webRequest.TryAddCookie(new Cookie(nameValue.Key, nameValue.Value, "/", uri.Host));
+                }
+                var response = webRequest.GetResponse();
+                var receiveStream = response.GetResponseStream();
+                var readStream = new StreamReader(receiveStream, encoding);
+                var htmlCode = readStream.ReadToEnd();
+                return htmlCode;
+            }
+        }
+        public static bool TryAddCookie(this WebRequest webRequest, Cookie cookie) {
+            HttpWebRequest httpRequest = webRequest as HttpWebRequest;
+            if (httpRequest == null) {
+                return false;
+            }
+
+            if (httpRequest.CookieContainer == null) {
+                httpRequest.CookieContainer = new CookieContainer();
+            }
+
+            httpRequest.CookieContainer.Add(cookie);
+            return true;
+        }
+
     }
 }
