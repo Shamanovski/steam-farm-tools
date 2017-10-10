@@ -382,23 +382,24 @@ namespace Shatulsky_Farm {
         }
         private void LootButton_Click(object sender, EventArgs e) {
             var unusedKeys = File.ReadAllLines("UNUSEDKEYS.TXT").ToList<string>();
-            foreach (var line in unusedKeys) {
+            for (int i = 0; i < unusedKeys.Count(); i++) {
+                var line = unusedKeys[i];
                 var data = line.Split(',');
-                //{bot.vds},{bot.login},{key},{response}
                 var vds = data[0];
                 var login = data[1];
-                var key = data[1];
+                var key = data[2];
                 var command = $"http://{vds}/IPC?command=";
                 command += $"!redeem^ {login} SD,SF {key}";
                 var response = Request.getResponse(command);
                 Program.GetForm.MyMainForm.AddLog(response);
-                if (response.Contains("OK/NoDetail") == false) {
+                if (response.Contains("OK/NoDetail")) {
+                    unusedKeys.Remove(line);
+                    File.WriteAllLines("UNUSEDKEYS.TXT", unusedKeys);
+                    Thread.Sleep(1000);
+                }
+                else {
                     File.WriteAllText("UNUSEDKEYS.TXT", $"{vds},{login},{key},{response.Replace('\r', ' ').Replace('\n', ' ')}");
                 }
-
-                var outList = File.ReadAllLines("UNUSEDKEYS.TXT").ToList<string>();
-                outList.Remove(line);
-                File.WriteAllLines("UNUSEDKEYS.TXT", outList);
             }
         }
         private void MainForm_Load(object sender, EventArgs e) {
