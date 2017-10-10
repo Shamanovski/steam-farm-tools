@@ -3,6 +3,7 @@
 import re
 import logging
 import json
+import time
 import sys
 import logging
 import traceback
@@ -12,7 +13,7 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 
 logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s', level=logging.INFO,
-                    filename='parse_catalogue_log.txt', filemode='w')
+                    filename='my_server/parse_catalogue_log.txt', filemode='w')
 
 def uncaught_exceptions_handler(type, value, tb):
     logging.critical("{0} {1}\n{2}".format(type, value, traceback.format_tb(tb)))
@@ -21,18 +22,20 @@ def uncaught_exceptions_handler(type, value, tb):
 sys.excepthook = uncaught_exceptions_handler
 
 def main():
-    with Display():
-        driver = webdriver.Firefox()
-        driver.get('http://steamkeys.ovh/?key=7f35e0db30daeb9c4dc813b641f7f0cf')
-        html = driver.page_source
-        driver.quit()
-    soup = BeautifulSoup(html, "html.parser")
-    catalogue_items = get_catalogue(soup)
+    for _ in range(4):
+        with Display():
+            driver = webdriver.Firefox()
+            driver.get('http://steamkeys.ovh/?key=7f35e0db30daeb9c4dc813b641f7f0cf')
+            html = driver.page_source
+            driver.quit()
+        soup = BeautifulSoup(html, "html.parser")
+        catalogue_items = get_catalogue(soup)
 
-    with open('catalogue.json', 'w', encoding='utf-8') as f:
-        json.dump(catalogue_items, f)
+        with open('my_server/catalogue.json', 'w', encoding='utf-8') as f:
+            json.dump(catalogue_items, f)
 
-    logging.info("Successfully updated catalogue")
+        logging.info("Successfully updated catalogue")
+        time.sleep(900)
 
 def get_catalogue(soup_obj):
     rows = soup_obj.select("table.ttt.dataTable.no-footer")[0].find_all('tr')
@@ -66,6 +69,7 @@ def get_catalogue(soup_obj):
             'lequeshop_id': lequeshop_id,
             'market_link': market_link
         }
+
     return catalogue_items
 
 
