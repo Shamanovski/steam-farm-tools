@@ -3,7 +3,7 @@ import logging
 import shelve
 import requests
 
-from flask import Flask, request
+from flask import Flask, request, render_template
 
 # disable flask and requests info logs
 logging.getLogger('werkzeug').setLevel(logging.ERROR)
@@ -11,7 +11,7 @@ logging.getLogger("requests").setLevel(logging.ERROR)
 
 logger = logging.getLogger()
 logger.setLevel(level=logging.INFO)
-file_handler = logging.FileHandler('logs.txt', 'a', encoding='utf-8')
+file_handler = logging.FileHandler('my_server/logs.txt', 'a', encoding='utf-8')
 formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s')
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
@@ -26,7 +26,7 @@ def check_license_autoreg():
     with open('farmtools_keys.txt', 'r') as f:
         farmtools_keys = [i.rstrip() for i in f.readlines()]
 
-    success = check_license(autoreg_keys + farmtools_keys)
+    success = check_license(autoreg_keys + farmtools_keys, 'autoreg')
     return json.dumps({'success': success}), 200
 
 
@@ -35,16 +35,28 @@ def check_license_farmtools():
     with open('farmtools_keys.txt', 'r') as f:
         farmtools_keys = [i.rstrip() for i in f.readlines()]
 
-    success = check_license(farmtools_keys)
+    success = check_license(farmtools_keys, 'farmtools')
     return json.dumps({'success': success}), 200
 
 
-def check_license(keys):
+@app.route('/showdb', methods=['GET'])
+def show_db():
+    with shelve.open('farmtools_db') as db:
+        return render_template('my_server/farmtools_db.html', dict(db)), 200
+
+
+def check_license(keys, app_name):
+    logging.info('Application: %s', app_name)
     success = False
     data = {key: value for key, value in request.form.items()}
     ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
     key = data['key']
-    db = shelve.open('clients')
+    if app_name == 'autoreg':
+        db_name = 'clients'
+    elif app_name == 'farmtools':
+        db_name = 'farmtools_db'
+    db = shelve.open(db_name)
+
     try:
         if key in keys:
             if not db.get(key, None):
@@ -56,7 +68,7 @@ def check_license(keys):
                 db_data = db[key]
                 success = check_device(data, db_data, ip)
         else:
-            logger.info('WRONG KEY: %s, %s', data, ip)
+            logger.info('WRONG KEY: %s, %s\n', data, ip)
     finally:
         db.close()
 
@@ -94,12 +106,12 @@ def get_city_from_ip(ip_address):
 
 def update_database(data, db, key):
     db[key] = data
-    logger.info('VALID KEY. Added to the database: %s', data)
+    logger.info('VALID KEY. Added to the database: %s\n', data)
 
 
 def check_device(data, db_data, ip):
     if data['uid'] != db_data['uid']:
-        logger.warning('UID is different (%s). The request has been declined: %s', data['uid'], db_data)
+        logger.warning('UID is different (%s). The request has been declined: %s\n', data['uid'], db_data)
         return False
 
     stored_ip, stored_city = db_data['ip']
@@ -110,5 +122,5 @@ def check_device(data, db_data, ip):
                 'Data from database: %s', ip, city, db_data)
         logger.warning('IPs are different: %s-%s', ip, stored_ip)
 
-    logger.info('The device has been authorized successfully: %s', db_data)
+    logger.info('The device has been authorized successfully: %s\n', db_data)
     return True
