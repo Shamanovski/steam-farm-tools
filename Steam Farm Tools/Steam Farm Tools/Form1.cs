@@ -803,11 +803,7 @@ namespace Shatulsky_Farm {
             postData += "&returnurl=" + returnUrl;
 
             string[] setCookies;
-            string cookies = "";
-            foreach (var item in steamCookies) {
-                cookies += item.Key + "=" + item.Value;
-            }
-            var postResponse = Request.cookiesPOST("https://store.steampowered.com/checkout/approvetxnsubmit", postData, out setCookies, cookies);
+            var postResponse = Request.cookiesPOST("https://store.steampowered.com/checkout/approvetxnsubmit", postData, out setCookies, steamCookies);
         }
     }
 }

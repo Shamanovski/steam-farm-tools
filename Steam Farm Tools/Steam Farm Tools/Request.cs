@@ -40,7 +40,7 @@ namespace Shatulsky_Farm {
             }
         }
 
-        public static string POST(string Url, string postData, out string[] setCookies ) {
+        public static string POST(string Url, string postData, out string[] setCookies) {
             var request = (HttpWebRequest)WebRequest.Create(Url);
 
             var data = Encoding.ASCII.GetBytes(postData);
@@ -63,19 +63,24 @@ namespace Shatulsky_Farm {
             return returnValue;
         }
 
-        public static string cookiesPOST(string Url, string postData, out string[] setCookies, string cookies1 = "") {
-            System.Net.WebClient web = new System.Net.WebClient();
-            web.Encoding = UTF8Encoding.UTF8;
-            web.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36");
-            if (cookies1 != "")
-                web.Headers.Add(HttpRequestHeader.Cookie, cookies1);
-            string response = "";
-            try { response = web.UploadString(Url, postData); } catch {
-                System.Threading.Thread.Sleep(10000);
-                response = cookiesPOST(Url, postData, out setCookies, cookies1 = "");
+        public static string cookiesPOST(string Url, string postData, out string[] setCookies, IDictionary<string, string> cookieNameValues) {
+            using (var webClient = new WebClient()) {
+                var uri = new Uri(Url);
+                webClient.Encoding = UTF8Encoding.UTF8;
+                webClient.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36");
+                
+                foreach (var nameValue in cookieNameValues) {
+                    webClient.Headers.Add(HttpRequestHeader.Cookie, $"{nameValue.Key}={nameValue.Value}; ");
+                }
+
+                string response = "";
+                try { response = webClient.UploadString(Url, postData); } catch {
+                    System.Threading.Thread.Sleep(10000);
+                    response = cookiesPOST(Url, postData, out setCookies, cookieNameValues);
+                }
+                setCookies = webClient.Headers.GetValues("Set-Cookie");
+                return response;
             }
-            setCookies = web.Headers.GetValues("Set-Cookie");
-            return response;
         }
 
         public static string GetCatalog() {
@@ -87,7 +92,7 @@ namespace Shatulsky_Farm {
             string html = web.DownloadString("http://shamanovski.pythonanywhere.com/catalogue");
             return html;
         }
-        
+
         public static string getSteamResponse(string url, IDictionary<string, string> cookieNameValues) {
             var encoding = Encoding.UTF8;
             using (var webClient = new WebClient()) {
