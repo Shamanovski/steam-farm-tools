@@ -63,32 +63,6 @@ namespace Shatulsky_Farm {
             return returnValue;
         }
 
-        public static string cookiesPOST(string Url, string postData, out string[] setCookies, IDictionary<string, string> cookieNameValues) {
-            using (var webClient = new WebClient()) {
-                var uri = new Uri(Url);
-                webClient.Encoding = UTF8Encoding.UTF8;
-                webClient.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36");
-
-                string[] cookiesArray = new string[5];
-                int index = 0;
-                foreach (var item in cookieNameValues)
-                {
-                    cookiesArray[index] = item.Key + "=" + item.Value;
-                    ++index;
-                }
-                webClient.Headers.Add(HttpRequestHeader.Cookie, String.Join("; ", cookiesArray));
-
-                string response = "";
-                try { response = webClient.UploadString(Url, postData); } catch {
-                    System.Threading.Thread.Sleep(10000);
-                    response = cookiesPOST(Url, postData, out setCookies, cookieNameValues);
-                }
-                setCookies = webClient.Headers.GetValues("Set-Cookie");
-                Console.Write(response);
-                return response;
-            }
-        }
-
         public static string GetCatalog() {
             System.Net.WebClient web = new System.Net.WebClient();
             web.Encoding = UTF8Encoding.UTF8;
@@ -128,6 +102,42 @@ namespace Shatulsky_Farm {
             httpRequest.CookieContainer.Add(cookie);
             return true;
         }
+
+
+        public static string SendPostRequest(string url, string data, CookieCollection cookieNameValues) {
+            string responseFromServer = "";
+            try {
+                WebRequest request = WebRequest.Create(url);
+                request.Method = "POST";
+                string postData = data;
+                request.ContentType = "application/x-www-form-urlencoded";
+                foreach (var item in cookieNameValues) {
+                    request.TryAddCookie((Cookie)item);
+                }
+                System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
+                byte[] postByteArray = encoding.GetBytes(postData);
+                request.ContentLength = postByteArray.Length;
+
+                System.IO.Stream postStream = request.GetRequestStream();
+                postStream.Write(postByteArray, 0, postByteArray.Length);
+                postStream.Close();
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                Console.WriteLine("Response Status Description: " + response.StatusDescription);
+                Stream dataSteam = response.GetResponseStream();
+                StreamReader reader = new StreamReader(dataSteam);
+                responseFromServer = reader.ReadToEnd();
+                reader.Close();
+                dataSteam.Close();
+                response.Close();
+            } catch (Exception ex) {
+                //Если что-то пошло не так, выводим ошибочку о том, что же пошло не так.
+                Console.WriteLine("ERROR: " + ex.Message);
+            }
+            return responseFromServer;
+
+        }
+
+
 
     }
 }

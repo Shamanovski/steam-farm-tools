@@ -770,9 +770,9 @@ namespace Shatulsky_Farm {
         private void SteamBuyButton_Click(object sender, EventArgs e) {
 
             #region Данные аккаунта
-            var login = "1addy";
-            var password = "unameddWALKERadd11";
-            var sharedSecret = "raTfvjLRdVOw+BUPbv9721JUmkA=";
+            var login = "";
+            var password = "";
+            var sharedSecret = "";
             #endregion
 
             #region Steam login
@@ -791,24 +791,20 @@ namespace Shatulsky_Farm {
 
             CookieCollection storeCookies = new CookieCollection();
             var response = Request.getSteamResponse("https://store.steampowered.com/buyitem/440/5021/1", steamCookies, out storeCookies);
-            Console.WriteLine(storeCookies["sessionid"].Value);
 
-            Regex regex1 = new Regex(@"name=""returnurl"" value=""(.+)""");
-            Match m1 = regex1.Match(response);
+            Match m1 = new Regex(@"name=""returnurl"" value=""(.+)""").Match(response);
             var returnUrl = m1.Groups[1];
 
-            Regex regex2 = new Regex(@"name=""transaction_id"" value=""(.+)""");
-            Match m2 = regex2.Match(response);
+            Match m2 = new Regex(@"name=""transaction_id"" value=""(.+)""").Match(response);
             var transId = m2.Groups[1];
-
+            
             var postData = "transaction_id=" + transId;
-            postData += "&sessionid=" + storeCookies["sessionid"].Value;
+            postData += "&returnurl=" + returnUrl.ToString().Replace(";", "%2F&");
+            postData += "&sessionid=" + storeCookies[2].Value.ToString();
             postData += "&approved=1";
-            postData += "&returnurl=" + returnUrl;
 
-            Console.Write(postData + "\n");
-            string[] setCookies;
-            var postResponse = Request.cookiesPOST("https://store.steampowered.com/checkout/approvetxnsubmit", postData, out setCookies, steamCookies);
+            var test = Request.SendPostRequest("https://store.steampowered.com/checkout/approvetxnsubmit", postData, storeCookies)
+
         }
     }
 }
