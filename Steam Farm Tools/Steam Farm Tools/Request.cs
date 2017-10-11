@@ -68,10 +68,15 @@ namespace Shatulsky_Farm {
                 var uri = new Uri(Url);
                 webClient.Encoding = UTF8Encoding.UTF8;
                 webClient.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36");
-                
-                foreach (var nameValue in cookieNameValues) {
-                    webClient.Headers.Add(HttpRequestHeader.Cookie, $"{nameValue.Key}={nameValue.Value}; ");
+
+                string[] cookiesArray = new string[5];
+                int index = 0;
+                foreach (var item in cookieNameValues)
+                {
+                    cookiesArray[index] = item.Key + "=" + item.Value;
+                    ++index;
                 }
+                webClient.Headers.Add(HttpRequestHeader.Cookie, String.Join("; ", cookiesArray));
 
                 string response = "";
                 try { response = webClient.UploadString(Url, postData); } catch {
@@ -79,6 +84,7 @@ namespace Shatulsky_Farm {
                     response = cookiesPOST(Url, postData, out setCookies, cookieNameValues);
                 }
                 setCookies = webClient.Headers.GetValues("Set-Cookie");
+                Console.Write(response);
                 return response;
             }
         }
@@ -93,11 +99,11 @@ namespace Shatulsky_Farm {
             return html;
         }
 
-        public static string getSteamResponse(string url, IDictionary<string, string> cookieNameValues) {
+        public static string getSteamResponse(string url, IDictionary<string, string> cookieNameValues, out CookieCollection storeCookies) {
             var encoding = Encoding.UTF8;
             using (var webClient = new WebClient()) {
                 var uri = new Uri(url);
-                var webRequest = WebRequest.Create(uri);
+                HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(url);
                 foreach (var nameValue in cookieNameValues) {
                     webRequest.TryAddCookie(new Cookie(nameValue.Key, nameValue.Value, "/", uri.Host));
                 }
@@ -105,6 +111,7 @@ namespace Shatulsky_Farm {
                 var receiveStream = response.GetResponseStream();
                 var readStream = new StreamReader(receiveStream, encoding);
                 var htmlCode = readStream.ReadToEnd();
+                storeCookies = webRequest.CookieContainer.GetCookies(new Uri("https://store.steampowered.com"));
                 return htmlCode;
             }
         }
