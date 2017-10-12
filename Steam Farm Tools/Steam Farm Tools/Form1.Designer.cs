@@ -52,7 +52,8 @@
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.IPC2GruopBox2 = new System.Windows.Forms.GroupBox();
+            this.IPCGroupBox2 = new System.Windows.Forms.GroupBox();
+            this.RescanBotsCheckBox = new System.Windows.Forms.CheckBox();
             this.AppidTextBox = new System.Windows.Forms.TextBox();
             this.OwnsCheckButton = new System.Windows.Forms.Button();
             this.ManualCommandsGroupBox = new System.Windows.Forms.GroupBox();
@@ -65,7 +66,7 @@
             this.InventoryToScanBox = new System.Windows.Forms.ComboBox();
             this.InventoryToScanBox2 = new System.Windows.Forms.TextBox();
             this.InventoryItemsButton = new System.Windows.Forms.Button();
-            this.IPC2GruopBox = new System.Windows.Forms.GroupBox();
+            this.IPCGroupBox = new System.Windows.Forms.GroupBox();
             this.label6 = new System.Windows.Forms.Label();
             this.ServersRichTextBox2 = new System.Windows.Forms.RichTextBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
@@ -90,18 +91,17 @@
             this.label2 = new System.Windows.Forms.Label();
             this.QIWILoginsBox = new System.Windows.Forms.RichTextBox();
             this.QIWIStartButton = new System.Windows.Forms.Button();
-            this.RescanBotsCheckBox = new System.Windows.Forms.CheckBox();
             this.IPC1GruopBox.SuspendLayout();
             this.PaymentGroupBox.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage3.SuspendLayout();
-            this.IPC2GruopBox2.SuspendLayout();
+            this.IPCGroupBox2.SuspendLayout();
             this.ManualCommandsGroupBox.SuspendLayout();
             this.CommandsGroupBox.SuspendLayout();
             this.ScanGroupBox.SuspendLayout();
-            this.IPC2GruopBox.SuspendLayout();
+            this.IPCGroupBox.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.SteamBuyGruouBox3.SuspendLayout();
             this.SteamBuyGruouBox2.SuspendLayout();
@@ -388,11 +388,11 @@
             // 
             // tabPage3
             // 
-            this.tabPage3.Controls.Add(this.IPC2GruopBox2);
+            this.tabPage3.Controls.Add(this.IPCGroupBox2);
             this.tabPage3.Controls.Add(this.ManualCommandsGroupBox);
             this.tabPage3.Controls.Add(this.CommandsGroupBox);
             this.tabPage3.Controls.Add(this.ScanGroupBox);
-            this.tabPage3.Controls.Add(this.IPC2GruopBox);
+            this.tabPage3.Controls.Add(this.IPCGroupBox);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(473, 343);
@@ -400,17 +400,29 @@
             this.tabPage3.Text = "IPC";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // IPC2GruopBox2
+            // IPCGroupBox2
             // 
-            this.IPC2GruopBox2.Controls.Add(this.RescanBotsCheckBox);
-            this.IPC2GruopBox2.Controls.Add(this.AppidTextBox);
-            this.IPC2GruopBox2.Controls.Add(this.OwnsCheckButton);
-            this.IPC2GruopBox2.Location = new System.Drawing.Point(239, 175);
-            this.IPC2GruopBox2.Name = "IPC2GruopBox2";
-            this.IPC2GruopBox2.Size = new System.Drawing.Size(226, 67);
-            this.IPC2GruopBox2.TabIndex = 11;
-            this.IPC2GruopBox2.TabStop = false;
-            this.IPC2GruopBox2.Text = "Check appid for owns";
+            this.IPCGroupBox2.Controls.Add(this.RescanBotsCheckBox);
+            this.IPCGroupBox2.Controls.Add(this.AppidTextBox);
+            this.IPCGroupBox2.Controls.Add(this.OwnsCheckButton);
+            this.IPCGroupBox2.Location = new System.Drawing.Point(239, 175);
+            this.IPCGroupBox2.Name = "IPCGroupBox2";
+            this.IPCGroupBox2.Size = new System.Drawing.Size(226, 67);
+            this.IPCGroupBox2.TabIndex = 11;
+            this.IPCGroupBox2.TabStop = false;
+            this.IPCGroupBox2.Text = "Check appid for owns";
+            // 
+            // RescanBotsCheckBox
+            // 
+            this.RescanBotsCheckBox.AutoSize = true;
+            this.RescanBotsCheckBox.Checked = true;
+            this.RescanBotsCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.RescanBotsCheckBox.Location = new System.Drawing.Point(10, 41);
+            this.RescanBotsCheckBox.Name = "RescanBotsCheckBox";
+            this.RescanBotsCheckBox.Size = new System.Drawing.Size(186, 17);
+            this.RescanBotsCheckBox.TabIndex = 14;
+            this.RescanBotsCheckBox.Text = "Rescan bots games before check";
+            this.RescanBotsCheckBox.UseVisualStyleBackColor = true;
             // 
             // AppidTextBox
             // 
@@ -541,16 +553,16 @@
             this.InventoryItemsButton.UseVisualStyleBackColor = true;
             this.InventoryItemsButton.Click += new System.EventHandler(this.InventoryItemsButton_Click);
             // 
-            // IPC2GruopBox
+            // IPCGroupBox
             // 
-            this.IPC2GruopBox.Controls.Add(this.label6);
-            this.IPC2GruopBox.Controls.Add(this.ServersRichTextBox2);
-            this.IPC2GruopBox.Location = new System.Drawing.Point(7, 6);
-            this.IPC2GruopBox.Name = "IPC2GruopBox";
-            this.IPC2GruopBox.Size = new System.Drawing.Size(226, 325);
-            this.IPC2GruopBox.TabIndex = 2;
-            this.IPC2GruopBox.TabStop = false;
-            this.IPC2GruopBox.Text = "Settings";
+            this.IPCGroupBox.Controls.Add(this.label6);
+            this.IPCGroupBox.Controls.Add(this.ServersRichTextBox2);
+            this.IPCGroupBox.Location = new System.Drawing.Point(7, 6);
+            this.IPCGroupBox.Name = "IPCGroupBox";
+            this.IPCGroupBox.Size = new System.Drawing.Size(226, 325);
+            this.IPCGroupBox.TabIndex = 2;
+            this.IPCGroupBox.TabStop = false;
+            this.IPCGroupBox.Text = "Settings";
             // 
             // label6
             // 
@@ -793,18 +805,6 @@
             this.QIWIStartButton.UseVisualStyleBackColor = true;
             this.QIWIStartButton.Click += new System.EventHandler(this.button1_Click);
             // 
-            // RescanBotsCheckBox
-            // 
-            this.RescanBotsCheckBox.AutoSize = true;
-            this.RescanBotsCheckBox.Checked = true;
-            this.RescanBotsCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.RescanBotsCheckBox.Location = new System.Drawing.Point(10, 41);
-            this.RescanBotsCheckBox.Name = "RescanBotsCheckBox";
-            this.RescanBotsCheckBox.Size = new System.Drawing.Size(186, 17);
-            this.RescanBotsCheckBox.TabIndex = 14;
-            this.RescanBotsCheckBox.Text = "Rescan bots games before check";
-            this.RescanBotsCheckBox.UseVisualStyleBackColor = true;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -816,7 +816,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "MainForm";
-            this.Text = "Steam Farm Tools v1.1";
+            this.Text = "Steam Farm Tools v1.2";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.IPC1GruopBox.ResumeLayout(false);
             this.IPC1GruopBox.PerformLayout();
@@ -827,14 +827,14 @@
             this.tabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
-            this.IPC2GruopBox2.ResumeLayout(false);
-            this.IPC2GruopBox2.PerformLayout();
+            this.IPCGroupBox2.ResumeLayout(false);
+            this.IPCGroupBox2.PerformLayout();
             this.ManualCommandsGroupBox.ResumeLayout(false);
             this.CommandsGroupBox.ResumeLayout(false);
             this.ScanGroupBox.ResumeLayout(false);
             this.ScanGroupBox.PerformLayout();
-            this.IPC2GruopBox.ResumeLayout(false);
-            this.IPC2GruopBox.PerformLayout();
+            this.IPCGroupBox.ResumeLayout(false);
+            this.IPCGroupBox.PerformLayout();
             this.tabPage4.ResumeLayout(false);
             this.SteamBuyGruouBox3.ResumeLayout(false);
             this.SteamBuyGruouBox3.PerformLayout();
@@ -887,7 +887,7 @@
         public System.Windows.Forms.Label EmailLable;
         public System.Windows.Forms.TextBox EmailBox;
         private System.Windows.Forms.TabPage tabPage3;
-        public System.Windows.Forms.GroupBox IPC2GruopBox;
+        public System.Windows.Forms.GroupBox IPCGroupBox;
         public System.Windows.Forms.Label label6;
         public System.Windows.Forms.RichTextBox ServersRichTextBox2;
         private System.Windows.Forms.Button InventoryItemsButton;
@@ -912,7 +912,7 @@
         public System.Windows.Forms.Label label1;
         public System.Windows.Forms.RichTextBox SteamBuyAccounts;
         private System.Windows.Forms.Button BrowseFolderButton;
-        private System.Windows.Forms.GroupBox IPC2GruopBox2;
+        private System.Windows.Forms.GroupBox IPCGroupBox2;
         public System.Windows.Forms.TextBox AppidTextBox;
         private System.Windows.Forms.Button OwnsCheckButton;
         private System.Windows.Forms.GroupBox QIWIGroupBox2;

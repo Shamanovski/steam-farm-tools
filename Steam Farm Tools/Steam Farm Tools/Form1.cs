@@ -358,8 +358,9 @@ namespace Shatulsky_Farm {
             if (InvokeRequired)
                 Invoke((Action)BlockAll);
             Program.GetForm.MyMainForm.IPC1GruopBox.Enabled = false;
+            Program.GetForm.MyMainForm.IPCGroupBox2.Enabled = false;
             Program.GetForm.MyMainForm.PaymentGroupBox.Enabled = false;
-            Program.GetForm.MyMainForm.IPC2GruopBox.Enabled = false;
+            Program.GetForm.MyMainForm.IPCGroupBox.Enabled = false;
             Program.GetForm.MyMainForm.ScanGroupBox.Enabled = false;
             Program.GetForm.MyMainForm.CommandsGroupBox.Enabled = false;
             Program.GetForm.MyMainForm.ManualCommandsGroupBox.Enabled = false;
@@ -374,13 +375,15 @@ namespace Shatulsky_Farm {
             Program.GetForm.MyMainForm.SteamBuyGruouBox2.Enabled = false;
             Program.GetForm.MyMainForm.SteamBuyGruouBox3.Enabled = false;
             Program.GetForm.MyMainForm.SteamBuyButton.Enabled = false;
+
         }
         public void UnblockAll() {
             if (InvokeRequired)
                 Invoke((Action)UnblockAll);
             Program.GetForm.MyMainForm.IPC1GruopBox.Enabled = true;
+            Program.GetForm.MyMainForm.IPCGroupBox2.Enabled = true;
             Program.GetForm.MyMainForm.PaymentGroupBox.Enabled = true;
-            Program.GetForm.MyMainForm.IPC2GruopBox.Enabled = true;
+            Program.GetForm.MyMainForm.IPCGroupBox.Enabled = true;
             Program.GetForm.MyMainForm.ScanGroupBox.Enabled = true;
             Program.GetForm.MyMainForm.CommandsGroupBox.Enabled = true;
             Program.GetForm.MyMainForm.ManualCommandsGroupBox.Enabled = true;
@@ -536,7 +539,7 @@ namespace Shatulsky_Farm {
             await Task.Run(() => {
                 Directory.CreateDirectory("activate");
                 var files = Directory.GetFiles("activate");
-                
+
                 foreach (var file in files) {
                     int botCount = 0;
                     Program.GetForm.MyMainForm.AddLog($"Processing {file}");
@@ -583,7 +586,10 @@ namespace Shatulsky_Farm {
                             }
                         }
                     }
-                    File.WriteAllLines(file, keys);
+                    if (keys.Count > 0)
+                        File.WriteAllLines(file, keys);
+                    else
+                        File.Delete(file);
                 }
             });
             #endregion
@@ -879,8 +885,54 @@ namespace Shatulsky_Farm {
             }
         }
 
-        private void OwnsCheckButton_Click(object sender, EventArgs e) {
+        private async void OwnsCheckButton_Click(object sender, EventArgs e) {
+            BlockAll();
+            #region Загрузка VDS
+            var VDSs = ServersRichTextBox.Text.Split('\n').ToList();
 
+            #region удалить пустые строки
+            for (int i = 0; i < VDSs.Count; i++) {
+                if (VDSs[i] == "" || VDSs[i] == "\n")
+                    VDSs.RemoveAt(i--);
+            }
+            #endregion
+            if (Program.GetForm.MyMainForm.RescanBotsCheckBox.Checked) {
+                Database.BOT_LIST = new List<Bot>();
+                Database.BOTS_LOADING = new List<bool>();
+                for (int i = 0; i < VDSs.Count; i++) {
+                    var VDS = VDSs[i];
+
+                    if (VDS != string.Empty) {
+#pragma warning disable CS4014
+                        Task.Run(() => {
+                            AddLog($"{VDS} - bots loading started");
+                            Bot.AllBotsToDatabase(VDS);
+                            Database.BOTS_LOADING.Add(true);
+                            AddLog($"{VDS} - bots loading done");
+                        });
+#pragma warning restore CS4014
+                    }
+                }
+                await Task.Run(() => {
+                    bool done = false;
+                    while (!done) {
+                        if (Database.BOTS_LOADING.Count == VDSs.Count)
+                            break;
+                        Thread.Sleep(1000);
+                    }
+                });
+            }
+
+            #endregion
+            var appID = Program.GetForm.MyMainForm.AppidTextBox.Text;
+            await Task.Run(() => {
+                int needsCount = 0;
+                foreach (var bot in Database.BOT_LIST) {
+                    if (!bot.gamesHave.Contains(appID)) needsCount++;
+                }
+                Program.GetForm.MyMainForm.AddLog($"{needsCount} bots need {appID}.");
+            });
+            UnblockAll();
         }
     }
 }
