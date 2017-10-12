@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Shatulsky_Farm {
     public class Bot {
@@ -42,6 +43,7 @@ namespace Shatulsky_Farm {
             var json = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(response);
             var bots = json["Bots"];
             foreach (var bot in bots) {
+                if(bot.Value.SteamID.ToString() == "0") throw new Exception($"SteamID=0 - {VDS} {bot.Name}");
                 Database.BOT_LIST.Add(new Bot(bot.Name, bot.Value.SteamID.ToString(), VDS));
             }
         }
