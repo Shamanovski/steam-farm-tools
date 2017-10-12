@@ -120,7 +120,7 @@ namespace Shatulsky_Farm {
                 double maxGamePrice = double.Parse(Program.GetForm.MyMainForm.MaxGameCostBox.Text);
                 for (int i = 0; i < Database.ALL_GAMES_LIST.Count; i++) {//удаляем из списка игры которые не нужны и которые дороже разрешонного
                     var game = Database.ALL_GAMES_LIST[i];
-                    if (game.count == 0 || game.price > maxGamePrice || Database.BLACKLIST.Contains(game.appid) || game.store.Contains("akens.ru")) {
+                    if (game.count == 0 || game.price > maxGamePrice || Database.BLACKLIST.Contains(game.appid) || game.store.Contains("akens.ru") || game.store.Contains("alfakeys.ru") || game.store.Contains("keymarket.pw")) {
                         Database.ALL_GAMES_LIST.Remove(game);
                         i--;
                     }
@@ -137,7 +137,7 @@ namespace Shatulsky_Farm {
 
                     #region Пост запрос в магазин
                     string[] setCookies;
-
+                    Program.GetForm.MyMainForm.AddLog($"Processing {game.count} {game.game_name} ({game.price}) in {game.store}");
                     var postData = "email=" + Program.GetForm.MyMainForm.EmailBox.Text.Replace("@", "%40");
                     postData += "&count=" + game.count;
                     postData += "&type=" + game.lequeshop_id;
@@ -870,7 +870,7 @@ namespace Shatulsky_Farm {
                     var postResponse = Request.SendPostRequest("https://store.steampowered.com/checkout/approvetxnsubmit", postData, storeCookies);
                     if (postResponse.Contains("произошла непредвиденная ошибка") || postResponse.Contains("произошла ошибка"))
                         throw new Exception($"Cant buy items for {login}");
-                    Program.GetForm.MyMainForm.AddLog($"{login} - DONE [{++count}/{account.Count()}]");
+                    Program.GetForm.MyMainForm.AddLog($"{login} - DONE [{++count}/{accounts.Count()}]");
                     #endregion
                 }
             });
