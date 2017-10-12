@@ -298,6 +298,8 @@ namespace Shatulsky_Farm {
                             }
                         }
                     }
+
+
                     Program.GetForm.MyMainForm.AddLog($"Waiting 30 seconds until next purchase");
                     Thread.Sleep(30000);
                     Program.GetForm.MyMainForm.AddLogNoDate($"----------------------------------------------------------------------------------------");
@@ -523,13 +525,16 @@ namespace Shatulsky_Farm {
             await Task.Run(() => {
                 Directory.CreateDirectory("activate");
                 var files = Directory.GetFiles("activate");
+                int botCount = 0;
                 foreach (var file in files) {
                     Program.GetForm.MyMainForm.AddLog($"Processing {file}");
                     var appid = file.Split('\\')[1].Split('.')[0];
                     var keys = File.ReadAllLines(file).ToList<string>();
                     for (int i = 0; i < keys.Count(); i++) {
                         if (keys[i] != String.Empty) {
-                            foreach (var bot in Database.BOT_LIST) {
+                            for (; botCount < Database.BOT_LIST.Count(); botCount++) {
+                                var bot = Database.BOT_LIST[botCount];
+
                                 if (!bot.gamesHave.Contains(appid)) {
 
                                     Regex regex = new Regex(@"\w{5}-\w{5}-\w{5}");
@@ -551,21 +556,22 @@ namespace Shatulsky_Farm {
                                         Program.GetForm.MyMainForm.AddLog($"{keys[i]} - OK");
                                         keys.Remove(keys[i--]);
                                         bot.gamesHave.Add(appid);
-                                        continue;
+                                        botCount++;
+                                        break;
                                     }
 
                                     if (response.Contains("BadActivationCode") || response.Contains("DuplicateActivationCode")) {
-                                        Program.GetForm.MyMainForm.AddLog($"{keys[i]} - DuplicateActivationCode");
+                                        Program.GetForm.MyMainForm.AddLogBold($"{keys[i]} - DuplicateActivationCode");
                                         keys.Remove(keys[i--]);
-                                        continue;
+                                        botCount++;
+                                        break;
                                     }
 
                                 }
                             }
-                            File.WriteAllLines(file, keys);
                         }
-
                     }
+                    File.WriteAllLines(file, keys);
                 }
             });
             #endregion

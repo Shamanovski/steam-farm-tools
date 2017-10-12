@@ -411,7 +411,7 @@
             "farm asf",
             "pause asf",
             "resume asf",
-            "restart asf",
+            "restart",
             "addlicense asf "});
             this.ManualCommandBox.Location = new System.Drawing.Point(9, 27);
             this.ManualCommandBox.Name = "ManualCommandBox";
