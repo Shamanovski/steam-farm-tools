@@ -52,6 +52,9 @@
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.IPC2GruopBox2 = new System.Windows.Forms.GroupBox();
+            this.AppidTextBox = new System.Windows.Forms.TextBox();
+            this.OwnsCheckButton = new System.Windows.Forms.Button();
             this.ManualCommandsGroupBox = new System.Windows.Forms.GroupBox();
             this.ManualCommandBox = new System.Windows.Forms.ComboBox();
             this.ManualCommandButton = new System.Windows.Forms.Button();
@@ -61,20 +64,10 @@
             this.ScanGroupBox = new System.Windows.Forms.GroupBox();
             this.InventoryToScanBox = new System.Windows.Forms.ComboBox();
             this.InventoryToScanBox2 = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.InventoryItemsButton = new System.Windows.Forms.Button();
             this.IPC2GruopBox = new System.Windows.Forms.GroupBox();
             this.label6 = new System.Windows.Forms.Label();
             this.ServersRichTextBox2 = new System.Windows.Forms.RichTextBox();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.QIWITextBox = new System.Windows.Forms.Label();
-            this.QIWIStartButton = new System.Windows.Forms.Button();
-            this.QIWILoginsBox = new System.Windows.Forms.RichTextBox();
-            this.QIWIGroupBox = new System.Windows.Forms.GroupBox();
-            this.QIWIDonateLable = new System.Windows.Forms.Label();
-            this.QIWIDonateBox = new System.Windows.Forms.TextBox();
-            this.QiwiTokenLable2 = new System.Windows.Forms.Label();
-            this.QiwiTokenBox2 = new System.Windows.Forms.TextBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.SteamBuyGruouBox3 = new System.Windows.Forms.GroupBox();
             this.radioButtonTF = new System.Windows.Forms.RadioButton();
@@ -87,22 +80,35 @@
             this.label1 = new System.Windows.Forms.Label();
             this.SteamBuyAccounts = new System.Windows.Forms.RichTextBox();
             this.SteamBuyButton = new System.Windows.Forms.Button();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.QIWIGroupBox2 = new System.Windows.Forms.GroupBox();
+            this.QIWIDonateLable = new System.Windows.Forms.Label();
+            this.QiwiTokenLable2 = new System.Windows.Forms.Label();
+            this.QIWIDonateBox = new System.Windows.Forms.TextBox();
+            this.QiwiTokenBox2 = new System.Windows.Forms.TextBox();
+            this.QIWIGroupBox1 = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.QIWILoginsBox = new System.Windows.Forms.RichTextBox();
+            this.QIWIStartButton = new System.Windows.Forms.Button();
+            this.RescanBotsCheckBox = new System.Windows.Forms.CheckBox();
             this.IPC1GruopBox.SuspendLayout();
             this.PaymentGroupBox.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            this.IPC2GruopBox2.SuspendLayout();
             this.ManualCommandsGroupBox.SuspendLayout();
             this.CommandsGroupBox.SuspendLayout();
             this.ScanGroupBox.SuspendLayout();
             this.IPC2GruopBox.SuspendLayout();
-            this.tabPage2.SuspendLayout();
-            this.QIWIGroupBox.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.SteamBuyGruouBox3.SuspendLayout();
             this.SteamBuyGruouBox2.SuspendLayout();
             this.SteamBuyGruouBox1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
+            this.QIWIGroupBox2.SuspendLayout();
+            this.QIWIGroupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // ServersRichTextBox
@@ -382,6 +388,7 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.IPC2GruopBox2);
             this.tabPage3.Controls.Add(this.ManualCommandsGroupBox);
             this.tabPage3.Controls.Add(this.CommandsGroupBox);
             this.tabPage3.Controls.Add(this.ScanGroupBox);
@@ -393,13 +400,42 @@
             this.tabPage3.Text = "IPC";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // IPC2GruopBox2
+            // 
+            this.IPC2GruopBox2.Controls.Add(this.RescanBotsCheckBox);
+            this.IPC2GruopBox2.Controls.Add(this.AppidTextBox);
+            this.IPC2GruopBox2.Controls.Add(this.OwnsCheckButton);
+            this.IPC2GruopBox2.Location = new System.Drawing.Point(239, 175);
+            this.IPC2GruopBox2.Name = "IPC2GruopBox2";
+            this.IPC2GruopBox2.Size = new System.Drawing.Size(226, 67);
+            this.IPC2GruopBox2.TabIndex = 11;
+            this.IPC2GruopBox2.TabStop = false;
+            this.IPC2GruopBox2.Text = "Check appid for owns";
+            // 
+            // AppidTextBox
+            // 
+            this.AppidTextBox.Location = new System.Drawing.Point(9, 19);
+            this.AppidTextBox.Name = "AppidTextBox";
+            this.AppidTextBox.Size = new System.Drawing.Size(142, 20);
+            this.AppidTextBox.TabIndex = 13;
+            // 
+            // OwnsCheckButton
+            // 
+            this.OwnsCheckButton.Location = new System.Drawing.Point(157, 15);
+            this.OwnsCheckButton.Name = "OwnsCheckButton";
+            this.OwnsCheckButton.Size = new System.Drawing.Size(63, 26);
+            this.OwnsCheckButton.TabIndex = 10;
+            this.OwnsCheckButton.Text = "Check";
+            this.OwnsCheckButton.UseVisualStyleBackColor = true;
+            this.OwnsCheckButton.Click += new System.EventHandler(this.OwnsCheckButton_Click);
+            // 
             // ManualCommandsGroupBox
             // 
             this.ManualCommandsGroupBox.Controls.Add(this.ManualCommandBox);
             this.ManualCommandsGroupBox.Controls.Add(this.ManualCommandButton);
-            this.ManualCommandsGroupBox.Location = new System.Drawing.Point(239, 236);
+            this.ManualCommandsGroupBox.Location = new System.Drawing.Point(239, 248);
             this.ManualCommandsGroupBox.Name = "ManualCommandsGroupBox";
-            this.ManualCommandsGroupBox.Size = new System.Drawing.Size(226, 95);
+            this.ManualCommandsGroupBox.Size = new System.Drawing.Size(226, 83);
             this.ManualCommandsGroupBox.TabIndex = 11;
             this.ManualCommandsGroupBox.TabStop = false;
             this.ManualCommandsGroupBox.Text = "Manual commands";
@@ -413,7 +449,7 @@
             "resume asf",
             "restart",
             "addlicense asf "});
-            this.ManualCommandBox.Location = new System.Drawing.Point(9, 27);
+            this.ManualCommandBox.Location = new System.Drawing.Point(9, 21);
             this.ManualCommandBox.Name = "ManualCommandBox";
             this.ManualCommandBox.Size = new System.Drawing.Size(211, 21);
             this.ManualCommandBox.TabIndex = 13;
@@ -421,7 +457,7 @@
             // 
             // ManualCommandButton
             // 
-            this.ManualCommandButton.Location = new System.Drawing.Point(80, 54);
+            this.ManualCommandButton.Location = new System.Drawing.Point(80, 50);
             this.ManualCommandButton.Name = "ManualCommandButton";
             this.ManualCommandButton.Size = new System.Drawing.Size(73, 25);
             this.ManualCommandButton.TabIndex = 0;
@@ -433,18 +469,18 @@
             // 
             this.CommandsGroupBox.Controls.Add(this.LootAllFarmButton);
             this.CommandsGroupBox.Controls.Add(this.FarmStatusButton);
-            this.CommandsGroupBox.Location = new System.Drawing.Point(239, 118);
+            this.CommandsGroupBox.Location = new System.Drawing.Point(239, 98);
             this.CommandsGroupBox.Name = "CommandsGroupBox";
-            this.CommandsGroupBox.Size = new System.Drawing.Size(226, 111);
+            this.CommandsGroupBox.Size = new System.Drawing.Size(226, 71);
             this.CommandsGroupBox.TabIndex = 10;
             this.CommandsGroupBox.TabStop = false;
             this.CommandsGroupBox.Text = "Commands";
             // 
             // LootAllFarmButton
             // 
-            this.LootAllFarmButton.Location = new System.Drawing.Point(56, 61);
+            this.LootAllFarmButton.Location = new System.Drawing.Point(113, 21);
             this.LootAllFarmButton.Name = "LootAllFarmButton";
-            this.LootAllFarmButton.Size = new System.Drawing.Size(117, 36);
+            this.LootAllFarmButton.Size = new System.Drawing.Size(107, 36);
             this.LootAllFarmButton.TabIndex = 9;
             this.LootAllFarmButton.Text = "Loot all farms through ASF";
             this.LootAllFarmButton.UseVisualStyleBackColor = true;
@@ -452,9 +488,9 @@
             // 
             // FarmStatusButton
             // 
-            this.FarmStatusButton.Location = new System.Drawing.Point(56, 19);
+            this.FarmStatusButton.Location = new System.Drawing.Point(6, 21);
             this.FarmStatusButton.Name = "FarmStatusButton";
-            this.FarmStatusButton.Size = new System.Drawing.Size(117, 36);
+            this.FarmStatusButton.Size = new System.Drawing.Size(104, 36);
             this.FarmStatusButton.TabIndex = 0;
             this.FarmStatusButton.Text = "Status of all farms";
             this.FarmStatusButton.UseVisualStyleBackColor = true;
@@ -464,14 +500,13 @@
             // 
             this.ScanGroupBox.Controls.Add(this.InventoryToScanBox);
             this.ScanGroupBox.Controls.Add(this.InventoryToScanBox2);
-            this.ScanGroupBox.Controls.Add(this.label3);
             this.ScanGroupBox.Controls.Add(this.InventoryItemsButton);
             this.ScanGroupBox.Location = new System.Drawing.Point(239, 6);
             this.ScanGroupBox.Name = "ScanGroupBox";
-            this.ScanGroupBox.Size = new System.Drawing.Size(226, 106);
+            this.ScanGroupBox.Size = new System.Drawing.Size(226, 86);
             this.ScanGroupBox.TabIndex = 8;
             this.ScanGroupBox.TabStop = false;
-            this.ScanGroupBox.Text = "Scan";
+            this.ScanGroupBox.Text = "Inventory scan";
             // 
             // InventoryToScanBox
             // 
@@ -481,7 +516,7 @@
             "CS GO",
             "PUBG",
             "TF"});
-            this.InventoryToScanBox.Location = new System.Drawing.Point(6, 36);
+            this.InventoryToScanBox.Location = new System.Drawing.Point(6, 18);
             this.InventoryToScanBox.Name = "InventoryToScanBox";
             this.InventoryToScanBox.Size = new System.Drawing.Size(107, 21);
             this.InventoryToScanBox.TabIndex = 12;
@@ -490,24 +525,15 @@
             // 
             // InventoryToScanBox2
             // 
-            this.InventoryToScanBox2.Location = new System.Drawing.Point(119, 37);
+            this.InventoryToScanBox2.Location = new System.Drawing.Point(119, 18);
             this.InventoryToScanBox2.Name = "InventoryToScanBox2";
             this.InventoryToScanBox2.Size = new System.Drawing.Size(101, 20);
             this.InventoryToScanBox2.TabIndex = 11;
             this.InventoryToScanBox2.Text = "6";
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 22);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(89, 13);
-            this.label3.TabIndex = 10;
-            this.label3.Text = "Inventory to scan";
-            // 
             // InventoryItemsButton
             // 
-            this.InventoryItemsButton.Location = new System.Drawing.Point(56, 63);
+            this.InventoryItemsButton.Location = new System.Drawing.Point(56, 44);
             this.InventoryItemsButton.Name = "InventoryItemsButton";
             this.InventoryItemsButton.Size = new System.Drawing.Size(117, 35);
             this.InventoryItemsButton.TabIndex = 1;
@@ -544,94 +570,6 @@
             this.ServersRichTextBox2.TabIndex = 0;
             this.ServersRichTextBox2.Text = "";
             // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.QIWITextBox);
-            this.tabPage2.Controls.Add(this.QIWIStartButton);
-            this.tabPage2.Controls.Add(this.QIWILoginsBox);
-            this.tabPage2.Controls.Add(this.QIWIGroupBox);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(473, 343);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "QIWI";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // QIWITextBox
-            // 
-            this.QIWITextBox.Location = new System.Drawing.Point(10, 10);
-            this.QIWITextBox.Name = "QIWITextBox";
-            this.QIWITextBox.Size = new System.Drawing.Size(178, 30);
-            this.QIWITextBox.TabIndex = 3;
-            this.QIWITextBox.Text = "The list of logins for replenishment (each login, with a new line)";
-            // 
-            // QIWIStartButton
-            // 
-            this.QIWIStartButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.QIWIStartButton.Location = new System.Drawing.Point(276, 180);
-            this.QIWIStartButton.Name = "QIWIStartButton";
-            this.QIWIStartButton.Size = new System.Drawing.Size(155, 49);
-            this.QIWIStartButton.TabIndex = 2;
-            this.QIWIStartButton.Text = "Add funds to accounts";
-            this.QIWIStartButton.UseVisualStyleBackColor = true;
-            this.QIWIStartButton.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // QIWILoginsBox
-            // 
-            this.QIWILoginsBox.Location = new System.Drawing.Point(9, 40);
-            this.QIWILoginsBox.Name = "QIWILoginsBox";
-            this.QIWILoginsBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.QIWILoginsBox.Size = new System.Drawing.Size(225, 283);
-            this.QIWILoginsBox.TabIndex = 1;
-            this.QIWILoginsBox.Text = "";
-            // 
-            // QIWIGroupBox
-            // 
-            this.QIWIGroupBox.Controls.Add(this.QIWIDonateLable);
-            this.QIWIGroupBox.Controls.Add(this.QIWIDonateBox);
-            this.QIWIGroupBox.Controls.Add(this.QiwiTokenLable2);
-            this.QIWIGroupBox.Controls.Add(this.QiwiTokenBox2);
-            this.QIWIGroupBox.Location = new System.Drawing.Point(240, 40);
-            this.QIWIGroupBox.Name = "QIWIGroupBox";
-            this.QIWIGroupBox.Size = new System.Drawing.Size(227, 112);
-            this.QIWIGroupBox.TabIndex = 0;
-            this.QIWIGroupBox.TabStop = false;
-            this.QIWIGroupBox.Text = "Settings";
-            // 
-            // QIWIDonateLable
-            // 
-            this.QIWIDonateLable.AutoSize = true;
-            this.QIWIDonateLable.Location = new System.Drawing.Point(6, 62);
-            this.QIWIDonateLable.Name = "QIWIDonateLable";
-            this.QIWIDonateLable.Size = new System.Drawing.Size(129, 13);
-            this.QIWIDonateLable.TabIndex = 20;
-            this.QIWIDonateLable.Text = "Amount to replenish, RUB";
-            // 
-            // QIWIDonateBox
-            // 
-            this.QIWIDonateBox.Location = new System.Drawing.Point(6, 77);
-            this.QIWIDonateBox.Name = "QIWIDonateBox";
-            this.QIWIDonateBox.Size = new System.Drawing.Size(214, 20);
-            this.QIWIDonateBox.TabIndex = 19;
-            // 
-            // QiwiTokenLable2
-            // 
-            this.QiwiTokenLable2.AutoSize = true;
-            this.QiwiTokenLable2.Location = new System.Drawing.Point(6, 20);
-            this.QiwiTokenLable2.Name = "QiwiTokenLable2";
-            this.QiwiTokenLable2.Size = new System.Drawing.Size(66, 13);
-            this.QiwiTokenLable2.TabIndex = 18;
-            this.QiwiTokenLable2.Text = "QIWI Token";
-            // 
-            // QiwiTokenBox2
-            // 
-            this.QiwiTokenBox2.Location = new System.Drawing.Point(6, 35);
-            this.QiwiTokenBox2.Name = "QiwiTokenBox2";
-            this.QiwiTokenBox2.PasswordChar = '*';
-            this.QiwiTokenBox2.Size = new System.Drawing.Size(214, 20);
-            this.QiwiTokenBox2.TabIndex = 17;
-            // 
             // tabPage4
             // 
             this.tabPage4.Controls.Add(this.SteamBuyGruouBox3);
@@ -649,9 +587,9 @@
             // 
             this.SteamBuyGruouBox3.Controls.Add(this.radioButtonTF);
             this.SteamBuyGruouBox3.Controls.Add(this.radioButtonPubg);
-            this.SteamBuyGruouBox3.Location = new System.Drawing.Point(242, 79);
+            this.SteamBuyGruouBox3.Location = new System.Drawing.Point(239, 79);
             this.SteamBuyGruouBox3.Name = "SteamBuyGruouBox3";
-            this.SteamBuyGruouBox3.Size = new System.Drawing.Size(222, 79);
+            this.SteamBuyGruouBox3.Size = new System.Drawing.Size(225, 79);
             this.SteamBuyGruouBox3.TabIndex = 19;
             this.SteamBuyGruouBox3.TabStop = false;
             this.SteamBuyGruouBox3.Text = "What to buy";
@@ -756,6 +694,117 @@
             this.SteamBuyButton.UseVisualStyleBackColor = true;
             this.SteamBuyButton.Click += new System.EventHandler(this.SteamBuyButton_Click);
             // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.QIWIGroupBox2);
+            this.tabPage2.Controls.Add(this.QIWIGroupBox1);
+            this.tabPage2.Controls.Add(this.QIWIStartButton);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(473, 343);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "QIWI";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // QIWIGroupBox2
+            // 
+            this.QIWIGroupBox2.Controls.Add(this.QIWIDonateLable);
+            this.QIWIGroupBox2.Controls.Add(this.QiwiTokenLable2);
+            this.QIWIGroupBox2.Controls.Add(this.QIWIDonateBox);
+            this.QIWIGroupBox2.Controls.Add(this.QiwiTokenBox2);
+            this.QIWIGroupBox2.Location = new System.Drawing.Point(239, 6);
+            this.QIWIGroupBox2.Name = "QIWIGroupBox2";
+            this.QIWIGroupBox2.Size = new System.Drawing.Size(225, 111);
+            this.QIWIGroupBox2.TabIndex = 5;
+            this.QIWIGroupBox2.TabStop = false;
+            this.QIWIGroupBox2.Text = "Settings";
+            // 
+            // QIWIDonateLable
+            // 
+            this.QIWIDonateLable.AutoSize = true;
+            this.QIWIDonateLable.Location = new System.Drawing.Point(6, 58);
+            this.QIWIDonateLable.Name = "QIWIDonateLable";
+            this.QIWIDonateLable.Size = new System.Drawing.Size(129, 13);
+            this.QIWIDonateLable.TabIndex = 20;
+            this.QIWIDonateLable.Text = "Amount to replenish, RUB";
+            // 
+            // QiwiTokenLable2
+            // 
+            this.QiwiTokenLable2.AutoSize = true;
+            this.QiwiTokenLable2.Location = new System.Drawing.Point(6, 16);
+            this.QiwiTokenLable2.Name = "QiwiTokenLable2";
+            this.QiwiTokenLable2.Size = new System.Drawing.Size(66, 13);
+            this.QiwiTokenLable2.TabIndex = 18;
+            this.QiwiTokenLable2.Text = "QIWI Token";
+            // 
+            // QIWIDonateBox
+            // 
+            this.QIWIDonateBox.Location = new System.Drawing.Point(6, 73);
+            this.QIWIDonateBox.Name = "QIWIDonateBox";
+            this.QIWIDonateBox.Size = new System.Drawing.Size(214, 20);
+            this.QIWIDonateBox.TabIndex = 19;
+            // 
+            // QiwiTokenBox2
+            // 
+            this.QiwiTokenBox2.Location = new System.Drawing.Point(6, 31);
+            this.QiwiTokenBox2.Name = "QiwiTokenBox2";
+            this.QiwiTokenBox2.PasswordChar = '*';
+            this.QiwiTokenBox2.Size = new System.Drawing.Size(214, 20);
+            this.QiwiTokenBox2.TabIndex = 17;
+            // 
+            // QIWIGroupBox1
+            // 
+            this.QIWIGroupBox1.Controls.Add(this.label2);
+            this.QIWIGroupBox1.Controls.Add(this.QIWILoginsBox);
+            this.QIWIGroupBox1.Location = new System.Drawing.Point(7, 6);
+            this.QIWIGroupBox1.Name = "QIWIGroupBox1";
+            this.QIWIGroupBox1.Size = new System.Drawing.Size(226, 325);
+            this.QIWIGroupBox1.TabIndex = 4;
+            this.QIWIGroupBox1.TabStop = false;
+            this.QIWIGroupBox1.Text = "Bots";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(3, 21);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(165, 13);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Steam logins (each from new line)";
+            // 
+            // QIWILoginsBox
+            // 
+            this.QIWILoginsBox.Location = new System.Drawing.Point(6, 37);
+            this.QIWILoginsBox.Name = "QIWILoginsBox";
+            this.QIWILoginsBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
+            this.QIWILoginsBox.Size = new System.Drawing.Size(211, 282);
+            this.QIWILoginsBox.TabIndex = 0;
+            this.QIWILoginsBox.Text = "";
+            // 
+            // QIWIStartButton
+            // 
+            this.QIWIStartButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.QIWIStartButton.Location = new System.Drawing.Point(276, 140);
+            this.QIWIStartButton.Name = "QIWIStartButton";
+            this.QIWIStartButton.Size = new System.Drawing.Size(155, 49);
+            this.QIWIStartButton.TabIndex = 2;
+            this.QIWIStartButton.Text = "Add funds to accounts";
+            this.QIWIStartButton.UseVisualStyleBackColor = true;
+            this.QIWIStartButton.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // RescanBotsCheckBox
+            // 
+            this.RescanBotsCheckBox.AutoSize = true;
+            this.RescanBotsCheckBox.Checked = true;
+            this.RescanBotsCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.RescanBotsCheckBox.Location = new System.Drawing.Point(10, 41);
+            this.RescanBotsCheckBox.Name = "RescanBotsCheckBox";
+            this.RescanBotsCheckBox.Size = new System.Drawing.Size(186, 17);
+            this.RescanBotsCheckBox.TabIndex = 14;
+            this.RescanBotsCheckBox.Text = "Rescan bots games before check";
+            this.RescanBotsCheckBox.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -778,15 +827,14 @@
             this.tabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
+            this.IPC2GruopBox2.ResumeLayout(false);
+            this.IPC2GruopBox2.PerformLayout();
             this.ManualCommandsGroupBox.ResumeLayout(false);
             this.CommandsGroupBox.ResumeLayout(false);
             this.ScanGroupBox.ResumeLayout(false);
             this.ScanGroupBox.PerformLayout();
             this.IPC2GruopBox.ResumeLayout(false);
             this.IPC2GruopBox.PerformLayout();
-            this.tabPage2.ResumeLayout(false);
-            this.QIWIGroupBox.ResumeLayout(false);
-            this.QIWIGroupBox.PerformLayout();
             this.tabPage4.ResumeLayout(false);
             this.SteamBuyGruouBox3.ResumeLayout(false);
             this.SteamBuyGruouBox3.PerformLayout();
@@ -794,6 +842,11 @@
             this.SteamBuyGruouBox2.PerformLayout();
             this.SteamBuyGruouBox1.ResumeLayout(false);
             this.SteamBuyGruouBox1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.QIWIGroupBox2.ResumeLayout(false);
+            this.QIWIGroupBox2.PerformLayout();
+            this.QIWIGroupBox1.ResumeLayout(false);
+            this.QIWIGroupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -826,14 +879,11 @@
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.RichTextBox QIWILoginsBox;
-        private System.Windows.Forms.GroupBox QIWIGroupBox;
         private System.Windows.Forms.Button QIWIStartButton;
         public System.Windows.Forms.Label QiwiTokenLable2;
         public System.Windows.Forms.TextBox QiwiTokenBox2;
         public System.Windows.Forms.Label QIWIDonateLable;
         public System.Windows.Forms.TextBox QIWIDonateBox;
-        private System.Windows.Forms.Label QIWITextBox;
         public System.Windows.Forms.Label EmailLable;
         public System.Windows.Forms.TextBox EmailBox;
         private System.Windows.Forms.TabPage tabPage3;
@@ -843,7 +893,6 @@
         private System.Windows.Forms.Button InventoryItemsButton;
         private System.Windows.Forms.Button FarmStatusButton;
         public System.Windows.Forms.GroupBox ScanGroupBox;
-        public System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button LootAllFarmButton;
         public System.Windows.Forms.TextBox InventoryToScanBox2;
         private System.Windows.Forms.ComboBox InventoryToScanBox;
@@ -863,6 +912,14 @@
         public System.Windows.Forms.Label label1;
         public System.Windows.Forms.RichTextBox SteamBuyAccounts;
         private System.Windows.Forms.Button BrowseFolderButton;
+        private System.Windows.Forms.GroupBox IPC2GruopBox2;
+        public System.Windows.Forms.TextBox AppidTextBox;
+        private System.Windows.Forms.Button OwnsCheckButton;
+        private System.Windows.Forms.GroupBox QIWIGroupBox2;
+        public System.Windows.Forms.GroupBox QIWIGroupBox1;
+        public System.Windows.Forms.Label label2;
+        public System.Windows.Forms.RichTextBox QIWILoginsBox;
+        private System.Windows.Forms.CheckBox RescanBotsCheckBox;
     }
 }
 

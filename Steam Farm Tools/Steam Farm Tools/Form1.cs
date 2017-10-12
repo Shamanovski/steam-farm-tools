@@ -153,6 +153,7 @@ namespace Shatulsky_Farm {
                         jsonOrder = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(order);
                     } catch {
                         Program.GetForm.MyMainForm.AddLogBold($"Error getting payment information {game.game_name} in {game.store}. Moving on to the next product.");
+                        Thread.Sleep(10000);
                         continue;
                     }
                     #endregion
@@ -185,6 +186,7 @@ namespace Shatulsky_Farm {
                         appid = game.appid;
                     } catch {
                         Program.GetForm.MyMainForm.AddLogBold($"Error getting payment information {game.game_name} in {game.store}. Proceed to the next product.");
+                        Thread.Sleep(10000);
                         continue;
                     }
                     #endregion
@@ -213,8 +215,9 @@ namespace Shatulsky_Farm {
                         default: throw new Exception($"Custom fractional separator - \"{separator}\"");
                     }
 
-                    if (oneItemPrice >= maxAllowedPrice) {
+                    if (oneItemPrice > maxAllowedPrice) {
                         Program.GetForm.MyMainForm.AddLog($"We skip the game {game.game_name} ({game.appid}) since its price has become higher than permissible - {Math.Round(oneItemPrice, 2)}");
+                        Thread.Sleep(10000);
                         continue; //пропускаем элемент если его цена увеличилась выше допустимой
                     }
                     #endregion
@@ -363,10 +366,14 @@ namespace Shatulsky_Farm {
             Program.GetForm.MyMainForm.BuyGamesButton.Enabled = false;
             Program.GetForm.MyMainForm.ActivateKeysButton.Enabled = false;
             Program.GetForm.MyMainForm.ActivateUnusedKeysButton.Enabled = false;
-            Program.GetForm.MyMainForm.QIWIGroupBox.Enabled = false;
+            Program.GetForm.MyMainForm.QIWIGroupBox2.Enabled = false;
             Program.GetForm.MyMainForm.QIWIStartButton.Enabled = false;
             Program.GetForm.MyMainForm.QIWILoginsBox.Enabled = false;
-            Program.GetForm.MyMainForm.QIWITextBox.Enabled = false;
+            Program.GetForm.MyMainForm.QIWIGroupBox1.Enabled = false;
+            Program.GetForm.MyMainForm.SteamBuyGruouBox1.Enabled = false;
+            Program.GetForm.MyMainForm.SteamBuyGruouBox2.Enabled = false;
+            Program.GetForm.MyMainForm.SteamBuyGruouBox3.Enabled = false;
+            Program.GetForm.MyMainForm.SteamBuyButton.Enabled = false;
         }
         public void UnblockAll() {
             if (InvokeRequired)
@@ -380,10 +387,14 @@ namespace Shatulsky_Farm {
             Program.GetForm.MyMainForm.BuyGamesButton.Enabled = true;
             Program.GetForm.MyMainForm.ActivateKeysButton.Enabled = true;
             Program.GetForm.MyMainForm.ActivateUnusedKeysButton.Enabled = true;
-            Program.GetForm.MyMainForm.QIWIGroupBox.Enabled = true;
+            Program.GetForm.MyMainForm.QIWIGroupBox2.Enabled = true;
             Program.GetForm.MyMainForm.QIWIStartButton.Enabled = true;
             Program.GetForm.MyMainForm.QIWILoginsBox.Enabled = true;
-            Program.GetForm.MyMainForm.QIWITextBox.Enabled = true;
+            Program.GetForm.MyMainForm.QIWIGroupBox1.Enabled = true;
+            Program.GetForm.MyMainForm.SteamBuyGruouBox1.Enabled = true;
+            Program.GetForm.MyMainForm.SteamBuyGruouBox2.Enabled = true;
+            Program.GetForm.MyMainForm.SteamBuyGruouBox3.Enabled = true;
+            Program.GetForm.MyMainForm.SteamBuyButton.Enabled = true;
         }
         private class DescendingComparer : IComparer<string> {
             int IComparer<string>.Compare(string a, string b) {
@@ -525,8 +536,9 @@ namespace Shatulsky_Farm {
             await Task.Run(() => {
                 Directory.CreateDirectory("activate");
                 var files = Directory.GetFiles("activate");
-                int botCount = 0;
+                
                 foreach (var file in files) {
+                    int botCount = 0;
                     Program.GetForm.MyMainForm.AddLog($"Processing {file}");
                     var appid = file.Split('\\')[1].Split('.')[0];
                     var keys = File.ReadAllLines(file).ToList<string>();
@@ -546,7 +558,7 @@ namespace Shatulsky_Farm {
                                     File.AppendAllText($"responses.txt", $"\n{DateTime.Now} {bot.vds} {bot.login} {appid} - {response}");
 
                                     if (response.Contains("Timeout")) {
-                                        Thread.Sleep(10000);
+                                        Thread.Sleep(5000);
                                         var botResponse = Request.getResponse($"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={Program.GetForm.MyMainForm.ApikeyBox.Text}&steamid={bot.steamID}&format=json");
                                         if (botResponse.Contains(appid))
                                             response += "False timeout. OK/NoDetail";
@@ -865,6 +877,10 @@ namespace Shatulsky_Farm {
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK) {
                 Program.GetForm.MyMainForm.MafilePathBox.Text = folderBrowserDialog.SelectedPath;
             }
+        }
+
+        private void OwnsCheckButton_Click(object sender, EventArgs e) {
+
         }
     }
 }
