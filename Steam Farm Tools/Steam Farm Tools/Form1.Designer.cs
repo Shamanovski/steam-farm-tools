@@ -76,6 +76,16 @@
             this.QiwiTokenLable2 = new System.Windows.Forms.Label();
             this.QiwiTokenBox2 = new System.Windows.Forms.TextBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.SteamBuyGruouBox3 = new System.Windows.Forms.GroupBox();
+            this.radioButtonTF = new System.Windows.Forms.RadioButton();
+            this.radioButtonPubg = new System.Windows.Forms.RadioButton();
+            this.SteamBuyGruouBox2 = new System.Windows.Forms.GroupBox();
+            this.BrowseFolderButton = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.MafilePathBox = new System.Windows.Forms.TextBox();
+            this.SteamBuyGruouBox1 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.SteamBuyAccounts = new System.Windows.Forms.RichTextBox();
             this.SteamBuyButton = new System.Windows.Forms.Button();
             this.IPC1GruopBox.SuspendLayout();
             this.PaymentGroupBox.SuspendLayout();
@@ -90,6 +100,9 @@
             this.tabPage2.SuspendLayout();
             this.QIWIGroupBox.SuspendLayout();
             this.tabPage4.SuspendLayout();
+            this.SteamBuyGruouBox3.SuspendLayout();
+            this.SteamBuyGruouBox2.SuspendLayout();
+            this.SteamBuyGruouBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // ServersRichTextBox
@@ -342,8 +355,8 @@
             // 
             this.tabControl.Controls.Add(this.tabPage1);
             this.tabControl.Controls.Add(this.tabPage3);
-            this.tabControl.Controls.Add(this.tabPage2);
             this.tabControl.Controls.Add(this.tabPage4);
+            this.tabControl.Controls.Add(this.tabPage2);
             this.tabControl.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.tabControl.Location = new System.Drawing.Point(-1, -1);
             this.tabControl.Name = "tabControl";
@@ -621,6 +634,9 @@
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.SteamBuyGruouBox3);
+            this.tabPage4.Controls.Add(this.SteamBuyGruouBox2);
+            this.tabPage4.Controls.Add(this.SteamBuyGruouBox1);
             this.tabPage4.Controls.Add(this.SteamBuyButton);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
@@ -629,13 +645,114 @@
             this.tabPage4.Text = "Steam buy";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
+            // SteamBuyGruouBox3
+            // 
+            this.SteamBuyGruouBox3.Controls.Add(this.radioButtonTF);
+            this.SteamBuyGruouBox3.Controls.Add(this.radioButtonPubg);
+            this.SteamBuyGruouBox3.Location = new System.Drawing.Point(242, 79);
+            this.SteamBuyGruouBox3.Name = "SteamBuyGruouBox3";
+            this.SteamBuyGruouBox3.Size = new System.Drawing.Size(222, 79);
+            this.SteamBuyGruouBox3.TabIndex = 19;
+            this.SteamBuyGruouBox3.TabStop = false;
+            this.SteamBuyGruouBox3.Text = "What to buy";
+            // 
+            // radioButtonTF
+            // 
+            this.radioButtonTF.AutoSize = true;
+            this.radioButtonTF.Location = new System.Drawing.Point(15, 42);
+            this.radioButtonTF.Name = "radioButtonTF";
+            this.radioButtonTF.Size = new System.Drawing.Size(73, 17);
+            this.radioButtonTF.TabIndex = 6;
+            this.radioButtonTF.TabStop = true;
+            this.radioButtonTF.Text = "2 TF Keys";
+            this.radioButtonTF.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonPubg
+            // 
+            this.radioButtonPubg.AutoSize = true;
+            this.radioButtonPubg.Location = new System.Drawing.Point(15, 19);
+            this.radioButtonPubg.Name = "radioButtonPubg";
+            this.radioButtonPubg.Size = new System.Drawing.Size(85, 17);
+            this.radioButtonPubg.TabIndex = 5;
+            this.radioButtonPubg.TabStop = true;
+            this.radioButtonPubg.Text = "2 Pubg Keys";
+            this.radioButtonPubg.UseVisualStyleBackColor = true;
+            // 
+            // SteamBuyGruouBox2
+            // 
+            this.SteamBuyGruouBox2.Controls.Add(this.BrowseFolderButton);
+            this.SteamBuyGruouBox2.Controls.Add(this.label4);
+            this.SteamBuyGruouBox2.Controls.Add(this.MafilePathBox);
+            this.SteamBuyGruouBox2.Location = new System.Drawing.Point(239, 6);
+            this.SteamBuyGruouBox2.Name = "SteamBuyGruouBox2";
+            this.SteamBuyGruouBox2.Size = new System.Drawing.Size(225, 67);
+            this.SteamBuyGruouBox2.TabIndex = 4;
+            this.SteamBuyGruouBox2.TabStop = false;
+            this.SteamBuyGruouBox2.Text = "Settings";
+            // 
+            // BrowseFolderButton
+            // 
+            this.BrowseFolderButton.Location = new System.Drawing.Point(140, 33);
+            this.BrowseFolderButton.Name = "BrowseFolderButton";
+            this.BrowseFolderButton.Size = new System.Drawing.Size(75, 23);
+            this.BrowseFolderButton.TabIndex = 19;
+            this.BrowseFolderButton.Text = "Chose";
+            this.BrowseFolderButton.UseVisualStyleBackColor = true;
+            this.BrowseFolderButton.Click += new System.EventHandler(this.BrowseFolderButton_Click);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 20);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(90, 13);
+            this.label4.TabIndex = 18;
+            this.label4.Text = "Mafiles folde path";
+            // 
+            // MafilePathBox
+            // 
+            this.MafilePathBox.Location = new System.Drawing.Point(6, 35);
+            this.MafilePathBox.Name = "MafilePathBox";
+            this.MafilePathBox.Size = new System.Drawing.Size(128, 20);
+            this.MafilePathBox.TabIndex = 17;
+            // 
+            // SteamBuyGruouBox1
+            // 
+            this.SteamBuyGruouBox1.Controls.Add(this.label1);
+            this.SteamBuyGruouBox1.Controls.Add(this.SteamBuyAccounts);
+            this.SteamBuyGruouBox1.Location = new System.Drawing.Point(7, 6);
+            this.SteamBuyGruouBox1.Name = "SteamBuyGruouBox1";
+            this.SteamBuyGruouBox1.Size = new System.Drawing.Size(226, 325);
+            this.SteamBuyGruouBox1.TabIndex = 3;
+            this.SteamBuyGruouBox1.TabStop = false;
+            this.SteamBuyGruouBox1.Text = "Bots";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 21);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(180, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Login:Password (each from new line)";
+            // 
+            // SteamBuyAccounts
+            // 
+            this.SteamBuyAccounts.Location = new System.Drawing.Point(6, 37);
+            this.SteamBuyAccounts.Name = "SteamBuyAccounts";
+            this.SteamBuyAccounts.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
+            this.SteamBuyAccounts.Size = new System.Drawing.Size(211, 282);
+            this.SteamBuyAccounts.TabIndex = 0;
+            this.SteamBuyAccounts.Text = "";
+            // 
             // SteamBuyButton
             // 
-            this.SteamBuyButton.Location = new System.Drawing.Point(132, 124);
+            this.SteamBuyButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.SteamBuyButton.Location = new System.Drawing.Point(274, 178);
             this.SteamBuyButton.Name = "SteamBuyButton";
-            this.SteamBuyButton.Size = new System.Drawing.Size(176, 69);
+            this.SteamBuyButton.Size = new System.Drawing.Size(156, 51);
             this.SteamBuyButton.TabIndex = 0;
-            this.SteamBuyButton.Text = "КУПИТЬ ЧТО-ТО В СТИМ";
+            this.SteamBuyButton.Text = "Buy items";
             this.SteamBuyButton.UseVisualStyleBackColor = true;
             this.SteamBuyButton.Click += new System.EventHandler(this.SteamBuyButton_Click);
             // 
@@ -671,6 +788,12 @@
             this.QIWIGroupBox.ResumeLayout(false);
             this.QIWIGroupBox.PerformLayout();
             this.tabPage4.ResumeLayout(false);
+            this.SteamBuyGruouBox3.ResumeLayout(false);
+            this.SteamBuyGruouBox3.PerformLayout();
+            this.SteamBuyGruouBox2.ResumeLayout(false);
+            this.SteamBuyGruouBox2.PerformLayout();
+            this.SteamBuyGruouBox1.ResumeLayout(false);
+            this.SteamBuyGruouBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -730,6 +853,16 @@
         private System.Windows.Forms.ComboBox ManualCommandBox;
         private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.Button SteamBuyButton;
+        private System.Windows.Forms.GroupBox SteamBuyGruouBox3;
+        private System.Windows.Forms.RadioButton radioButtonTF;
+        private System.Windows.Forms.RadioButton radioButtonPubg;
+        private System.Windows.Forms.GroupBox SteamBuyGruouBox2;
+        public System.Windows.Forms.Label label4;
+        public System.Windows.Forms.TextBox MafilePathBox;
+        public System.Windows.Forms.GroupBox SteamBuyGruouBox1;
+        public System.Windows.Forms.Label label1;
+        public System.Windows.Forms.RichTextBox SteamBuyAccounts;
+        private System.Windows.Forms.Button BrowseFolderButton;
     }
 }
 

@@ -14,6 +14,7 @@ using System.Net;
 using System.ComponentModel;
 using System.Globalization;
 using SteamAuth;
+using System.Drawing;
 
 namespace Shatulsky_Farm {
     public partial class MainForm : Form {
@@ -86,7 +87,7 @@ namespace Shatulsky_Farm {
             #endregion
 
             if (Program.GetForm.MyMainForm.LogBox.Text.Contains("Bot parse error")) {
-                Program.GetForm.MyMainForm.AddLog("Fix erroneous bots and restart Steam Farm Tools");
+                Program.GetForm.MyMainForm.AddLogBold("Fix erroneous bots and restart Steam Farm Tools");
                 Thread.Sleep(Timeout.Infinite);
             }
 
@@ -151,7 +152,7 @@ namespace Shatulsky_Farm {
                     try {
                         jsonOrder = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(order);
                     } catch {
-                        Program.GetForm.MyMainForm.AddLog($"Error getting payment information {game.game_name} in {game.store}. Moving on to the next product.");
+                        Program.GetForm.MyMainForm.AddLogBold($"Error getting payment information {game.game_name} in {game.store}. Moving on to the next product.");
                         continue;
                     }
                     #endregion
@@ -183,7 +184,7 @@ namespace Shatulsky_Farm {
                         count = jsonOrder.count.Value;
                         appid = game.appid;
                     } catch {
-                        Program.GetForm.MyMainForm.AddLog($"Error getting payment information {game.game_name} in {game.store}. Proceed to the next product.");
+                        Program.GetForm.MyMainForm.AddLogBold($"Error getting payment information {game.game_name} in {game.store}. Proceed to the next product.");
                         continue;
                     }
                     #endregion
@@ -198,7 +199,7 @@ namespace Shatulsky_Farm {
                     }
                     #region Проверки
                     if (Database.WASTED_MONEY + allPreciDouble > double.Parse(Program.GetForm.MyMainForm.MaxMoneyBox.Text)) { //заканчиваем цикл если достигли лимит по деньгам
-                        Program.GetForm.MyMainForm.AddLog($"You have reached the purchase limit. Spent {Database.WASTED_MONEY}");
+                        Program.GetForm.MyMainForm.AddLogBold($"You have reached the purchase limit. Spent {Database.WASTED_MONEY}");
                         break;
                     }
 
@@ -289,7 +290,7 @@ namespace Shatulsky_Farm {
                                 }
 
                                 if (keysResponse.Contains("OK/NoDetail") == false) {
-                                    Program.GetForm.MyMainForm.AddLog($"Error while activating the keys for {bot.vds},{bot.login},{key},{keysResponse.Replace('\r', ' ').Replace('\n', ' ')}");
+                                    Program.GetForm.MyMainForm.AddLogBold($"Bad activation for {bot.vds},{bot.login},{key},{keysResponse.Replace('\r', ' ').Replace('\n', ' ')}");
                                     File.AppendAllText("UNUSEDKEYS.TXT", $"{bot.vds},{bot.login},{key},{keysResponse.Replace('\r', ' ').Replace('\n', ' ')}\n");
                                 }
                                 bot.gamesHave.Add(appid);
@@ -327,6 +328,16 @@ namespace Shatulsky_Farm {
                 Invoke((Action<string>)AddLog, text);
             else {
                 Program.GetForm.MyMainForm.LogBox.AppendText(DateTime.Now + " - " + text + "\n");
+                File.AppendAllText("log.txt", "\n" + DateTime.Now + " - " + text);
+            }
+        }
+        public void AddLogBold(string text) {
+            if (InvokeRequired)
+                Invoke((Action<string>)AddLogBold, text);
+            else {
+                Program.GetForm.MyMainForm.LogBox.SelectionFont = new Font(Program.GetForm.MyMainForm.LogBox.Font, FontStyle.Bold);
+                Program.GetForm.MyMainForm.LogBox.AppendText(DateTime.Now + " - " + text + "\n");
+                Program.GetForm.MyMainForm.LogBox.SelectionFont = new Font(Program.GetForm.MyMainForm.LogBox.Font, FontStyle.Regular);
                 File.AppendAllText("log.txt", "\n" + DateTime.Now + " - " + text);
             }
         }
@@ -408,7 +419,7 @@ namespace Shatulsky_Farm {
             UnblockAll();
         }
         private void MainForm_Load(object sender, EventArgs e) {
-            var settings = File.ReadAllText("settings.txt");
+            var settings = File.ReadAllText("settings.txt").Replace('\\', '/');
             var json = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(settings);
             ApikeyBox.Text = json.SteamAPI;
             CouponsKeyBox.Text = json.SteamkeysAPI;
@@ -418,11 +429,13 @@ namespace Shatulsky_Farm {
             CouponsKeyBox.Text = json.CouponsKey;
             QiwiTokenBox.Text = json.QiwiToken;
             QiwiTokenBox2.Text = json.QiwiToken;
+            MafilePathBox.Text = json.MafilesPath.ToString().Replace("/", "\\");
             Database.KEY = json.LicenseKey;
             for (int i = 0; i < json.VDSs.Count; i++) {
                 ServersRichTextBox.AppendText(json.VDSs[i].Value + "\n");
                 ServersRichTextBox2.AppendText(json.VDSs[i].Value + "\n");
             }
+
             Database.BLACKLIST = new List<string>();
             for (int i = 0; i < json.BlacklistAppids.Count; i++) {
                 Database.BLACKLIST.Add(json.BlacklistAppids[i].Value);
@@ -538,13 +551,13 @@ namespace Shatulsky_Farm {
                                         Program.GetForm.MyMainForm.AddLog($"{keys[i]} - OK");
                                         keys.Remove(keys[i--]);
                                         bot.gamesHave.Add(appid);
-                                        break;
+                                        continue;
                                     }
 
                                     if (response.Contains("BadActivationCode") || response.Contains("DuplicateActivationCode")) {
-                                        Program.GetForm.MyMainForm.AddLog($"{keys[i]} - FAIL");
+                                        Program.GetForm.MyMainForm.AddLog($"{keys[i]} - DuplicateActivationCode");
                                         keys.Remove(keys[i--]);
-                                        break;
+                                        continue;
                                     }
 
                                 }
@@ -767,44 +780,85 @@ namespace Shatulsky_Farm {
 
         }
 
-        private void SteamBuyButton_Click(object sender, EventArgs e) {
-
-            #region Данные аккаунта
-            var login = "";
-            var password = "";
-            var sharedSecret = "";
+        private async void SteamBuyButton_Click(object sender, EventArgs e) {
+            BlockAll();
+            var allBotsInfo = new Dictionary<string, string>();
+            #region Загрузка мафайлов
+            await Task.Run(() => {
+                Program.GetForm.MyMainForm.AddLog("Mafiles processing started.");
+                var mafiles = Directory.GetFiles(Program.GetForm.MyMainForm.MafilePathBox.Text);
+                foreach (var mafile in mafiles) {
+                    try {
+                        var mafileJson = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(File.ReadAllText(mafile));
+                        allBotsInfo.Add(mafileJson.account_name.Value, mafileJson.shared_secret.Value);
+                    } catch { }
+                }
+                Program.GetForm.MyMainForm.AddLog($"{mafiles.Count()} mafiles processed.");
+            });
             #endregion
 
-            #region Steam login
-            var steamLogin = new UserLogin(login, password);
-            var bot = new SteamGuardAccount();
-            bot.SharedSecret = sharedSecret;
-            steamLogin.TwoFactorCode = bot.GenerateSteamGuardCode();
-            steamLogin.DoLogin();
-            if (!steamLogin.LoggedIn) throw new Exception($"Cant login - {login}");
+            var accounts = Program.GetForm.MyMainForm.SteamBuyAccounts.Text.Split('\n');
+            await Task.Run(() => {
+                int count = 0;
+                foreach (var account in accounts) {
+                    #region Данные аккаунта
+                    var accSpl = account.Split(':');
+                    var login = accSpl[0];
+                    var password = accSpl[1];
+                    var sharedSecret = allBotsInfo[login];
+                    #endregion
 
-            var steamCookies = new Dictionary<string, string>();
-            steamCookies.Add("sessionid", steamLogin.Session.SessionID);
-            steamCookies.Add("steamLogin", steamLogin.Session.SteamLogin);
-            steamCookies.Add("steamLoginSecure", steamLogin.Session.SteamLoginSecure);
-            #endregion
+                    #region Steam login
+                    var steamLogin = new UserLogin(login, password);
+                    var bot = new SteamGuardAccount();
+                    bot.SharedSecret = sharedSecret;
+                    steamLogin.TwoFactorCode = bot.GenerateSteamGuardCode();
+                    steamLogin.DoLogin();
+                    if (!steamLogin.LoggedIn) throw new Exception($"Cant login - {login}.");
 
-            CookieCollection storeCookies = new CookieCollection();
-            var response = Request.getSteamResponse("https://store.steampowered.com/buyitem/440/5021/1", steamCookies, out storeCookies);
+                    var steamCookies = new Dictionary<string, string>();
+                    steamCookies.Add("sessionid", steamLogin.Session.SessionID);
+                    steamCookies.Add("steamLogin", steamLogin.Session.SteamLogin);
+                    steamCookies.Add("steamLoginSecure", steamLogin.Session.SteamLoginSecure);
+                    #endregion
 
-            Match m1 = new Regex(@"name=""returnurl"" value=""(.+)""").Match(response);
-            var returnUrl = m1.Groups[1];
+                    #region Что покупать
+                    var buyLink = "";
+                    if (Program.GetForm.MyMainForm.radioButtonTF.Checked) buyLink = "https://store.steampowered.com/buyitem/440/5021/2";
+                    if (Program.GetForm.MyMainForm.radioButtonPubg.Checked) buyLink = "http://store.steampowered.com/buyitem/578080/35100001/2";
+                    #endregion
 
-            Match m2 = new Regex(@"name=""transaction_id"" value=""(.+)""").Match(response);
-            var transId = m2.Groups[1];
-            
-            var postData = "transaction_id=" + transId;
-            postData += "&returnurl=" + returnUrl.ToString().Replace(";", "%2F&");
-            postData += "&sessionid=" + storeCookies[2].Value.ToString();
-            postData += "&approved=1";
+                    #region Покупка
+                    CookieCollection storeCookies = new CookieCollection();
+                    var response = Request.getSteamResponse(buyLink, steamCookies, out storeCookies);
 
-            var test = Request.SendPostRequest("https://store.steampowered.com/checkout/approvetxnsubmit", postData, storeCookies)
+                    Match m1 = new Regex(@"name=""returnurl"" value=""(.+)""").Match(response);
+                    var returnUrl = m1.Groups[1];
 
+                    Match m2 = new Regex(@"name=""transaction_id"" value=""(.+)""").Match(response);
+                    var transId = m2.Groups[1];
+
+                    var postData = "transaction_id=" + transId;
+                    postData += "&returnurl=" + returnUrl.ToString().Replace(";", "%2F&");
+                    postData += "&sessionid=" + storeCookies[2].Value.ToString();
+                    postData += "&approved=1";
+
+                    var postResponse = Request.SendPostRequest("https://store.steampowered.com/checkout/approvetxnsubmit", postData, storeCookies);
+                    if (postResponse.Contains("произошла непредвиденная ошибка") || postResponse.Contains("произошла ошибка"))
+                        throw new Exception($"Cant buy items for {login}");
+                    Program.GetForm.MyMainForm.AddLog($"{login} - DONE [{++count}/{account.Count()}]");
+                    #endregion
+                }
+            });
+            UnblockAll();
+        }
+
+        private void BrowseFolderButton_Click(object sender, EventArgs e) {
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            folderBrowserDialog.Description = "Chose Mafiles folder.";
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK) {
+                Program.GetForm.MyMainForm.MafilePathBox.Text = folderBrowserDialog.SelectedPath;
+            }
         }
     }
 }
