@@ -816,7 +816,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "MainForm";
-            this.Text = "Steam Farm Tools v1.2";
+            this.Text = "Steam Farm Tools v1.3";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.IPC1GruopBox.ResumeLayout(false);
             this.IPC1GruopBox.PerformLayout();

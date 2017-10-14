@@ -435,7 +435,20 @@ namespace Shatulsky_Farm {
             UnblockAll();
         }
         private void MainForm_Load(object sender, EventArgs e) {
-            var settings = File.ReadAllText("settings.txt").Replace('\\', '/');
+            bool licenseFail = false;
+            string settings = "";
+            try {
+                settings = File.ReadAllText("settings.txt").Replace('\\', '/');
+            } catch {
+                licenseFail = true;
+                DialogResult res = new DialogResult();
+                res = MessageBox.Show("Settings.txt load failed!",
+                                                 "Settings Error",
+                                                 MessageBoxButtons.OK,
+                                                 MessageBoxIcon.Error);
+                if (res == DialogResult.OK) { Close(); }
+                else { Close(); }
+            }
             var json = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(settings);
             ApikeyBox.Text = json.SteamAPI;
             CouponsKeyBox.Text = json.SteamkeysAPI;
@@ -473,12 +486,22 @@ namespace Shatulsky_Farm {
             } catch { }
 
             Database.UID = uid;
-
-            string check = $"uid={uid}&key={Database.KEY}";
-            string[] ok;
-            var postResponse = Request.POST("https://shamanovski.pythonanywhere.com/check_license", check, out ok);
-            var postJson = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(postResponse);
-            if (postJson.success == false) {
+            try {
+                string check = $"uid={uid}&key={Database.KEY}";
+                string[] ok;
+                var postResponse = Request.POST("https://shamanovski.pythonanywhere.com/check_license", check, out ok);
+                var postJson = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(postResponse);
+                if (postJson.success == false) {
+                    DialogResult res = new DialogResult();
+                    res = MessageBox.Show("License check failed!",
+                                                     "License Error",
+                                                     MessageBoxButtons.OK,
+                                                     MessageBoxIcon.Error);
+                    if (res == DialogResult.OK) { Close(); }
+                    else { Close(); }
+                }
+            } catch { licenseFail = true; }
+            if (licenseFail) {
                 DialogResult res = new DialogResult();
                 res = MessageBox.Show("License check failed!",
                                                  "License Error",

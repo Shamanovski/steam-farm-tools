@@ -43,7 +43,10 @@ namespace Shatulsky_Farm {
             var json = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(response);
             var bots = json["Bots"];
             foreach (var bot in bots) {
-                if(bot.Value.SteamID.ToString() == "0") throw new Exception($"SteamID=0 - {VDS} {bot.Name}");
+                if (bot.Value.SteamID.ToString() == "0") {
+                    Program.GetForm.MyMainForm.AddLogBold($"SteamID=0 - {VDS} {bot.Name}");
+                    continue;
+                }
                 Database.BOT_LIST.Add(new Bot(bot.Name, bot.Value.SteamID.ToString(), VDS));
             }
         }
