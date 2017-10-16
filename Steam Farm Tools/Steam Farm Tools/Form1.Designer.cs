@@ -91,6 +91,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.QIWILoginsBox = new System.Windows.Forms.RichTextBox();
             this.QIWIStartButton = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.KeysCountNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.IPC1GruopBox.SuspendLayout();
             this.PaymentGroupBox.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -109,6 +111,7 @@
             this.tabPage2.SuspendLayout();
             this.QIWIGroupBox2.SuspendLayout();
             this.QIWIGroupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.KeysCountNumericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // ServersRichTextBox
@@ -597,11 +600,13 @@
             // 
             // SteamBuyGruouBox3
             // 
+            this.SteamBuyGruouBox3.Controls.Add(this.KeysCountNumericUpDown);
+            this.SteamBuyGruouBox3.Controls.Add(this.label3);
             this.SteamBuyGruouBox3.Controls.Add(this.radioButtonTF);
             this.SteamBuyGruouBox3.Controls.Add(this.radioButtonPubg);
             this.SteamBuyGruouBox3.Location = new System.Drawing.Point(239, 79);
             this.SteamBuyGruouBox3.Name = "SteamBuyGruouBox3";
-            this.SteamBuyGruouBox3.Size = new System.Drawing.Size(225, 79);
+            this.SteamBuyGruouBox3.Size = new System.Drawing.Size(225, 113);
             this.SteamBuyGruouBox3.TabIndex = 19;
             this.SteamBuyGruouBox3.TabStop = false;
             this.SteamBuyGruouBox3.Text = "What to buy";
@@ -609,23 +614,23 @@
             // radioButtonTF
             // 
             this.radioButtonTF.AutoSize = true;
-            this.radioButtonTF.Location = new System.Drawing.Point(15, 42);
+            this.radioButtonTF.Location = new System.Drawing.Point(9, 46);
             this.radioButtonTF.Name = "radioButtonTF";
-            this.radioButtonTF.Size = new System.Drawing.Size(73, 17);
+            this.radioButtonTF.Size = new System.Drawing.Size(64, 17);
             this.radioButtonTF.TabIndex = 6;
             this.radioButtonTF.TabStop = true;
-            this.radioButtonTF.Text = "2 TF Keys";
+            this.radioButtonTF.Text = "TF Keys";
             this.radioButtonTF.UseVisualStyleBackColor = true;
             // 
             // radioButtonPubg
             // 
             this.radioButtonPubg.AutoSize = true;
-            this.radioButtonPubg.Location = new System.Drawing.Point(15, 19);
+            this.radioButtonPubg.Location = new System.Drawing.Point(9, 23);
             this.radioButtonPubg.Name = "radioButtonPubg";
-            this.radioButtonPubg.Size = new System.Drawing.Size(85, 17);
+            this.radioButtonPubg.Size = new System.Drawing.Size(76, 17);
             this.radioButtonPubg.TabIndex = 5;
             this.radioButtonPubg.TabStop = true;
-            this.radioButtonPubg.Text = "2 Pubg Keys";
+            this.radioButtonPubg.Text = "Pubg Keys";
             this.radioButtonPubg.UseVisualStyleBackColor = true;
             // 
             // SteamBuyGruouBox2
@@ -698,7 +703,7 @@
             // SteamBuyButton
             // 
             this.SteamBuyButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.SteamBuyButton.Location = new System.Drawing.Point(274, 178);
+            this.SteamBuyButton.Location = new System.Drawing.Point(276, 212);
             this.SteamBuyButton.Name = "SteamBuyButton";
             this.SteamBuyButton.Size = new System.Drawing.Size(156, 51);
             this.SteamBuyButton.TabIndex = 0;
@@ -805,6 +810,32 @@
             this.QIWIStartButton.UseVisualStyleBackColor = true;
             this.QIWIStartButton.Click += new System.EventHandler(this.button1_Click);
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 78);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(35, 13);
+            this.label3.TabIndex = 21;
+            this.label3.Text = "Count";
+            // 
+            // KeysCountNumericUpDown
+            // 
+            this.KeysCountNumericUpDown.Location = new System.Drawing.Point(47, 76);
+            this.KeysCountNumericUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.KeysCountNumericUpDown.Name = "KeysCountNumericUpDown";
+            this.KeysCountNumericUpDown.Size = new System.Drawing.Size(58, 20);
+            this.KeysCountNumericUpDown.TabIndex = 22;
+            this.KeysCountNumericUpDown.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -847,6 +878,7 @@
             this.QIWIGroupBox2.PerformLayout();
             this.QIWIGroupBox1.ResumeLayout(false);
             this.QIWIGroupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.KeysCountNumericUpDown)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -920,6 +952,8 @@
         public System.Windows.Forms.Label label2;
         public System.Windows.Forms.RichTextBox QIWILoginsBox;
         private System.Windows.Forms.CheckBox RescanBotsCheckBox;
+        private System.Windows.Forms.NumericUpDown KeysCountNumericUpDown;
+        public System.Windows.Forms.Label label3;
     }
 }
 

@@ -687,6 +687,10 @@ namespace Shatulsky_Farm {
                     var bots = json["Bots"];
                     Database.ALL_BOTS_STEAMID_LOGIN = new Dictionary<string, string>();
                     foreach (var bot in bots) {
+                        if (bot.Value.SteamID.ToString() == "0") {
+                            Program.GetForm.MyMainForm.AddLogBold($"SteamID=0 - {VDS} {bot.Name}");
+                            continue;
+                        }
                         Database.ALL_BOTS_STEAMID_LOGIN.Add(bot.Value.SteamID.ToString(), bot.Name);
                     }
                     foreach (var bot in Database.ALL_BOTS_STEAMID_LOGIN) {
@@ -830,6 +834,7 @@ namespace Shatulsky_Farm {
         private async void SteamBuyButton_Click(object sender, EventArgs e) {
             BlockAll();
             var allBotsInfo = new Dictionary<string, string>();
+            var keysCount = Program.GetForm.MyMainForm.KeysCountNumericUpDown.Value.ToString();
             #region Загрузка мафайлов
             await Task.Run(() => {
                 Program.GetForm.MyMainForm.AddLog("Mafiles processing started.");
@@ -850,7 +855,7 @@ namespace Shatulsky_Farm {
                 foreach (var account in accounts) {
                     #region Данные аккаунта
                     var accSpl = account.Split(':');
-                    var login = accSpl[0];
+                    var login = accSpl[0].ToLower();
                     var password = accSpl[1];
                     var sharedSecret = allBotsInfo[login];
                     #endregion
@@ -871,8 +876,8 @@ namespace Shatulsky_Farm {
 
                     #region Что покупать
                     var buyLink = "";
-                    if (Program.GetForm.MyMainForm.radioButtonTF.Checked) buyLink = "https://store.steampowered.com/buyitem/440/5021/2";
-                    if (Program.GetForm.MyMainForm.radioButtonPubg.Checked) buyLink = "http://store.steampowered.com/buyitem/578080/35100001/2";
+                    if (Program.GetForm.MyMainForm.radioButtonTF.Checked) buyLink = "https://store.steampowered.com/buyitem/440/5021/" + keysCount;
+                    if (Program.GetForm.MyMainForm.radioButtonPubg.Checked) buyLink = "http://store.steampowered.com/buyitem/578080/35100001/" + keysCount;
                     #endregion
 
                     #region Покупка
@@ -885,13 +890,17 @@ namespace Shatulsky_Farm {
                     Match m2 = new Regex(@"name=""transaction_id"" value=""(.+)""").Match(response);
                     var transId = m2.Groups[1];
 
+                    Match m3 = new Regex(@"name=""sessionid"" value=""(.+)""").Match(response);
+                    var postSession = m3.Groups[1];
+
+
                     var postData = "transaction_id=" + transId;
                     postData += "&returnurl=" + returnUrl.ToString().Replace(";", "%2F&");
-                    postData += "&sessionid=" + storeCookies[2].Value.ToString();
+                    postData += "&sessionid=" + postSession;
                     postData += "&approved=1";
 
                     var postResponse = Request.SendPostRequest("https://store.steampowered.com/checkout/approvetxnsubmit", postData, storeCookies);
-                    if (postResponse.Contains("произошла непредвиденная ошибка") || postResponse.Contains("произошла ошибка"))
+                    if (postResponse.Contains("произошла непредвиденная ошибка") || postResponse.Contains("произошла ошибка") || postResponse.Contains("unexpected error"))
                         throw new Exception($"Cant buy items for {login}");
                     Program.GetForm.MyMainForm.AddLog($"{login} - DONE [{++count}/{accounts.Count()}]");
                     #endregion
