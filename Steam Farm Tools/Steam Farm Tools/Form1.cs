@@ -24,295 +24,305 @@ namespace Shatulsky_Farm {
 
         private async void StartButton_Click(object sender, EventArgs e) {
             BlockAll();
+            Database.FORSE_STOP = false;
+            if (Program.GetForm.MyMainForm.BuyGamesButton.Text == "Forse buying process stop") {
+                Program.GetForm.MyMainForm.AddLog("Buying process will stop on next loop");
+                Database.FORSE_STOP = true;
+                Program.GetForm.MyMainForm.BuyGamesButton.Enabled = false;
+                Program.GetForm.MyMainForm.BuyGamesButton.Text = "Buy games";
+            }
+            else {
+                #region Настройки Database
+                await Task.Run(() => {
+                    Database.BOT_LIST = new List<Bot>();
+                    Database.BOTS_LOADING = new List<bool>();
+                    Database.WASTED_MONEY = 0;
+                    Database.ALL_GAMES_LIST = new List<Game>();
+                    Database.COUPONS = new Dictionary<string, Tuple<string, int>>();
+                    #region Загрузка купонов
+                    if (Program.GetForm.MyMainForm.CouponsKeyBox.Text != "") {
+                        var couponResponse = Request.getResponse($"http://steamkeys.ovh/user.php?key={Program.GetForm.MyMainForm.CouponsKeyBox.Text}");
+                        var splCoupons = couponResponse.Split(new[] { "<div style='min-weight:", }, StringSplitOptions.None);
+                        for (int i = 1; i < splCoupons.Count(); i++) {
+                            var coupon = splCoupons[i];
 
-            #region Настройки Database
-            await Task.Run(() => {
-                Database.BOT_LIST = new List<Bot>();
-                Database.BOTS_LOADING = new List<bool>();
-                Database.WASTED_MONEY = 0;
-                Database.ALL_GAMES_LIST = new List<Game>();
-                Database.COUPONS = new Dictionary<string, Tuple<string, int>>();
-                #region Загрузка купонов
-                if (Program.GetForm.MyMainForm.CouponsKeyBox.Text != "") {
-                    var couponResponse = Request.getResponse($"http://steamkeys.ovh/user.php?key={Program.GetForm.MyMainForm.CouponsKeyBox.Text}");
-                    var splCoupons = couponResponse.Split(new[] { "<div style='min-weight:", }, StringSplitOptions.None);
-                    for (int i = 1; i < splCoupons.Count(); i++) {
-                        var coupon = splCoupons[i];
-
-                        var shop = coupon.Split(new[] { "<div title=" }, StringSplitOptions.None)[1];
-                        shop = "http://" + shop.Split('>')[1].Split('<')[0];
-                        var text = "";
-                        try { text = coupon.Split(new[] { "Купон'value='" }, StringSplitOptions.None)[1].Split('\'')[0]; } catch { }
-                        int percent = 0;
-                        try { percent = int.Parse(coupon.Split(new[] { "Скидка'value='" }, StringSplitOptions.None)[1].Split('%')[0]); } catch { }
-                        Database.COUPONS.Add(shop, new Tuple<string, int>(text, percent));
+                            var shop = coupon.Split(new[] { "<div title=" }, StringSplitOptions.None)[1];
+                            shop = "http://" + shop.Split('>')[1].Split('<')[0];
+                            var text = "";
+                            try { text = coupon.Split(new[] { "Купон'value='" }, StringSplitOptions.None)[1].Split('\'')[0]; } catch { }
+                            int percent = 0;
+                            try { percent = int.Parse(coupon.Split(new[] { "Скидка'value='" }, StringSplitOptions.None)[1].Split('%')[0]); } catch { }
+                            Database.COUPONS.Add(shop, new Tuple<string, int>(text, percent));
+                        }
                     }
-                }
+                    #endregion
+                });
                 #endregion
-            });
-            #endregion
 
-            #region Загрузка VDS
-            var VDSs = ServersRichTextBox.Text.Split('\n').ToList();
-            #region удалить пустые строки
-            for (int i = 0; i < VDSs.Count; i++) {
-                if (VDSs[i] == "" || VDSs[i] == "\n")
-                    VDSs.RemoveAt(i--);
-            }
-            #endregion
-
-            for (int i = 0; i < VDSs.Count; i++) {
-                var VDS = VDSs[i];
-
-                if (VDS != string.Empty) {
-#pragma warning disable CS4014 
-                    Task.Run(() => {
-                        AddLog($"{VDS} - bots loading started");
-                        Bot.AllBotsToDatabase(VDS);
-                        Database.BOTS_LOADING.Add(true);
-                        AddLog($"{VDS} - bots loading done");
-                    });
-#pragma warning restore CS4014 
-                }
-            }
-
-            await Task.Run(() => {
-                bool done = false;
-                while (!done) {
-                    if (Database.BOTS_LOADING.Count == VDSs.Count)
-                        break;
-                    Thread.Sleep(1000);
-                }
-            });
-            #endregion
-
-            if (Program.GetForm.MyMainForm.LogBox.Text.Contains("Bot parse error")) {
-                Program.GetForm.MyMainForm.AddLogBold("Fix erroneous bots and restart Steam Farm Tools");
-                Thread.Sleep(Timeout.Infinite);
-            }
-
-            await Task.Run(async () => {
-
-                #region Обработка Json каталога
-                Program.GetForm.MyMainForm.AddLog("All suitable games loading.");
-
-                var response = Request.GetCatalog();
-                var json = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(response);
-                foreach (var item in json) {
-                    string appid = item.Path;
-                    string lequeshop_id = item.Value.lequeshop_id.Value;
-                    double price = item.Value.price.Value;
-                    double amount = (item.Value.amount.Value.ToString() == "N/A") ? 0 : item.Value.amount.Value;
-                    string store = item.Value.store.Value;
-                    string game_name = item.Value.game_name.Value;
-                    Database.ALL_GAMES_LIST.Add(new Game(appid, lequeshop_id, price, amount, store, game_name));
+                #region Загрузка VDS
+                var VDSs = ServersRichTextBox.Text.Split('\n').ToList();
+                #region удалить пустые строки
+                for (int i = 0; i < VDSs.Count; i++) {
+                    if (VDSs[i] == "" || VDSs[i] == "\n")
+                        VDSs.RemoveAt(i--);
                 }
                 #endregion
 
-                #region Поиск нужных игр
-                foreach (var game in Database.ALL_GAMES_LIST) {
-                    foreach (var bot in Database.BOT_LIST) {
-                        if (!bot.gamesHave.Contains(game.appid))
-                            game.count += 1;
+                for (int i = 0; i < VDSs.Count; i++) {
+                    var VDS = VDSs[i];
+
+                    if (VDS != string.Empty) {
+#pragma warning disable CS4014
+                        Task.Run(() => {
+                            AddLog($"{VDS} - bots loading started");
+                            Bot.AllBotsToDatabase(VDS);
+                            Database.BOTS_LOADING.Add(true);
+                            AddLog($"{VDS} - bots loading done");
+                        });
+#pragma warning restore CS4014
                     }
                 }
 
-                double maxGamePrice = double.Parse(Program.GetForm.MyMainForm.MaxGameCostBox.Text);
-                for (int i = 0; i < Database.ALL_GAMES_LIST.Count; i++) {//удаляем из списка игры которые не нужны и которые дороже разрешонного
-                    var game = Database.ALL_GAMES_LIST[i];
-                    if (game.count == 0 || game.price > maxGamePrice || Database.BLACKLIST.Contains(game.appid) || game.store.Contains("akens.ru") || game.store.Contains("alfakeys.ru") || game.store.Contains("keymarket.pw")) {
-                        Database.ALL_GAMES_LIST.Remove(game);
-                        i--;
+                await Task.Run(() => {
+                    bool done = false;
+                    while (!done) {
+                        if (Database.BOTS_LOADING.Count == VDSs.Count)
+                            break;
+                        Thread.Sleep(1000);
                     }
-                }
-
-                Database.ALL_GAMES_LIST.Sort(); //сортируем от минимальной цены
+                });
                 #endregion
 
-                #region Покупка игр
-                Program.GetForm.MyMainForm.AddLog($"Found {Database.ALL_GAMES_LIST.Count()} games satisfying the condition (<={Program.GetForm.MyMainForm.MaxGameCostBox.Text})");
-                Program.GetForm.MyMainForm.AddLog("Game buying process started");
+                if (Program.GetForm.MyMainForm.LogBox.Text.Contains("Bot parse error")) {
+                    Program.GetForm.MyMainForm.AddLogBold("Fix erroneous bots and restart Steam Farm Tools");
+                    Thread.Sleep(Timeout.Infinite);
+                }
 
-                foreach (var game in Database.ALL_GAMES_LIST) {
+                Program.GetForm.MyMainForm.BuyGamesButton.Enabled = true;
+                Program.GetForm.MyMainForm.BuyGamesButton.Text = "Forse buying process stop";
 
-                    #region Пост запрос в магазин
-                    string[] setCookies;
-                    Program.GetForm.MyMainForm.AddLog($"Processing {game.count} {game.game_name} ({game.price}) in {game.store}");
-                    var postData = "email=" + Program.GetForm.MyMainForm.EmailBox.Text.Replace("@", "%40");
-                    postData += "&count=" + game.count;
-                    postData += "&type=" + game.lequeshop_id;
-                    postData += "&forms=%7B%7D&fund=4";
-                    postData += "&copupon=";
-                    if (Program.GetForm.MyMainForm.CouponsKeyBox.Text != "")
-                        postData += Database.COUPONS[game.store].Item1;
+                await Task.Run(async () => {
 
-                    var order = Request.POST(game.store + "/order", postData, out setCookies);
+                    #region Обработка Json каталога
+                    Program.GetForm.MyMainForm.AddLog("All suitable games loading.");
 
-                    dynamic jsonOrder = null;
-                    try {
-                        jsonOrder = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(order);
-                    } catch {
-                        Program.GetForm.MyMainForm.AddLogBold($"Error getting payment information {game.game_name} in {game.store}. Moving on to the next product.");
-                        Thread.Sleep(10000);
-                        continue;
+                    var response = Request.GetCatalog();
+                    var json = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(response);
+                    foreach (var item in json) {
+                        string appid = item.Path;
+                        string lequeshop_id = item.Value.lequeshop_id.Value;
+                        double price = item.Value.price.Value;
+                        double amount = (item.Value.amount.Value.ToString() == "N/A") ? 0 : item.Value.amount.Value;
+                        string store = item.Value.store.Value;
+                        string game_name = item.Value.game_name.Value;
+                        Database.ALL_GAMES_LIST.Add(new Game(appid, lequeshop_id, price, amount, store, game_name));
                     }
                     #endregion
 
-                    #region Если товара не хватает
-                    try {
-                        if (jsonOrder.error.Value.Contains("Такого количества товара нет в наличии.")) {
-                            var keysLeft = jsonOrder.error.Value.Split(new[] { "Доступно: " }, StringSplitOptions.None)[1].Split(new[] { " Шт" }, StringSplitOptions.None)[0];
-                            Program.GetForm.MyMainForm.AddLog($"{game.store} does notenought keys fot {game.game_name}. Buying {keysLeft} remaining keys.");
-                            postData = postData.Replace($"count={game.count}", $"count={keysLeft}");
-                            order = Request.POST(game.store + "/order", postData, out setCookies);
-                            jsonOrder = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(order);
-                        }
-                    } catch { }
-                    #endregion
-
-                    #region Данные заказа
-                    var allPrice = "";
-                    var reciever = "";
-                    var comment = "";
-                    var buyLink = "";
-                    double count = 0;
-                    var appid = "";
-                    try {
-                        allPrice = jsonOrder.price.Value.Split(new[] { " QIWI" }, StringSplitOptions.None)[0];
-                        reciever = jsonOrder.fund.Value.Split('>')[1].Split('<')[0];
-                        comment = jsonOrder.bill.Value.Split('>')[1].Split('<')[0];
-                        buyLink = jsonOrder.check_url.Value.Replace("\\", "");
-                        count = jsonOrder.count.Value;
-                        appid = game.appid;
-                    } catch {
-                        Program.GetForm.MyMainForm.AddLogBold($"Error getting payment information {game.game_name} in {game.store}. Proceed to the next product.");
-                        Thread.Sleep(10000);
-                        continue;
-                    }
-                    #endregion
-                    double allPreciDouble = 0;
-                    var separator = Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator;
-                    switch (separator) {
-                        case ".":
-                            allPreciDouble = double.Parse(allPrice.Replace(',', '.')); break;
-                        case ",":
-                            allPreciDouble = double.Parse(allPrice.Replace('.', ',')); break;
-                        default: throw new Exception($"Custom fractional separator - \"{separator}\"");
-                    }
-                    #region Проверки
-                    if (Database.WASTED_MONEY + allPreciDouble > double.Parse(Program.GetForm.MyMainForm.MaxMoneyBox.Text)) { //заканчиваем цикл если достигли лимит по деньгам
-                        Program.GetForm.MyMainForm.AddLogBold($"You have reached the purchase limit. Spent {Database.WASTED_MONEY}");
-                        break;
-                    }
-
-                    var oneItemPrice = allPreciDouble / count;
-                    double maxAllowedPrice = 0;
-                    switch (separator) {
-                        case ".":
-                            maxAllowedPrice = double.Parse(Program.GetForm.MyMainForm.MaxGameCostBox.Text.Replace(',', '.')); break;
-                        case ",":
-                            maxAllowedPrice = double.Parse(Program.GetForm.MyMainForm.MaxGameCostBox.Text.Replace('.', ',')); break;
-                        default: throw new Exception($"Custom fractional separator - \"{separator}\"");
-                    }
-
-                    if (oneItemPrice > maxAllowedPrice) {
-                        Program.GetForm.MyMainForm.AddLog($"We skip the game {game.game_name} ({game.appid}) since its price has become higher than permissible - {Math.Round(oneItemPrice, 2)}");
-                        Thread.Sleep(10000);
-                        continue; //пропускаем элемент если его цена увеличилась выше допустимой
-                    }
-                    #endregion
-
-                    #region Оплата
-                    Program.GetForm.MyMainForm.AddLog($"Buying {count} games {game.game_name} ({appid}) by {Math.Round(oneItemPrice, 2)} for the amount of {allPrice}");
-                    var totalPrice = allPrice.ToString().Replace(',', '.');
-                    Qiwi qiwiAccount = new Qiwi(Program.GetForm.MyMainForm.QiwiTokenBox.Text);
-                    var paymentDone = await qiwiAccount.SendMoneyToWallet(reciever, totalPrice, comment);
-                    if (!paymentDone) throw new Exception($"Failed to pay {reciever} {comment} {appid} {totalPrice} RUB. {buyLink}");
-                    File.AppendAllText("buylinks.txt", $"{DateTime.Now} - {buyLink}\n");
-                    Database.WASTED_MONEY += allPreciDouble;
-                    UpdateWastedMoney();
-                    Program.GetForm.MyMainForm.AddLog($"Paid {totalPrice} RUB, to the number {reciever}");
-                    Thread.Sleep(5000);
-                    #endregion
-
-                    #region Загрузка файла
-
-                    #region Получить куки
-                    string cookies = "";
-                    if (setCookies.Count() > 0) {
-                        var cookiesDictionary = new Dictionary<string, string>();
-                        var setCookiesString = "";
-                        foreach (var item in setCookies) {
-                            setCookiesString += item;
-                        }
-                        foreach (var item in setCookiesString.Split(';')) {
-                            try {
-                                var splItem = item.Split('=');
-                                cookiesDictionary.Add(splItem[0].Replace(" ", ""), splItem[1].Replace(" ", ""));
-                            } catch { }
-                        }
-                        cookies = "PHPSESSID=" + cookiesDictionary["PHPSESSID"];
-                    }
-
-                    #endregion
-
-                    try { File.Delete("downloaded.txt"); } catch { };
-                    response = Request.getResponse(buyLink, cookies).ToString();
-                    var fileDownloaded = Request.DownloadFile(buyLink.Replace("/order/", "/order/get/") + "/saved/", cookies, "downloaded.txt");
-                    if (!fileDownloaded) throw new Exception($"Failed to download file {buyLink}");
-                    Thread.Sleep(1000);
-                    var fileName = $"{appid} {game.game_name} - {DateTime.Now}";
-                    fileName = fileName.Replace('.', '-');
-                    fileName = fileName.Replace(':', '-');
-                    fileName = fileName.Replace('/', '-');
-                    fileName = fileName.Replace('\\', '-');
-                    Directory.CreateDirectory("keys");
-                    File.Move("downloaded.txt", $"keys\\{fileName}.txt");
-                    Program.GetForm.MyMainForm.AddLog($"File {fileName}.txt saved.");
-                    Thread.Sleep(1000);
-                    #endregion
-
-                    #region Активация ключей
-                    var keysList = File.ReadAllLines($"keys\\{fileName}.txt");
-                    Program.GetForm.MyMainForm.AddLog($"Activation {keysList.Count()} keys {game.game_name} ({appid})");
-                    foreach (var line in keysList) {
+                    #region Поиск нужных игр
+                    foreach (var game in Database.ALL_GAMES_LIST) {
                         foreach (var bot in Database.BOT_LIST) {
-                            if (!bot.gamesHave.Contains(appid)) {
-                                Regex regex = new Regex(@"\w{5}-\w{5}-\w{5}");
-                                var key = regex.Match(line);
-                                var command = $"http://{bot.vds}/IPC?command=";
-                                command += $"!redeem^ {bot.login} SD,SF {key}";
-                                var keysResponse = Request.getResponse(command);
-                                File.AppendAllText($"responses.txt", $"\n{DateTime.Now} {bot.vds} {bot.login} {appid} {buyLink} - {keysResponse}");
+                            if (!bot.gamesHave.Contains(game.appid))
+                                game.count += 1;
+                        }
+                    }
 
-                                if (keysResponse.Contains("Timeout")) {
-                                    Thread.Sleep(10000);
-                                    var botResponse = Request.getResponse($"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={Program.GetForm.MyMainForm.ApikeyBox.Text}&steamid={bot.steamID}&format=json");
-                                    if (botResponse.Contains(appid))
-                                        keysResponse += "False timout. OK/NoDetail";
-                                }
+                    double maxGamePrice = double.Parse(Program.GetForm.MyMainForm.MaxGameCostBox.Text);
+                    for (int i = 0; i < Database.ALL_GAMES_LIST.Count; i++) {//удаляем из списка игры которые не нужны и которые дороже разрешонного
+                        var game = Database.ALL_GAMES_LIST[i];
+                        if (game.count == 0 || game.price > maxGamePrice || Database.BLACKLIST.Contains(game.appid) || game.store.Contains("akens.ru") || game.store.Contains("alfakeys.ru") || game.store.Contains("keymarket.pw")) {
+                            Database.ALL_GAMES_LIST.Remove(game);
+                            i--;
+                        }
+                    }
 
-                                if (keysResponse.Contains("OK/NoDetail") == false) {
-                                    Program.GetForm.MyMainForm.AddLogBold($"Bad activation for {bot.vds},{bot.login},{key},{keysResponse.Replace('\r', ' ').Replace('\n', ' ')}");
-                                    File.AppendAllText("UNUSEDKEYS.TXT", $"{bot.vds},{bot.login},{key},{keysResponse.Replace('\r', ' ').Replace('\n', ' ')}\n");
+                    Database.ALL_GAMES_LIST.Sort(); //сортируем от минимальной цены
+                    #endregion
+
+                    #region Покупка игр
+                    Program.GetForm.MyMainForm.AddLog($"Found {Database.ALL_GAMES_LIST.Count()} games satisfying the condition (<={Program.GetForm.MyMainForm.MaxGameCostBox.Text})");
+                    Program.GetForm.MyMainForm.AddLog("Game buying process started");
+                    foreach (var game in Database.ALL_GAMES_LIST) {
+                        if (Database.FORSE_STOP) break;
+                        #region Пост запрос в магазин
+                        string[] setCookies;
+                        Program.GetForm.MyMainForm.AddLog($"Processing {game.count} {game.game_name} ({game.price}) in {game.store}");
+                        var postData = "email=" + Program.GetForm.MyMainForm.EmailBox.Text.Replace("@", "%40");
+                        postData += "&count=" + game.count;
+                        postData += "&type=" + game.lequeshop_id;
+                        postData += "&forms=%7B%7D&fund=4";
+                        postData += "&copupon=";
+                        if (Program.GetForm.MyMainForm.CouponsKeyBox.Text != "")
+                            postData += Database.COUPONS[game.store].Item1;
+
+                        var order = Request.POST(game.store + "/order", postData, out setCookies);
+
+                        dynamic jsonOrder = null;
+                        try {
+                            jsonOrder = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(order);
+                        } catch {
+                            Program.GetForm.MyMainForm.AddLogBold($"Error getting payment information {game.game_name} in {game.store}. Moving on to the next product.");
+                            Thread.Sleep(10000);
+                            continue;
+                        }
+                        #endregion
+
+                        #region Если товара не хватает
+                        try {
+                            if (jsonOrder.error.Value.Contains("Такого количества товара нет в наличии.")) {
+                                var keysLeft = jsonOrder.error.Value.Split(new[] { "Доступно: " }, StringSplitOptions.None)[1].Split(new[] { " Шт" }, StringSplitOptions.None)[0];
+                                Program.GetForm.MyMainForm.AddLog($"{game.store} does notenought keys fot {game.game_name}. Buying {keysLeft} remaining keys.");
+                                postData = postData.Replace($"count={game.count}", $"count={keysLeft}");
+                                order = Request.POST(game.store + "/order", postData, out setCookies);
+                                jsonOrder = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(order);
+                            }
+                        } catch { }
+                        #endregion
+
+                        #region Данные заказа
+                        var allPrice = "";
+                        var reciever = "";
+                        var comment = "";
+                        var buyLink = "";
+                        double count = 0;
+                        var appid = "";
+                        try {
+                            allPrice = jsonOrder.price.Value.Split(new[] { " QIWI" }, StringSplitOptions.None)[0];
+                            reciever = jsonOrder.fund.Value.Split('>')[1].Split('<')[0];
+                            comment = jsonOrder.bill.Value.Split('>')[1].Split('<')[0];
+                            buyLink = jsonOrder.check_url.Value.Replace("\\", "");
+                            count = jsonOrder.count.Value;
+                            appid = game.appid;
+                        } catch {
+                            Program.GetForm.MyMainForm.AddLogBold($"Error getting payment information {game.game_name} in {game.store}. Proceed to the next product.");
+                            Thread.Sleep(10000);
+                            continue;
+                        }
+                        #endregion
+                        double allPreciDouble = 0;
+                        var separator = Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+                        switch (separator) {
+                            case ".":
+                                allPreciDouble = double.Parse(allPrice.Replace(',', '.')); break;
+                            case ",":
+                                allPreciDouble = double.Parse(allPrice.Replace('.', ',')); break;
+                            default: throw new Exception($"Custom fractional separator - \"{separator}\"");
+                        }
+                        #region Проверки
+                        if (Database.WASTED_MONEY + allPreciDouble > double.Parse(Program.GetForm.MyMainForm.MaxMoneyBox.Text)) { //заканчиваем цикл если достигли лимит по деньгам
+                            Program.GetForm.MyMainForm.AddLogBold($"You have reached the purchase limit. Spent {Database.WASTED_MONEY}");
+                            break;
+                        }
+
+                        var oneItemPrice = allPreciDouble / count;
+                        double maxAllowedPrice = 0;
+                        switch (separator) {
+                            case ".":
+                                maxAllowedPrice = double.Parse(Program.GetForm.MyMainForm.MaxGameCostBox.Text.Replace(',', '.')); break;
+                            case ",":
+                                maxAllowedPrice = double.Parse(Program.GetForm.MyMainForm.MaxGameCostBox.Text.Replace('.', ',')); break;
+                            default: throw new Exception($"Custom fractional separator - \"{separator}\"");
+                        }
+
+                        if (oneItemPrice > maxAllowedPrice) {
+                            Program.GetForm.MyMainForm.AddLog($"We skip the game {game.game_name} ({game.appid}) since its price has become higher than permissible - {Math.Round(oneItemPrice, 2)}");
+                            Thread.Sleep(10000);
+                            continue; //пропускаем элемент если его цена увеличилась выше допустимой
+                        }
+                        #endregion
+
+                        #region Оплата
+                        Program.GetForm.MyMainForm.AddLog($"Buying {count} games {game.game_name} ({appid}) by {Math.Round(oneItemPrice, 2)} for the amount of {allPrice}");
+                        var totalPrice = allPrice.ToString().Replace(',', '.');
+                        Qiwi qiwiAccount = new Qiwi(Program.GetForm.MyMainForm.QiwiTokenBox.Text);
+                        var paymentDone = await qiwiAccount.SendMoneyToWallet(reciever, totalPrice, comment);
+                        if (!paymentDone) throw new Exception($"Failed to pay {reciever} {comment} {appid} {totalPrice} RUB. {buyLink}");
+                        File.AppendAllText("buylinks.txt", $"{DateTime.Now} - {buyLink}\n");
+                        Database.WASTED_MONEY += allPreciDouble;
+                        UpdateWastedMoney();
+                        Program.GetForm.MyMainForm.AddLog($"Paid {totalPrice} RUB, to the number {reciever}");
+                        Thread.Sleep(5000);
+                        #endregion
+
+                        #region Загрузка файла
+
+                        #region Получить куки
+                        string cookies = "";
+                        if (setCookies.Count() > 0) {
+                            var cookiesDictionary = new Dictionary<string, string>();
+                            var setCookiesString = "";
+                            foreach (var item in setCookies) {
+                                setCookiesString += item;
+                            }
+                            foreach (var item in setCookiesString.Split(';')) {
+                                try {
+                                    var splItem = item.Split('=');
+                                    cookiesDictionary.Add(splItem[0].Replace(" ", ""), splItem[1].Replace(" ", ""));
+                                } catch { }
+                            }
+                            cookies = "PHPSESSID=" + cookiesDictionary["PHPSESSID"];
+                        }
+
+                        #endregion
+
+                        try { File.Delete("downloaded.txt"); } catch { };
+                        response = Request.getResponse(buyLink, cookies).ToString();
+                        var fileDownloaded = Request.DownloadFile(buyLink.Replace("/order/", "/order/get/") + "/saved/", cookies, "downloaded.txt");
+                        if (!fileDownloaded) throw new Exception($"Failed to download file {buyLink}");
+                        Thread.Sleep(1000);
+                        var fileName = $"{appid} {game.game_name} - {DateTime.Now}";
+                        fileName = fileName.Replace('.', '-');
+                        fileName = fileName.Replace(':', '-');
+                        fileName = fileName.Replace('/', '-');
+                        fileName = fileName.Replace('\\', '-');
+                        Directory.CreateDirectory("keys");
+                        File.Move("downloaded.txt", $"keys\\{fileName}.txt");
+                        Program.GetForm.MyMainForm.AddLog($"File {fileName}.txt saved.");
+                        Thread.Sleep(1000);
+                        #endregion
+
+                        #region Активация ключей
+                        var keysList = File.ReadAllLines($"keys\\{fileName}.txt");
+                        Program.GetForm.MyMainForm.AddLog($"Activation {keysList.Count()} keys {game.game_name} ({appid})");
+                        foreach (var line in keysList) {
+                            foreach (var bot in Database.BOT_LIST) {
+                                if (!bot.gamesHave.Contains(appid)) {
+                                    Regex regex = new Regex(@"\w{5}-\w{5}-\w{5}");
+                                    var key = regex.Match(line);
+                                    var command = $"http://{bot.vds}/IPC?command=";
+                                    command += $"!redeem^ {bot.login} SD,SF {key}";
+                                    var keysResponse = Request.getResponse(command);
+                                    File.AppendAllText($"responses.txt", $"\n{DateTime.Now} {bot.vds} {bot.login} {appid} {buyLink} - {keysResponse}");
+
+                                    if (keysResponse.Contains("Timeout")) {
+                                        Thread.Sleep(10000);
+                                        var botResponse = Request.getResponse($"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={Program.GetForm.MyMainForm.ApikeyBox.Text}&steamid={bot.steamID}&format=json");
+                                        if (botResponse.Contains(appid))
+                                            keysResponse += "False timout. OK/NoDetail";
+                                    }
+
+                                    if (keysResponse.Contains("OK/NoDetail") == false) {
+                                        Program.GetForm.MyMainForm.AddLogBold($"Bad activation for {bot.vds},{bot.login},{key},{keysResponse.Replace('\r', ' ').Replace('\n', ' ')}");
+                                        File.AppendAllText("UNUSEDKEYS.TXT", $"{bot.vds},{bot.login},{key},{keysResponse.Replace('\r', ' ').Replace('\n', ' ')}\n");
+                                    }
+                                    bot.gamesHave.Add(appid);
+                                    break;
                                 }
-                                bot.gamesHave.Add(appid);
-                                break;
                             }
                         }
+
+                        if (Database.FORSE_STOP) break;
+                        Program.GetForm.MyMainForm.AddLog($"Waiting 30 seconds until next purchase");
+                        Thread.Sleep(30000);
+                        Program.GetForm.MyMainForm.AddLogNoDate($"----------------------------------------------------------------------------------------");
+                        #endregion
                     }
-
-
-                    Program.GetForm.MyMainForm.AddLog($"Waiting 30 seconds until next purchase");
-                    Thread.Sleep(30000);
-                    Program.GetForm.MyMainForm.AddLogNoDate($"----------------------------------------------------------------------------------------");
                     #endregion
-                }
-                #endregion
 
-            });
-            Program.GetForm.MyMainForm.AddLog($"Purchases complete");
-            UnblockAll();
+                });
+                Program.GetForm.MyMainForm.AddLog($"Purchases complete");
+                UnblockAll();
+            }
         }
         public void IncreaseBotsCount() {
             if (InvokeRequired)

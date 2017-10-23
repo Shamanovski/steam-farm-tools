@@ -17,6 +17,7 @@ namespace Shatulsky_Farm {
         public static List<Game> ALL_GAMES_LIST;
 
         public static Dictionary<string, string> ALL_BOTS_STEAMID_LOGIN;
+        public static bool FORSE_STOP;
     }
     public class Game :IComparable<Game> {
         public string appid;
