@@ -22,8 +22,10 @@ namespace Shatulsky_Farm {
                 var json = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(response);
                 var games = json.response.games;
                 gamesHave = new List<string>();
-                foreach (var item in games) {
-                    gamesHave.Add(item.appid.ToString());
+                if (games != null) {
+                    foreach (var item in games) {
+                        gamesHave.Add(item.appid.ToString());
+                    }
                 }
                 #endregion
                 Program.GetForm.MyMainForm.IncreaseBotsCount();

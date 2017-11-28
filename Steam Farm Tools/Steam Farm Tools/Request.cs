@@ -15,13 +15,21 @@ namespace Shatulsky_Farm {
             if (cookies1 != "")
                 web.Headers.Add(HttpRequestHeader.Cookie, cookies1);
             string html = "";
-            try { html = web.DownloadString(uri); } catch {
+            try { html = web.DownloadString(uri); } catch(Exception ex){
+                addRequestLog(uri);
                 System.Threading.Thread.Sleep(10000);
                 html = getResponse(uri);
             }
             return html;
         }
 
+        public static void addRequestLog(string uri) {
+            try {
+                File.AppendAllText("requests.txt", DateTime.Now + " - " + uri + "\n");
+            } catch {
+                addRequestLog(uri);
+            }
+        }
         public static bool DownloadFile(string url, string cookies, string filename) {
             try {
                 // Construct HTTP request to get the file
@@ -69,6 +77,8 @@ namespace Shatulsky_Farm {
             web.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36");
             web.Headers.Add("uid", Database.UID);
             web.Headers.Add("key", Database.KEY);
+            var catalogKey = Program.GetForm.MyMainForm.CatalogLicenseTextBox.Text;
+            web.Headers.Add("catalogue-key", catalogKey);
             string html = web.DownloadString("http://shamanovski.pythonanywhere.com/catalogue");
             return html;
         }

@@ -100,9 +100,9 @@ namespace Shatulsky_Farm {
 
                 Program.GetForm.MyMainForm.BuyGamesButton.Enabled = true;
                 Program.GetForm.MyMainForm.BuyGamesButton.Text = "Forse buying process stop";
+                Program.GetForm.MyMainForm.AddLog($"{Request.getResponse($"http://steamkeys.ovh/get_time.php?key={Program.GetForm.MyMainForm.CatalogLicenseTextBox.Text}")} - term of the Catalog license - ");
 
                 await Task.Run(async () => {
-
                     #region Обработка Json каталога
                     Program.GetForm.MyMainForm.AddLog("All suitable games loading.");
 
@@ -171,7 +171,7 @@ namespace Shatulsky_Farm {
                         try {
                             if (jsonOrder.error.Value.Contains("Такого количества товара нет в наличии.")) {
                                 var keysLeft = jsonOrder.error.Value.Split(new[] { "Доступно: " }, StringSplitOptions.None)[1].Split(new[] { " Шт" }, StringSplitOptions.None)[0];
-                                Program.GetForm.MyMainForm.AddLog($"{game.store} does notenought keys fot {game.game_name}. Buying {keysLeft} remaining keys.");
+                                Program.GetForm.MyMainForm.AddLog($"{game.store} does not enought keys fot {game.game_name}. Buying {keysLeft} remaining keys.");
                                 postData = postData.Replace($"count={game.count}", $"count={keysLeft}");
                                 order = Request.POST(game.store + "/order", postData, out setCookies);
                                 jsonOrder = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(order);
@@ -302,8 +302,8 @@ namespace Shatulsky_Farm {
                                     }
 
                                     if (keysResponse.Contains("OK/NoDetail") == false) {
-                                        Program.GetForm.MyMainForm.AddLogBold($"Bad activation for {bot.vds},{bot.login},{key},{keysResponse.Replace('\r', ' ').Replace('\n', ' ')}");
-                                        File.AppendAllText("UNUSEDKEYS.TXT", $"{bot.vds},{bot.login},{key},{keysResponse.Replace('\r', ' ').Replace('\n', ' ')}\n");
+                                        Program.GetForm.MyMainForm.AddLogBold($"Bad activation for {bot.vds},{bot.login},{game.store},{key},{keysResponse.Replace('\r', ' ').Replace('\n', ' ')}");
+                                        File.AppendAllText("BadActivations.txt", $"{bot.vds},{bot.login},{game.store},{key},{keysResponse.Replace('\r', ' ').Replace('\n', ' ')}\n");
                                     }
                                     bot.gamesHave.Add(appid);
                                     break;
@@ -321,6 +321,7 @@ namespace Shatulsky_Farm {
 
                 });
                 Program.GetForm.MyMainForm.AddLog($"Purchases complete");
+                Program.GetForm.MyMainForm.BuyGamesButton.Text = "Buy games";
                 UnblockAll();
             }
         }
@@ -376,7 +377,6 @@ namespace Shatulsky_Farm {
             Program.GetForm.MyMainForm.ManualCommandsGroupBox.Enabled = false;
             Program.GetForm.MyMainForm.BuyGamesButton.Enabled = false;
             Program.GetForm.MyMainForm.ActivateKeysButton.Enabled = false;
-            Program.GetForm.MyMainForm.ActivateUnusedKeysButton.Enabled = false;
             Program.GetForm.MyMainForm.QIWIGroupBox2.Enabled = false;
             Program.GetForm.MyMainForm.QIWIStartButton.Enabled = false;
             Program.GetForm.MyMainForm.QIWILoginsBox.Enabled = false;
@@ -399,7 +399,6 @@ namespace Shatulsky_Farm {
             Program.GetForm.MyMainForm.ManualCommandsGroupBox.Enabled = true;
             Program.GetForm.MyMainForm.BuyGamesButton.Enabled = true;
             Program.GetForm.MyMainForm.ActivateKeysButton.Enabled = true;
-            Program.GetForm.MyMainForm.ActivateUnusedKeysButton.Enabled = true;
             Program.GetForm.MyMainForm.QIWIGroupBox2.Enabled = true;
             Program.GetForm.MyMainForm.QIWIStartButton.Enabled = true;
             Program.GetForm.MyMainForm.QIWILoginsBox.Enabled = true;
@@ -418,32 +417,7 @@ namespace Shatulsky_Farm {
             LogBox.SelectionStart = LogBox.TextLength;
             LogBox.ScrollToCaret();
         }
-        private async void LootButton_Click(object sender, EventArgs e) {
-            BlockAll();
-            await Task.Run(() => {
-                var unusedKeys = File.ReadAllLines("UNUSEDKEYS.TXT").ToList<string>();
-                for (int i = 0; i < unusedKeys.Count(); i++) {
-                    var line = unusedKeys[i];
-                    var data = line.Split(',');
-                    var vds = data[0];
-                    var login = data[1];
-                    var key = data[2];
-                    var command = $"http://{vds}/IPC?command=";
-                    command += $"!redeem^ {login} SD,SF {key}";
-                    var response = Request.getResponse(command);
-                    Program.GetForm.MyMainForm.AddLog(response);
-                    if (response.Contains("OK/NoDetail")) {
-                        unusedKeys.Remove(line);
-                        File.WriteAllLines("UNUSEDKEYS.TXT", unusedKeys);
-                        Thread.Sleep(1000);
-                    }
-                    else {
-                        File.WriteAllText("UNUSEDKEYS.TXT", $"{vds},{login},{key},{response.Replace('\r', ' ').Replace('\n', ' ')}");
-                    }
-                }
-            });
-            UnblockAll();
-        }
+        
         private void MainForm_Load(object sender, EventArgs e) {
             bool licenseFail = false;
             string settings = "";
@@ -462,6 +436,7 @@ namespace Shatulsky_Farm {
             var json = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(settings);
             ApikeyBox.Text = json.SteamAPI;
             CouponsKeyBox.Text = json.SteamkeysAPI;
+            CatalogLicenseTextBox.Text = json.CatalogLicense;
             MaxGameCostBox.Text = json.MaxGameCost;
             MaxMoneyBox.Text = json.MaxMoneySpent;
             EmailBox.Text = json.Email;
@@ -976,5 +951,6 @@ namespace Shatulsky_Farm {
             });
             UnblockAll();
         }
+
     }
 }

@@ -26,6 +26,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.ServersRichTextBox = new System.Windows.Forms.RichTextBox();
             this.IPC1GruopBox = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.CatalogLicenseTextBox = new System.Windows.Forms.TextBox();
             this.EmailLable = new System.Windows.Forms.Label();
             this.EmailBox = new System.Windows.Forms.TextBox();
             this.QiwiTokenLable = new System.Windows.Forms.Label();
@@ -47,7 +49,6 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.WastedManeyCountLable = new System.Windows.Forms.Label();
             this.WastedManeyLable = new System.Windows.Forms.Label();
-            this.ActivateUnusedKeysButton = new System.Windows.Forms.Button();
             this.ActivateKeysButton = new System.Windows.Forms.Button();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -71,6 +72,8 @@
             this.ServersRichTextBox2 = new System.Windows.Forms.RichTextBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.SteamBuyGruouBox3 = new System.Windows.Forms.GroupBox();
+            this.KeysCountNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.label3 = new System.Windows.Forms.Label();
             this.radioButtonTF = new System.Windows.Forms.RadioButton();
             this.radioButtonPubg = new System.Windows.Forms.RadioButton();
             this.SteamBuyGruouBox2 = new System.Windows.Forms.GroupBox();
@@ -91,8 +94,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.QIWILoginsBox = new System.Windows.Forms.RichTextBox();
             this.QIWIStartButton = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
-            this.KeysCountNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.IPC1GruopBox.SuspendLayout();
             this.PaymentGroupBox.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -106,25 +107,27 @@
             this.IPCGroupBox.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.SteamBuyGruouBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.KeysCountNumericUpDown)).BeginInit();
             this.SteamBuyGruouBox2.SuspendLayout();
             this.SteamBuyGruouBox1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.QIWIGroupBox2.SuspendLayout();
             this.QIWIGroupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.KeysCountNumericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // ServersRichTextBox
             // 
-            this.ServersRichTextBox.Location = new System.Drawing.Point(6, 37);
+            this.ServersRichTextBox.Location = new System.Drawing.Point(6, 32);
             this.ServersRichTextBox.Name = "ServersRichTextBox";
             this.ServersRichTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.ServersRichTextBox.Size = new System.Drawing.Size(211, 103);
+            this.ServersRichTextBox.Size = new System.Drawing.Size(211, 93);
             this.ServersRichTextBox.TabIndex = 0;
             this.ServersRichTextBox.Text = "";
             // 
             // IPC1GruopBox
             // 
+            this.IPC1GruopBox.Controls.Add(this.label5);
+            this.IPC1GruopBox.Controls.Add(this.CatalogLicenseTextBox);
             this.IPC1GruopBox.Controls.Add(this.EmailLable);
             this.IPC1GruopBox.Controls.Add(this.EmailBox);
             this.IPC1GruopBox.Controls.Add(this.QiwiTokenLable);
@@ -142,10 +145,27 @@
             this.IPC1GruopBox.TabStop = false;
             this.IPC1GruopBox.Text = "Settings";
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 168);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(144, 13);
+            this.label5.TabIndex = 20;
+            this.label5.Text = "License key - steamkeys.ovh";
+            // 
+            // CatalogLicenseTextBox
+            // 
+            this.CatalogLicenseTextBox.Location = new System.Drawing.Point(6, 183);
+            this.CatalogLicenseTextBox.Name = "CatalogLicenseTextBox";
+            this.CatalogLicenseTextBox.PasswordChar = '*';
+            this.CatalogLicenseTextBox.Size = new System.Drawing.Size(211, 20);
+            this.CatalogLicenseTextBox.TabIndex = 19;
+            // 
             // EmailLable
             // 
             this.EmailLable.AutoSize = true;
-            this.EmailLable.Location = new System.Drawing.Point(6, 278);
+            this.EmailLable.Location = new System.Drawing.Point(6, 283);
             this.EmailLable.Name = "EmailLable";
             this.EmailLable.Size = new System.Drawing.Size(32, 13);
             this.EmailLable.TabIndex = 18;
@@ -153,7 +173,7 @@
             // 
             // EmailBox
             // 
-            this.EmailBox.Location = new System.Drawing.Point(6, 293);
+            this.EmailBox.Location = new System.Drawing.Point(6, 298);
             this.EmailBox.Name = "EmailBox";
             this.EmailBox.Size = new System.Drawing.Size(214, 20);
             this.EmailBox.TabIndex = 17;
@@ -161,7 +181,7 @@
             // QiwiTokenLable
             // 
             this.QiwiTokenLable.AutoSize = true;
-            this.QiwiTokenLable.Location = new System.Drawing.Point(6, 235);
+            this.QiwiTokenLable.Location = new System.Drawing.Point(6, 245);
             this.QiwiTokenLable.Name = "QiwiTokenLable";
             this.QiwiTokenLable.Size = new System.Drawing.Size(66, 13);
             this.QiwiTokenLable.TabIndex = 16;
@@ -170,7 +190,7 @@
             // CouponsKeyLable
             // 
             this.CouponsKeyLable.AutoSize = true;
-            this.CouponsKeyLable.Location = new System.Drawing.Point(6, 191);
+            this.CouponsKeyLable.Location = new System.Drawing.Point(6, 207);
             this.CouponsKeyLable.Name = "CouponsKeyLable";
             this.CouponsKeyLable.Size = new System.Drawing.Size(168, 13);
             this.CouponsKeyLable.TabIndex = 6;
@@ -178,7 +198,7 @@
             // 
             // QiwiTokenBox
             // 
-            this.QiwiTokenBox.Location = new System.Drawing.Point(6, 250);
+            this.QiwiTokenBox.Location = new System.Drawing.Point(6, 260);
             this.QiwiTokenBox.Name = "QiwiTokenBox";
             this.QiwiTokenBox.PasswordChar = '*';
             this.QiwiTokenBox.Size = new System.Drawing.Size(214, 20);
@@ -186,7 +206,7 @@
             // 
             // CouponsKeyBox
             // 
-            this.CouponsKeyBox.Location = new System.Drawing.Point(6, 207);
+            this.CouponsKeyBox.Location = new System.Drawing.Point(6, 222);
             this.CouponsKeyBox.Name = "CouponsKeyBox";
             this.CouponsKeyBox.PasswordChar = '*';
             this.CouponsKeyBox.Size = new System.Drawing.Size(211, 20);
@@ -195,7 +215,7 @@
             // ApikeyLable
             // 
             this.ApikeyLable.AutoSize = true;
-            this.ApikeyLable.Location = new System.Drawing.Point(6, 147);
+            this.ApikeyLable.Location = new System.Drawing.Point(6, 128);
             this.ApikeyLable.Name = "ApikeyLable";
             this.ApikeyLable.Size = new System.Drawing.Size(64, 13);
             this.ApikeyLable.TabIndex = 4;
@@ -203,7 +223,7 @@
             // 
             // ApikeyBox
             // 
-            this.ApikeyBox.Location = new System.Drawing.Point(6, 163);
+            this.ApikeyBox.Location = new System.Drawing.Point(6, 143);
             this.ApikeyBox.Name = "ApikeyBox";
             this.ApikeyBox.PasswordChar = '*';
             this.ApikeyBox.Size = new System.Drawing.Size(214, 20);
@@ -212,7 +232,7 @@
             // ServersLabel
             // 
             this.ServersLabel.AutoSize = true;
-            this.ServersLabel.Location = new System.Drawing.Point(3, 21);
+            this.ServersLabel.Location = new System.Drawing.Point(3, 16);
             this.ServersLabel.Name = "ServersLabel";
             this.ServersLabel.Size = new System.Drawing.Size(39, 13);
             this.ServersLabel.TabIndex = 1;
@@ -242,7 +262,7 @@
             // 
             this.BuyGamesButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.BuyGamesButton.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.BuyGamesButton.Location = new System.Drawing.Point(272, 278);
+            this.BuyGamesButton.Location = new System.Drawing.Point(272, 255);
             this.BuyGamesButton.Name = "BuyGamesButton";
             this.BuyGamesButton.Size = new System.Drawing.Size(155, 53);
             this.BuyGamesButton.TabIndex = 2;
@@ -340,19 +360,9 @@
             this.WastedManeyLable.TabIndex = 6;
             this.WastedManeyLable.Text = "Total spent -";
             // 
-            // ActivateUnusedKeysButton
-            // 
-            this.ActivateUnusedKeysButton.Location = new System.Drawing.Point(272, 192);
-            this.ActivateUnusedKeysButton.Name = "ActivateUnusedKeysButton";
-            this.ActivateUnusedKeysButton.Size = new System.Drawing.Size(155, 39);
-            this.ActivateUnusedKeysButton.TabIndex = 18;
-            this.ActivateUnusedKeysButton.Text = "Activate keys from UNUSEDKEYS.TXT";
-            this.ActivateUnusedKeysButton.UseVisualStyleBackColor = true;
-            this.ActivateUnusedKeysButton.Click += new System.EventHandler(this.LootButton_Click);
-            // 
             // ActivateKeysButton
             // 
-            this.ActivateKeysButton.Location = new System.Drawing.Point(272, 235);
+            this.ActivateKeysButton.Location = new System.Drawing.Point(272, 202);
             this.ActivateKeysButton.Name = "ActivateKeysButton";
             this.ActivateKeysButton.Size = new System.Drawing.Size(155, 39);
             this.ActivateKeysButton.TabIndex = 19;
@@ -378,7 +388,6 @@
             this.tabPage1.Controls.Add(this.IPC1GruopBox);
             this.tabPage1.Controls.Add(this.ActivateKeysButton);
             this.tabPage1.Controls.Add(this.PaymentGroupBox);
-            this.tabPage1.Controls.Add(this.ActivateUnusedKeysButton);
             this.tabPage1.Controls.Add(this.groupBox3);
             this.tabPage1.Controls.Add(this.BuyGamesButton);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
@@ -611,6 +620,32 @@
             this.SteamBuyGruouBox3.TabStop = false;
             this.SteamBuyGruouBox3.Text = "What to buy";
             // 
+            // KeysCountNumericUpDown
+            // 
+            this.KeysCountNumericUpDown.Location = new System.Drawing.Point(47, 76);
+            this.KeysCountNumericUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.KeysCountNumericUpDown.Name = "KeysCountNumericUpDown";
+            this.KeysCountNumericUpDown.Size = new System.Drawing.Size(58, 20);
+            this.KeysCountNumericUpDown.TabIndex = 22;
+            this.KeysCountNumericUpDown.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 78);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(35, 13);
+            this.label3.TabIndex = 21;
+            this.label3.Text = "Count";
+            // 
             // radioButtonTF
             // 
             this.radioButtonTF.AutoSize = true;
@@ -810,32 +845,6 @@
             this.QIWIStartButton.UseVisualStyleBackColor = true;
             this.QIWIStartButton.Click += new System.EventHandler(this.button1_Click);
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 78);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(35, 13);
-            this.label3.TabIndex = 21;
-            this.label3.Text = "Count";
-            // 
-            // KeysCountNumericUpDown
-            // 
-            this.KeysCountNumericUpDown.Location = new System.Drawing.Point(47, 76);
-            this.KeysCountNumericUpDown.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.KeysCountNumericUpDown.Name = "KeysCountNumericUpDown";
-            this.KeysCountNumericUpDown.Size = new System.Drawing.Size(58, 20);
-            this.KeysCountNumericUpDown.TabIndex = 22;
-            this.KeysCountNumericUpDown.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -847,7 +856,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "MainForm";
-            this.Text = "Steam Farm Tools v1.4";
+            this.Text = "Steam Farm Tools v1.51";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.IPC1GruopBox.ResumeLayout(false);
             this.IPC1GruopBox.PerformLayout();
@@ -869,6 +878,7 @@
             this.tabPage4.ResumeLayout(false);
             this.SteamBuyGruouBox3.ResumeLayout(false);
             this.SteamBuyGruouBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.KeysCountNumericUpDown)).EndInit();
             this.SteamBuyGruouBox2.ResumeLayout(false);
             this.SteamBuyGruouBox2.PerformLayout();
             this.SteamBuyGruouBox1.ResumeLayout(false);
@@ -878,7 +888,6 @@
             this.QIWIGroupBox2.PerformLayout();
             this.QIWIGroupBox1.ResumeLayout(false);
             this.QIWIGroupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.KeysCountNumericUpDown)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -906,7 +915,6 @@
         public System.Windows.Forms.TextBox MaxMoneyBox;
         public System.Windows.Forms.Label WastedManeyCountLable;
         public System.Windows.Forms.Label WastedManeyLable;
-        public System.Windows.Forms.Button ActivateUnusedKeysButton;
         public System.Windows.Forms.Button ActivateKeysButton;
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tabPage1;
@@ -954,6 +962,8 @@
         private System.Windows.Forms.CheckBox RescanBotsCheckBox;
         private System.Windows.Forms.NumericUpDown KeysCountNumericUpDown;
         public System.Windows.Forms.Label label3;
+        public System.Windows.Forms.Label label5;
+        public System.Windows.Forms.TextBox CatalogLicenseTextBox;
     }
 }
 
