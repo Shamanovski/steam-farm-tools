@@ -6,6 +6,7 @@ namespace Shatulsky_Farm {
         public static string KEY;
         public static string UID;
 
+        public static string IPC_PASSWORD;
 
         public static List<Bot> BOT_LIST;
         public static List<bool> BOTS_LOADING;
@@ -18,6 +19,10 @@ namespace Shatulsky_Farm {
 
         public static Dictionary<string, string> ALL_BOTS_STEAMID_LOGIN;
         public static bool FORSE_STOP;
+
+        public static void getIPCAuthenticationHeader() {
+
+        }
     }
     public class Game :IComparable<Game> {
         public string appid;

@@ -42,6 +42,8 @@
             this.BuyGamesButton = new System.Windows.Forms.Button();
             this.LogBox = new System.Windows.Forms.RichTextBox();
             this.PaymentGroupBox = new System.Windows.Forms.GroupBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.AllownCardsCountTextBox = new System.Windows.Forms.TextBox();
             this.MaxMoneyLable = new System.Windows.Forms.Label();
             this.MaxMoneyBox = new System.Windows.Forms.TextBox();
             this.MaxGameCostLable = new System.Windows.Forms.Label();
@@ -52,15 +54,16 @@
             this.ActivateKeysButton = new System.Windows.Forms.Button();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.UpdateBotsButton = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.IPCGroupBox2 = new System.Windows.Forms.GroupBox();
-            this.RescanBotsCheckBox = new System.Windows.Forms.CheckBox();
             this.AppidTextBox = new System.Windows.Forms.TextBox();
             this.OwnsCheckButton = new System.Windows.Forms.Button();
             this.ManualCommandsGroupBox = new System.Windows.Forms.GroupBox();
             this.ManualCommandBox = new System.Windows.Forms.ComboBox();
             this.ManualCommandButton = new System.Windows.Forms.Button();
             this.CommandsGroupBox = new System.Windows.Forms.GroupBox();
+            this.levelButton = new System.Windows.Forms.Button();
             this.LootAllFarmButton = new System.Windows.Forms.Button();
             this.FarmStatusButton = new System.Windows.Forms.Button();
             this.ScanGroupBox = new System.Windows.Forms.GroupBox();
@@ -72,6 +75,13 @@
             this.ServersRichTextBox2 = new System.Windows.Forms.RichTextBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.SteamBuyGruouBox3 = new System.Windows.Forms.GroupBox();
+            this.textBoxItemId = new System.Windows.Forms.TextBox();
+            this.textBoxGameId = new System.Windows.Forms.TextBox();
+            this.radioButtonCustom = new System.Windows.Forms.RadioButton();
+            this.label8 = new System.Windows.Forms.Label();
+            this.DelayNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
+            this.buyByOneCheckBox = new System.Windows.Forms.CheckBox();
             this.KeysCountNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
             this.radioButtonTF = new System.Windows.Forms.RadioButton();
@@ -107,6 +117,7 @@
             this.IPCGroupBox.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.SteamBuyGruouBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DelayNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.KeysCountNumericUpDown)).BeginInit();
             this.SteamBuyGruouBox2.SuspendLayout();
             this.SteamBuyGruouBox1.SuspendLayout();
@@ -241,7 +252,7 @@
             // BotsLoadedCountLable
             // 
             this.BotsLoadedCountLable.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.BotsLoadedCountLable.Location = new System.Drawing.Point(79, 14);
+            this.BotsLoadedCountLable.Location = new System.Drawing.Point(79, 13);
             this.BotsLoadedCountLable.Name = "BotsLoadedCountLable";
             this.BotsLoadedCountLable.Size = new System.Drawing.Size(67, 18);
             this.BotsLoadedCountLable.TabIndex = 3;
@@ -252,7 +263,7 @@
             // 
             this.BotsLoadedLabel.AutoSize = true;
             this.BotsLoadedLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.BotsLoadedLabel.Location = new System.Drawing.Point(7, 17);
+            this.BotsLoadedLabel.Location = new System.Drawing.Point(8, 16);
             this.BotsLoadedLabel.Name = "BotsLoadedLabel";
             this.BotsLoadedLabel.Size = new System.Drawing.Size(69, 13);
             this.BotsLoadedLabel.TabIndex = 4;
@@ -262,9 +273,9 @@
             // 
             this.BuyGamesButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.BuyGamesButton.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.BuyGamesButton.Location = new System.Drawing.Point(272, 255);
+            this.BuyGamesButton.Location = new System.Drawing.Point(274, 296);
             this.BuyGamesButton.Name = "BuyGamesButton";
-            this.BuyGamesButton.Size = new System.Drawing.Size(155, 53);
+            this.BuyGamesButton.Size = new System.Drawing.Size(155, 35);
             this.BuyGamesButton.TabIndex = 2;
             this.BuyGamesButton.Text = "Buy games";
             this.BuyGamesButton.UseVisualStyleBackColor = true;
@@ -285,21 +296,40 @@
             // 
             // PaymentGroupBox
             // 
+            this.PaymentGroupBox.Controls.Add(this.label9);
+            this.PaymentGroupBox.Controls.Add(this.AllownCardsCountTextBox);
             this.PaymentGroupBox.Controls.Add(this.MaxMoneyLable);
             this.PaymentGroupBox.Controls.Add(this.MaxMoneyBox);
             this.PaymentGroupBox.Controls.Add(this.MaxGameCostLable);
             this.PaymentGroupBox.Controls.Add(this.MaxGameCostBox);
             this.PaymentGroupBox.Location = new System.Drawing.Point(239, 6);
             this.PaymentGroupBox.Name = "PaymentGroupBox";
-            this.PaymentGroupBox.Size = new System.Drawing.Size(226, 104);
+            this.PaymentGroupBox.Size = new System.Drawing.Size(226, 141);
             this.PaymentGroupBox.TabIndex = 7;
             this.PaymentGroupBox.TabStop = false;
             this.PaymentGroupBox.Text = "Payment settings";
             // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(6, 94);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(151, 13);
+            this.label9.TabIndex = 20;
+            this.label9.Text = "Allown cards count (by comas)";
+            // 
+            // AllownCardsCountTextBox
+            // 
+            this.AllownCardsCountTextBox.Location = new System.Drawing.Point(6, 109);
+            this.AllownCardsCountTextBox.Name = "AllownCardsCountTextBox";
+            this.AllownCardsCountTextBox.Size = new System.Drawing.Size(214, 20);
+            this.AllownCardsCountTextBox.TabIndex = 19;
+            this.AllownCardsCountTextBox.Text = "5,6,7,8,9,10,11,12,13,14,15";
+            // 
             // MaxMoneyLable
             // 
             this.MaxMoneyLable.AutoSize = true;
-            this.MaxMoneyLable.Location = new System.Drawing.Point(6, 62);
+            this.MaxMoneyLable.Location = new System.Drawing.Point(6, 56);
             this.MaxMoneyLable.Name = "MaxMoneyLable";
             this.MaxMoneyLable.Size = new System.Drawing.Size(112, 13);
             this.MaxMoneyLable.TabIndex = 18;
@@ -307,7 +337,7 @@
             // 
             // MaxMoneyBox
             // 
-            this.MaxMoneyBox.Location = new System.Drawing.Point(6, 77);
+            this.MaxMoneyBox.Location = new System.Drawing.Point(6, 71);
             this.MaxMoneyBox.Name = "MaxMoneyBox";
             this.MaxMoneyBox.Size = new System.Drawing.Size(214, 20);
             this.MaxMoneyBox.TabIndex = 17;
@@ -315,7 +345,7 @@
             // MaxGameCostLable
             // 
             this.MaxGameCostLable.AutoSize = true;
-            this.MaxGameCostLable.Location = new System.Drawing.Point(6, 22);
+            this.MaxGameCostLable.Location = new System.Drawing.Point(6, 18);
             this.MaxGameCostLable.Name = "MaxGameCostLable";
             this.MaxGameCostLable.Size = new System.Drawing.Size(162, 13);
             this.MaxGameCostLable.TabIndex = 10;
@@ -323,7 +353,7 @@
             // 
             // MaxGameCostBox
             // 
-            this.MaxGameCostBox.Location = new System.Drawing.Point(6, 37);
+            this.MaxGameCostBox.Location = new System.Drawing.Point(6, 33);
             this.MaxGameCostBox.Name = "MaxGameCostBox";
             this.MaxGameCostBox.Size = new System.Drawing.Size(214, 20);
             this.MaxGameCostBox.TabIndex = 9;
@@ -334,16 +364,16 @@
             this.groupBox3.Controls.Add(this.WastedManeyLable);
             this.groupBox3.Controls.Add(this.BotsLoadedCountLable);
             this.groupBox3.Controls.Add(this.BotsLoadedLabel);
-            this.groupBox3.Location = new System.Drawing.Point(239, 116);
+            this.groupBox3.Location = new System.Drawing.Point(241, 150);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(226, 67);
+            this.groupBox3.Size = new System.Drawing.Size(226, 57);
             this.groupBox3.TabIndex = 17;
             this.groupBox3.TabStop = false;
             // 
             // WastedManeyCountLable
             // 
             this.WastedManeyCountLable.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.WastedManeyCountLable.Location = new System.Drawing.Point(79, 39);
+            this.WastedManeyCountLable.Location = new System.Drawing.Point(79, 29);
             this.WastedManeyCountLable.Name = "WastedManeyCountLable";
             this.WastedManeyCountLable.Size = new System.Drawing.Size(67, 18);
             this.WastedManeyCountLable.TabIndex = 5;
@@ -354,7 +384,7 @@
             // 
             this.WastedManeyLable.AutoSize = true;
             this.WastedManeyLable.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.WastedManeyLable.Location = new System.Drawing.Point(7, 42);
+            this.WastedManeyLable.Location = new System.Drawing.Point(8, 32);
             this.WastedManeyLable.Name = "WastedManeyLable";
             this.WastedManeyLable.Size = new System.Drawing.Size(66, 13);
             this.WastedManeyLable.TabIndex = 6;
@@ -362,11 +392,11 @@
             // 
             // ActivateKeysButton
             // 
-            this.ActivateKeysButton.Location = new System.Drawing.Point(272, 202);
+            this.ActivateKeysButton.Location = new System.Drawing.Point(274, 214);
             this.ActivateKeysButton.Name = "ActivateKeysButton";
-            this.ActivateKeysButton.Size = new System.Drawing.Size(155, 39);
+            this.ActivateKeysButton.Size = new System.Drawing.Size(155, 35);
             this.ActivateKeysButton.TabIndex = 19;
-            this.ActivateKeysButton.Text = "Activate all files from \"activate\" folder";
+            this.ActivateKeysButton.Text = "Activate all files from \'/activate\' folder";
             this.ActivateKeysButton.UseVisualStyleBackColor = true;
             this.ActivateKeysButton.Click += new System.EventHandler(this.ActivateKeysButton_Click);
             // 
@@ -385,6 +415,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.UpdateBotsButton);
             this.tabPage1.Controls.Add(this.IPC1GruopBox);
             this.tabPage1.Controls.Add(this.ActivateKeysButton);
             this.tabPage1.Controls.Add(this.PaymentGroupBox);
@@ -397,6 +428,16 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Game keys";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // UpdateBotsButton
+            // 
+            this.UpdateBotsButton.Location = new System.Drawing.Point(274, 255);
+            this.UpdateBotsButton.Name = "UpdateBotsButton";
+            this.UpdateBotsButton.Size = new System.Drawing.Size(155, 35);
+            this.UpdateBotsButton.TabIndex = 20;
+            this.UpdateBotsButton.Text = "Update bots database";
+            this.UpdateBotsButton.UseVisualStyleBackColor = true;
+            this.UpdateBotsButton.Click += new System.EventHandler(this.UpdateBotsDatabseClick);
             // 
             // tabPage3
             // 
@@ -414,27 +455,14 @@
             // 
             // IPCGroupBox2
             // 
-            this.IPCGroupBox2.Controls.Add(this.RescanBotsCheckBox);
             this.IPCGroupBox2.Controls.Add(this.AppidTextBox);
             this.IPCGroupBox2.Controls.Add(this.OwnsCheckButton);
-            this.IPCGroupBox2.Location = new System.Drawing.Point(239, 175);
+            this.IPCGroupBox2.Location = new System.Drawing.Point(239, 102);
             this.IPCGroupBox2.Name = "IPCGroupBox2";
-            this.IPCGroupBox2.Size = new System.Drawing.Size(226, 67);
+            this.IPCGroupBox2.Size = new System.Drawing.Size(226, 53);
             this.IPCGroupBox2.TabIndex = 11;
             this.IPCGroupBox2.TabStop = false;
             this.IPCGroupBox2.Text = "Check appid for owns";
-            // 
-            // RescanBotsCheckBox
-            // 
-            this.RescanBotsCheckBox.AutoSize = true;
-            this.RescanBotsCheckBox.Checked = true;
-            this.RescanBotsCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.RescanBotsCheckBox.Location = new System.Drawing.Point(10, 41);
-            this.RescanBotsCheckBox.Name = "RescanBotsCheckBox";
-            this.RescanBotsCheckBox.Size = new System.Drawing.Size(186, 17);
-            this.RescanBotsCheckBox.TabIndex = 14;
-            this.RescanBotsCheckBox.Text = "Rescan bots games before check";
-            this.RescanBotsCheckBox.UseVisualStyleBackColor = true;
             // 
             // AppidTextBox
             // 
@@ -457,9 +485,9 @@
             // 
             this.ManualCommandsGroupBox.Controls.Add(this.ManualCommandBox);
             this.ManualCommandsGroupBox.Controls.Add(this.ManualCommandButton);
-            this.ManualCommandsGroupBox.Location = new System.Drawing.Point(239, 248);
+            this.ManualCommandsGroupBox.Location = new System.Drawing.Point(239, 175);
             this.ManualCommandsGroupBox.Name = "ManualCommandsGroupBox";
-            this.ManualCommandsGroupBox.Size = new System.Drawing.Size(226, 83);
+            this.ManualCommandsGroupBox.Size = new System.Drawing.Size(226, 156);
             this.ManualCommandsGroupBox.TabIndex = 11;
             this.ManualCommandsGroupBox.TabStop = false;
             this.ManualCommandsGroupBox.Text = "Manual commands";
@@ -473,7 +501,7 @@
             "resume asf",
             "restart",
             "addlicense asf "});
-            this.ManualCommandBox.Location = new System.Drawing.Point(9, 21);
+            this.ManualCommandBox.Location = new System.Drawing.Point(9, 30);
             this.ManualCommandBox.Name = "ManualCommandBox";
             this.ManualCommandBox.Size = new System.Drawing.Size(211, 21);
             this.ManualCommandBox.TabIndex = 13;
@@ -481,9 +509,9 @@
             // 
             // ManualCommandButton
             // 
-            this.ManualCommandButton.Location = new System.Drawing.Point(80, 50);
+            this.ManualCommandButton.Location = new System.Drawing.Point(66, 63);
             this.ManualCommandButton.Name = "ManualCommandButton";
-            this.ManualCommandButton.Size = new System.Drawing.Size(73, 25);
+            this.ManualCommandButton.Size = new System.Drawing.Size(107, 36);
             this.ManualCommandButton.TabIndex = 0;
             this.ManualCommandButton.Text = "Send";
             this.ManualCommandButton.UseVisualStyleBackColor = true;
@@ -491,18 +519,29 @@
             // 
             // CommandsGroupBox
             // 
+            this.CommandsGroupBox.Controls.Add(this.levelButton);
             this.CommandsGroupBox.Controls.Add(this.LootAllFarmButton);
             this.CommandsGroupBox.Controls.Add(this.FarmStatusButton);
-            this.CommandsGroupBox.Location = new System.Drawing.Point(239, 98);
+            this.CommandsGroupBox.Location = new System.Drawing.Point(7, 175);
             this.CommandsGroupBox.Name = "CommandsGroupBox";
-            this.CommandsGroupBox.Size = new System.Drawing.Size(226, 71);
+            this.CommandsGroupBox.Size = new System.Drawing.Size(226, 156);
             this.CommandsGroupBox.TabIndex = 10;
             this.CommandsGroupBox.TabStop = false;
             this.CommandsGroupBox.Text = "Commands";
             // 
+            // levelButton
+            // 
+            this.levelButton.Location = new System.Drawing.Point(51, 105);
+            this.levelButton.Name = "levelButton";
+            this.levelButton.Size = new System.Drawing.Size(107, 36);
+            this.levelButton.TabIndex = 10;
+            this.levelButton.Text = "Level of all bots";
+            this.levelButton.UseVisualStyleBackColor = true;
+            this.levelButton.Click += new System.EventHandler(this.button1_Click_1);
+            // 
             // LootAllFarmButton
             // 
-            this.LootAllFarmButton.Location = new System.Drawing.Point(113, 21);
+            this.LootAllFarmButton.Location = new System.Drawing.Point(51, 63);
             this.LootAllFarmButton.Name = "LootAllFarmButton";
             this.LootAllFarmButton.Size = new System.Drawing.Size(107, 36);
             this.LootAllFarmButton.TabIndex = 9;
@@ -512,9 +551,9 @@
             // 
             // FarmStatusButton
             // 
-            this.FarmStatusButton.Location = new System.Drawing.Point(6, 21);
+            this.FarmStatusButton.Location = new System.Drawing.Point(51, 21);
             this.FarmStatusButton.Name = "FarmStatusButton";
-            this.FarmStatusButton.Size = new System.Drawing.Size(104, 36);
+            this.FarmStatusButton.Size = new System.Drawing.Size(107, 36);
             this.FarmStatusButton.TabIndex = 0;
             this.FarmStatusButton.Text = "Status of all farms";
             this.FarmStatusButton.UseVisualStyleBackColor = true;
@@ -571,7 +610,7 @@
             this.IPCGroupBox.Controls.Add(this.ServersRichTextBox2);
             this.IPCGroupBox.Location = new System.Drawing.Point(7, 6);
             this.IPCGroupBox.Name = "IPCGroupBox";
-            this.IPCGroupBox.Size = new System.Drawing.Size(226, 325);
+            this.IPCGroupBox.Size = new System.Drawing.Size(226, 163);
             this.IPCGroupBox.TabIndex = 2;
             this.IPCGroupBox.TabStop = false;
             this.IPCGroupBox.Text = "Settings";
@@ -590,7 +629,7 @@
             this.ServersRichTextBox2.Location = new System.Drawing.Point(6, 37);
             this.ServersRichTextBox2.Name = "ServersRichTextBox2";
             this.ServersRichTextBox2.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.ServersRichTextBox2.Size = new System.Drawing.Size(211, 282);
+            this.ServersRichTextBox2.Size = new System.Drawing.Size(211, 112);
             this.ServersRichTextBox2.TabIndex = 0;
             this.ServersRichTextBox2.Text = "";
             // 
@@ -609,20 +648,101 @@
             // 
             // SteamBuyGruouBox3
             // 
+            this.SteamBuyGruouBox3.Controls.Add(this.textBoxItemId);
+            this.SteamBuyGruouBox3.Controls.Add(this.textBoxGameId);
+            this.SteamBuyGruouBox3.Controls.Add(this.radioButtonCustom);
+            this.SteamBuyGruouBox3.Controls.Add(this.label8);
+            this.SteamBuyGruouBox3.Controls.Add(this.DelayNumericUpDown);
+            this.SteamBuyGruouBox3.Controls.Add(this.label7);
+            this.SteamBuyGruouBox3.Controls.Add(this.buyByOneCheckBox);
             this.SteamBuyGruouBox3.Controls.Add(this.KeysCountNumericUpDown);
             this.SteamBuyGruouBox3.Controls.Add(this.label3);
             this.SteamBuyGruouBox3.Controls.Add(this.radioButtonTF);
             this.SteamBuyGruouBox3.Controls.Add(this.radioButtonPubg);
             this.SteamBuyGruouBox3.Location = new System.Drawing.Point(239, 79);
             this.SteamBuyGruouBox3.Name = "SteamBuyGruouBox3";
-            this.SteamBuyGruouBox3.Size = new System.Drawing.Size(225, 113);
+            this.SteamBuyGruouBox3.Size = new System.Drawing.Size(225, 195);
             this.SteamBuyGruouBox3.TabIndex = 19;
             this.SteamBuyGruouBox3.TabStop = false;
             this.SteamBuyGruouBox3.Text = "What to buy";
             // 
+            // textBoxItemId
+            // 
+            this.textBoxItemId.Location = new System.Drawing.Point(140, 65);
+            this.textBoxItemId.Name = "textBoxItemId";
+            this.textBoxItemId.Size = new System.Drawing.Size(62, 20);
+            this.textBoxItemId.TabIndex = 29;
+            this.textBoxItemId.Text = "itemid";
+            this.textBoxItemId.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // textBoxGameId
+            // 
+            this.textBoxGameId.Location = new System.Drawing.Point(74, 65);
+            this.textBoxGameId.Name = "textBoxGameId";
+            this.textBoxGameId.Size = new System.Drawing.Size(60, 20);
+            this.textBoxGameId.TabIndex = 28;
+            this.textBoxGameId.Text = "gameid";
+            this.textBoxGameId.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // radioButtonCustom
+            // 
+            this.radioButtonCustom.AutoSize = true;
+            this.radioButtonCustom.Location = new System.Drawing.Point(9, 66);
+            this.radioButtonCustom.Name = "radioButtonCustom";
+            this.radioButtonCustom.Size = new System.Drawing.Size(60, 17);
+            this.radioButtonCustom.TabIndex = 27;
+            this.radioButtonCustom.TabStop = true;
+            this.radioButtonCustom.Text = "Custom";
+            this.radioButtonCustom.UseVisualStyleBackColor = true;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(178, 161);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(24, 13);
+            this.label8.TabIndex = 26;
+            this.label8.Text = "sec";
+            // 
+            // DelayNumericUpDown
+            // 
+            this.DelayNumericUpDown.Location = new System.Drawing.Point(135, 159);
+            this.DelayNumericUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.DelayNumericUpDown.Name = "DelayNumericUpDown";
+            this.DelayNumericUpDown.Size = new System.Drawing.Size(39, 20);
+            this.DelayNumericUpDown.TabIndex = 25;
+            this.DelayNumericUpDown.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 161);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(130, 13);
+            this.label7.TabIndex = 24;
+            this.label7.Text = "Delay between purchases";
+            // 
+            // buyByOneCheckBox
+            // 
+            this.buyByOneCheckBox.AutoSize = true;
+            this.buyByOneCheckBox.Location = new System.Drawing.Point(9, 141);
+            this.buyByOneCheckBox.Name = "buyByOneCheckBox";
+            this.buyByOneCheckBox.Size = new System.Drawing.Size(108, 17);
+            this.buyByOneCheckBox.TabIndex = 23;
+            this.buyByOneCheckBox.Text = "Buy one at a time";
+            this.buyByOneCheckBox.UseVisualStyleBackColor = true;
+            // 
             // KeysCountNumericUpDown
             // 
-            this.KeysCountNumericUpDown.Location = new System.Drawing.Point(47, 76);
+            this.KeysCountNumericUpDown.Location = new System.Drawing.Point(47, 111);
             this.KeysCountNumericUpDown.Minimum = new decimal(new int[] {
             1,
             0,
@@ -640,7 +760,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 78);
+            this.label3.Location = new System.Drawing.Point(6, 113);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(35, 13);
             this.label3.TabIndex = 21;
@@ -649,7 +769,7 @@
             // radioButtonTF
             // 
             this.radioButtonTF.AutoSize = true;
-            this.radioButtonTF.Location = new System.Drawing.Point(9, 46);
+            this.radioButtonTF.Location = new System.Drawing.Point(9, 43);
             this.radioButtonTF.Name = "radioButtonTF";
             this.radioButtonTF.Size = new System.Drawing.Size(64, 17);
             this.radioButtonTF.TabIndex = 6;
@@ -660,7 +780,7 @@
             // radioButtonPubg
             // 
             this.radioButtonPubg.AutoSize = true;
-            this.radioButtonPubg.Location = new System.Drawing.Point(9, 23);
+            this.radioButtonPubg.Location = new System.Drawing.Point(9, 20);
             this.radioButtonPubg.Name = "radioButtonPubg";
             this.radioButtonPubg.Size = new System.Drawing.Size(76, 17);
             this.radioButtonPubg.TabIndex = 5;
@@ -738,7 +858,7 @@
             // SteamBuyButton
             // 
             this.SteamBuyButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.SteamBuyButton.Location = new System.Drawing.Point(276, 212);
+            this.SteamBuyButton.Location = new System.Drawing.Point(274, 280);
             this.SteamBuyButton.Name = "SteamBuyButton";
             this.SteamBuyButton.Size = new System.Drawing.Size(156, 51);
             this.SteamBuyButton.TabIndex = 0;
@@ -856,7 +976,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "MainForm";
-            this.Text = "Steam Farm Tools v1.51";
+            this.Text = "Steam Farm Tools v1.8";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.IPC1GruopBox.ResumeLayout(false);
             this.IPC1GruopBox.PerformLayout();
@@ -878,6 +998,7 @@
             this.tabPage4.ResumeLayout(false);
             this.SteamBuyGruouBox3.ResumeLayout(false);
             this.SteamBuyGruouBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DelayNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.KeysCountNumericUpDown)).EndInit();
             this.SteamBuyGruouBox2.ResumeLayout(false);
             this.SteamBuyGruouBox2.PerformLayout();
@@ -959,11 +1080,21 @@
         public System.Windows.Forms.GroupBox QIWIGroupBox1;
         public System.Windows.Forms.Label label2;
         public System.Windows.Forms.RichTextBox QIWILoginsBox;
-        private System.Windows.Forms.CheckBox RescanBotsCheckBox;
         private System.Windows.Forms.NumericUpDown KeysCountNumericUpDown;
         public System.Windows.Forms.Label label3;
         public System.Windows.Forms.Label label5;
         public System.Windows.Forms.TextBox CatalogLicenseTextBox;
+        private System.Windows.Forms.Button levelButton;
+        private System.Windows.Forms.CheckBox buyByOneCheckBox;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.NumericUpDown DelayNumericUpDown;
+        public System.Windows.Forms.Label label7;
+        public System.Windows.Forms.Label label9;
+        public System.Windows.Forms.TextBox AllownCardsCountTextBox;
+        private System.Windows.Forms.TextBox textBoxItemId;
+        private System.Windows.Forms.TextBox textBoxGameId;
+        private System.Windows.Forms.RadioButton radioButtonCustom;
+        public System.Windows.Forms.Button UpdateBotsButton;
     }
 }
 

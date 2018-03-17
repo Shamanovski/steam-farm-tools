@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Shatulsky_Farm {
     public class Bot {
@@ -7,6 +9,10 @@ namespace Shatulsky_Farm {
         public string steamID;
         public string vds;
         public List<string> gamesHave;
+
+        public Bot() {
+            Program.GetForm.MyMainForm.IncreaseBotsCount();
+        }
 
         public Bot(string login, string steamID, string VDS) {
             this.login = login;
@@ -30,6 +36,7 @@ namespace Shatulsky_Farm {
                 #endregion
                 Program.GetForm.MyMainForm.IncreaseBotsCount();
             }
+            File.WriteAllText($"bots/{steamID}.json", JsonConvert.SerializeObject(this));
         }
 
         public Bot(string login, string VDS) {
@@ -37,30 +44,44 @@ namespace Shatulsky_Farm {
             this.vds = VDS;
         }
 
+        public static void AllBotsToDatabase(string VDS, bool loadFromFileAllowed = true) {
+            Directory.CreateDirectory("bots");
+            var botsFiles = new List<string>(Directory.GetFileSystemEntries("bots"));
 
-
-        public static void AllBotsToDatabase(string VDS) {
-            var command = $"http://{VDS}/IPC?command=";
-            var response = Request.getResponse(command + "!api asf");
+            var command = $"http://{VDS}/";
+            var response = Request.getResponse(command + "Api/Bot/asf");
             var json = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(response);
-            var bots = json["Bots"];
+            var bots = json["Result"];
             foreach (var bot in bots) {
-                if (bot.Value.SteamID.ToString() == "0") {
+                if (bot.SteamID.ToString() == "0") {
                     Program.GetForm.MyMainForm.AddLogBold($"SteamID=0 - {VDS} {bot.Name}");
                     continue;
                 }
-                Database.BOT_LIST.Add(new Bot(bot.Name, bot.Value.SteamID.ToString(), VDS));
+
+                if (botsFiles.Contains($"bots\\{bot.SteamID.Value.ToString()}.json") && loadFromFileAllowed) {
+                    Bot botFromFile = JsonConvert.DeserializeObject<Bot>(File.ReadAllText($"bots/{bot.SteamID.Value.ToString()}.json"));
+                    Database.BOT_LIST.Add(botFromFile);
+                }
+                else {
+                    Database.BOT_LIST.Add(new Bot(bot.BotName.Value, bot.SteamID.Value.ToString(), VDS));
+                }
             }
         }
 
+
         public static void AllBotsToDatabaseNoSteamID(string VDS) {
-            var command = $"http://{VDS}/IPC?command=";
-            var response = Request.getResponse(command + "!api asf");
+            var command = $"http://{VDS}/";
+            var response = Request.getResponse(command + "Api/Bot/asf");
             var json = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(response);
-            var bots = json["Bots"];
+            var bots = json["Result"];
             foreach (var bot in bots) {
                 Database.BOT_LIST.Add(new Bot(bot.Name, VDS));
             }
+        }
+
+        internal void UpdateFile() {
+            string output = JsonConvert.SerializeObject(this);
+            File.WriteAllText($"bots/{steamID}.json", JsonConvert.SerializeObject(this));
         }
     }
 }

@@ -12,10 +12,15 @@ namespace Shatulsky_Farm {
             System.Net.WebClient web = new System.Net.WebClient();
             web.Encoding = UTF8Encoding.UTF8;
             web.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36");
-            if (cookies1 != "")
+            if (cookies1 != "") {
                 web.Headers.Add(HttpRequestHeader.Cookie, cookies1);
+            }
+
+            if (!String.IsNullOrEmpty(Database.IPC_PASSWORD)) {
+                web.Headers.Add("Authentication", Database.IPC_PASSWORD);
+            }
             string html = "";
-            try { html = web.DownloadString(uri); } catch(Exception ex){
+            try { html = web.DownloadString(uri); } catch (Exception ex) {
                 addRequestLog(uri);
                 System.Threading.Thread.Sleep(10000);
                 html = getResponse(uri);
@@ -48,8 +53,17 @@ namespace Shatulsky_Farm {
             }
         }
 
+        public static string postResponse(string Url) {
+            string[] cook = new string[0];
+            return POST(Url, "", out cook);
+        }
+
         public static string POST(string Url, string postData, out string[] setCookies) {
             var request = (HttpWebRequest)WebRequest.Create(Url);
+
+            if (!String.IsNullOrEmpty(Database.IPC_PASSWORD)) {
+                request.Headers.Add("Authentication", Database.IPC_PASSWORD);
+            }
 
             var data = Encoding.ASCII.GetBytes(postData);
 
@@ -66,7 +80,6 @@ namespace Shatulsky_Farm {
 
             var returnValue = new StreamReader(response1.GetResponseStream()).ReadToEnd();
             setCookies = response1.Headers.GetValues("Set-Cookie");
-
 
             return returnValue;
         }
@@ -88,6 +101,9 @@ namespace Shatulsky_Farm {
             using (var webClient = new WebClient()) {
                 var uri = new Uri(url);
                 HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(url);
+                if (!String.IsNullOrEmpty(Database.IPC_PASSWORD)) {
+                    webRequest.Headers.Add("Authentication", Database.IPC_PASSWORD);
+                }
                 foreach (var nameValue in cookieNameValues) {
                     webRequest.TryAddCookie(new Cookie(nameValue.Key, nameValue.Value, "/", uri.Host));
                 }
@@ -118,6 +134,9 @@ namespace Shatulsky_Farm {
             string responseFromServer = "";
             try {
                 WebRequest request = WebRequest.Create(url);
+                if (!String.IsNullOrEmpty(Database.IPC_PASSWORD) && !url.Contains("steampowered")) {
+                    request.Headers.Add("Authentication", Database.IPC_PASSWORD);
+                }
                 request.Method = "POST";
                 string postData = data;
                 request.ContentType = "application/x-www-form-urlencoded";

@@ -24,6 +24,7 @@ namespace Shatulsky_Farm {
 
         private async void StartButton_Click(object sender, EventArgs e) {
             BlockAll();
+            List<string> allownGameCardsCount = Program.GetForm.MyMainForm.AllownCardsCountTextBox.Text.Split(',').ToList<string>();
             Database.FORSE_STOP = false;
             if (Program.GetForm.MyMainForm.BuyGamesButton.Text == "Forse buying process stop") {
                 Program.GetForm.MyMainForm.AddLog("Buying process will stop on next loop");
@@ -115,7 +116,10 @@ namespace Shatulsky_Farm {
                         double amount = (item.Value.amount.Value.ToString() == "N/A") ? 0 : item.Value.amount.Value;
                         string store = item.Value.store.Value;
                         string game_name = item.Value.game_name.Value;
-                        Database.ALL_GAMES_LIST.Add(new Game(appid, lequeshop_id, price, amount, store, game_name));
+                        string cards_in_set = item.Value.cards_in_set.Value.ToString();
+                        if (allownGameCardsCount.Contains(cards_in_set)) {
+                            Database.ALL_GAMES_LIST.Add(new Game(appid, lequeshop_id, price, amount, store, game_name));
+                        }
                     }
                     #endregion
 
@@ -289,9 +293,9 @@ namespace Shatulsky_Farm {
                                 if (!bot.gamesHave.Contains(appid)) {
                                     Regex regex = new Regex(@"\w{5}-\w{5}-\w{5}");
                                     var key = regex.Match(line);
-                                    var command = $"http://{bot.vds}/IPC?command=";
+                                    var command = $"http://{bot.vds}/Api/Command/";
                                     command += $"!redeem^ {bot.login} SD,SF {key}";
-                                    var keysResponse = Request.getResponse(command);
+                                    var keysResponse = Request.postResponse(command);
                                     File.AppendAllText($"responses.txt", $"\n{DateTime.Now} {bot.vds} {bot.login} {appid} {buyLink} - {keysResponse}");
 
                                     if (keysResponse.Contains("Timeout")) {
@@ -306,6 +310,7 @@ namespace Shatulsky_Farm {
                                         File.AppendAllText("BadActivations.txt", $"{bot.vds},{bot.login},{game.store},{key},{keysResponse.Replace('\r', ' ').Replace('\n', ' ')}\n");
                                     }
                                     bot.gamesHave.Add(appid);
+                                    bot.UpdateFile();
                                     break;
                                 }
                             }
@@ -385,6 +390,7 @@ namespace Shatulsky_Farm {
             Program.GetForm.MyMainForm.SteamBuyGruouBox2.Enabled = false;
             Program.GetForm.MyMainForm.SteamBuyGruouBox3.Enabled = false;
             Program.GetForm.MyMainForm.SteamBuyButton.Enabled = false;
+            Program.GetForm.MyMainForm.UpdateBotsButton.Enabled = false;
 
         }
         public void UnblockAll() {
@@ -407,6 +413,7 @@ namespace Shatulsky_Farm {
             Program.GetForm.MyMainForm.SteamBuyGruouBox2.Enabled = true;
             Program.GetForm.MyMainForm.SteamBuyGruouBox3.Enabled = true;
             Program.GetForm.MyMainForm.SteamBuyButton.Enabled = true;
+            Program.GetForm.MyMainForm.UpdateBotsButton.Enabled = true;
         }
         private class DescendingComparer : IComparer<string> {
             int IComparer<string>.Compare(string a, string b) {
@@ -417,7 +424,7 @@ namespace Shatulsky_Farm {
             LogBox.SelectionStart = LogBox.TextLength;
             LogBox.ScrollToCaret();
         }
-        
+
         private void MainForm_Load(object sender, EventArgs e) {
             bool licenseFail = false;
             string settings = "";
@@ -454,6 +461,9 @@ namespace Shatulsky_Farm {
             for (int i = 0; i < json.BlacklistAppids.Count; i++) {
                 Database.BLACKLIST.Add(json.BlacklistAppids[i].Value);
             }
+            try {
+                Database.IPC_PASSWORD = json.IPC_PASSWORD.Value;
+            } catch { }
             LogBox.Text = $"The program is started {System.DateTime.Now}\n";
 
             string uid = string.Empty;
@@ -562,9 +572,9 @@ namespace Shatulsky_Farm {
 
                                     Regex regex = new Regex(@"\w{5}-\w{5}-\w{5}");
                                     var key = regex.Match(keys[i]);
-                                    var command = $"http://{bot.vds}/IPC?command=";
+                                    var command = $"http://{bot.vds}/Api/Command/";
                                     command += $"!redeem^ {bot.login} SD,SF {key}";
-                                    var response = Request.getResponse(command);
+                                    var response = Request.postResponse(command);
 
                                     File.AppendAllText($"responses.txt", $"\n{DateTime.Now} {bot.vds} {bot.login} {appid} - {response}");
 
@@ -590,6 +600,11 @@ namespace Shatulsky_Farm {
                                         break;
                                     }
 
+                                    if (response.Contains("RateLimited") || response.Contains("AlreadyPurchased")) {
+                                        botCount++;
+                                        bot.gamesHave.Add(appid);
+                                    }
+                                    bot.UpdateFile();
                                 }
                             }
                         }
@@ -666,17 +681,18 @@ namespace Shatulsky_Farm {
             await Task.Run(() => {
                 var totalCount = 0;
                 foreach (var VDS in VDSs) {
-                    var command = $"http://{VDS}/IPC?command=";
-                    var response = Request.getResponse(command + "!api asf");
+                    var command = $"http://{VDS}/";
+                    var response = Request.getResponse(command + "Api/Bot/asf");
                     var json = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(response);
-                    var bots = json["Bots"];
+                    var bots = json["Result"];
                     Database.ALL_BOTS_STEAMID_LOGIN = new Dictionary<string, string>();
                     foreach (var bot in bots) {
-                        if (bot.Value.SteamID.ToString() == "0") {
-                            Program.GetForm.MyMainForm.AddLogBold($"SteamID=0 - {VDS} {bot.Name}");
-                            continue;
+                        if (bot.SteamID.ToString() == "0") {
+                            Program.GetForm.MyMainForm.AddLogBold($"SteamID=0 - {VDS} {bot.BotName}");
                         }
-                        Database.ALL_BOTS_STEAMID_LOGIN.Add(bot.Value.SteamID.ToString(), bot.Name);
+                        else {
+                            Database.ALL_BOTS_STEAMID_LOGIN.Add(bot.SteamID.ToString(), bot.BotName.Value);
+                        }
                     }
                     foreach (var bot in Database.ALL_BOTS_STEAMID_LOGIN) {
                         var invResponse = Request.getResponse($"http://steamcommunity.com/inventory/{bot.Key}/{InvId}/{InvAssetsId}?l=english&count=1");
@@ -709,9 +725,11 @@ namespace Shatulsky_Farm {
                 int cardsLeft = 0;
 
                 foreach (var VDS in VDSs) {
-                    var statusResponse = Request.getResponse($"http://{VDS}/IPC?command=!sa").Replace("\r", "");
-                    foreach (var line in statusResponse.Split('\n')) {
-                        if (line == "") continue;
+                    var statusResponse = Request.postResponse($"http://{VDS}/Api/Command/!sa");
+                    statusResponse = statusResponse.Replace("\\r", "");
+                    var splitedResponse = statusResponse.Split(new[] { "\\n" }, StringSplitOptions.None);
+                    foreach (var line in splitedResponse) {
+                        if (!line.Contains("<") && !line.Contains("bots running")) continue;
 
                         if (!line.Contains("There are ")) {
                             var botName = line.Split('<')[1].Split('>')[0];
@@ -727,7 +745,8 @@ namespace Shatulsky_Farm {
                             Program.GetForm.MyMainForm.AddLogNoDate($"{botName} - {status}");
                         }
                         else {
-                            cardsLeft += int.Parse(line.Split('(')[1].Split(' ')[0]);
+                            var cards = line.Split('(')[1].Split(' ')[0];
+                            cardsLeft += int.Parse(cards);
                         }
                     }
                 }
@@ -763,16 +782,16 @@ namespace Shatulsky_Farm {
             foreach (var VDS in VDSs) {
 #pragma warning disable CS4014
                 Task.Run(() => {
-                    var command = $"http://{VDS}/IPC?command=";
-                    var response = Request.getResponse(command + "!api asf");
+                    var command = $"http://{VDS}/";
+                    var response = Request.getResponse(command + "Api/Bot/asf");
                     var json = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(response);
-                    var bots = json["Bots"];
+                    var bots = json["Result"];
                     var allBots = new List<string>();
                     foreach (var bot in bots) {
-                        allBots.Add(bot.Name);
+                        allBots.Add(bot.BotName.Value);
                     }
                     foreach (var bot in allBots) {
-                        var lootResponse = Request.getResponse($"http://{VDS}/IPC?command=!loot {bot}");
+                        var lootResponse = Request.getResponse($"http://{VDS}/Api/Command/!loot {bot}");
                         Program.GetForm.MyMainForm.AddLog(VDS + lootResponse);
                         Thread.Sleep(15000);
                     }
@@ -807,7 +826,7 @@ namespace Shatulsky_Farm {
 
             await Task.Run(() => {
                 foreach (var VDS in VDSs) {
-                    var command = $"http://{VDS}/IPC?command=!" + commandFromBox;
+                    var command = $"http://{VDS}/Api/Command/" + commandFromBox;
                     var response = Request.getResponse(command);
                     Program.GetForm.MyMainForm.AddLog(response);
                 }
@@ -820,6 +839,12 @@ namespace Shatulsky_Farm {
             BlockAll();
             var allBotsInfo = new Dictionary<string, string>();
             var keysCount = Program.GetForm.MyMainForm.KeysCountNumericUpDown.Value.ToString();
+            int loops = 1;
+            if (Program.GetForm.MyMainForm.buyByOneCheckBox.Checked) {
+                loops = int.Parse(keysCount);
+                keysCount = "1";
+            }
+            var delay = int.Parse(Program.GetForm.MyMainForm.DelayNumericUpDown.Value.ToString()) * 1000;
             #region Загрузка мафайлов
             await Task.Run(() => {
                 Program.GetForm.MyMainForm.AddLog("Mafiles processing started.");
@@ -836,7 +861,6 @@ namespace Shatulsky_Farm {
 
             var accounts = Program.GetForm.MyMainForm.SteamBuyAccounts.Text.Split('\n');
             await Task.Run(() => {
-                int count = 0;
                 foreach (var account in accounts) {
                     #region Данные аккаунта
                     var accSpl = account.Split(':');
@@ -863,32 +887,36 @@ namespace Shatulsky_Farm {
                     var buyLink = "";
                     if (Program.GetForm.MyMainForm.radioButtonTF.Checked) buyLink = "https://store.steampowered.com/buyitem/440/5021/" + keysCount;
                     if (Program.GetForm.MyMainForm.radioButtonPubg.Checked) buyLink = "http://store.steampowered.com/buyitem/578080/35100001/" + keysCount;
+                    if (Program.GetForm.MyMainForm.radioButtonCustom.Checked) buyLink = "http://" + $"store.steampowered.com/buyitem/{Program.GetForm.MyMainForm.textBoxGameId.Text}/{Program.GetForm.MyMainForm.textBoxItemId.Text}/" + keysCount;
                     #endregion
+                    for (int i = 0; i < loops; i++) {
+                        #region Покупка
+                        CookieCollection storeCookies = new CookieCollection();
+                        var response = Request.getSteamResponse(buyLink, steamCookies, out storeCookies);
 
-                    #region Покупка
-                    CookieCollection storeCookies = new CookieCollection();
-                    var response = Request.getSteamResponse(buyLink, steamCookies, out storeCookies);
+                        Match m1 = new Regex(@"name=""returnurl"" value=""(.+)""").Match(response);
+                        var returnUrl = m1.Groups[1];
 
-                    Match m1 = new Regex(@"name=""returnurl"" value=""(.+)""").Match(response);
-                    var returnUrl = m1.Groups[1];
+                        Match m2 = new Regex(@"name=""transaction_id"" value=""(.+)""").Match(response);
+                        var transId = m2.Groups[1];
 
-                    Match m2 = new Regex(@"name=""transaction_id"" value=""(.+)""").Match(response);
-                    var transId = m2.Groups[1];
-
-                    Match m3 = new Regex(@"name=""sessionid"" value=""(.+)""").Match(response);
-                    var postSession = m3.Groups[1];
+                        Match m3 = new Regex(@"name=""sessionid"" value=""(.+)""").Match(response);
+                        var postSession = m3.Groups[1];
 
 
-                    var postData = "transaction_id=" + transId;
-                    postData += "&returnurl=" + returnUrl.ToString().Replace(";", "%2F&");
-                    postData += "&sessionid=" + postSession;
-                    postData += "&approved=1";
+                        var postData = "transaction_id=" + transId;
+                        postData += "&returnurl=" + returnUrl.ToString().Replace(";", "%2F&");
+                        postData += "&sessionid=" + postSession;
+                        postData += "&approved=1";
 
-                    var postResponse = Request.SendPostRequest("https://store.steampowered.com/checkout/approvetxnsubmit", postData, storeCookies);
-                    if (postResponse.Contains("произошла непредвиденная ошибка") || postResponse.Contains("произошла ошибка") || postResponse.Contains("unexpected error"))
-                        throw new Exception($"Cant buy items for {login}");
-                    Program.GetForm.MyMainForm.AddLog($"{login} - DONE [{++count}/{accounts.Count()}]");
-                    #endregion
+                        var postResponse = Request.SendPostRequest("https://store.steampowered.com/checkout/approvetxnsubmit", postData, storeCookies);
+                        if (postResponse.Contains("произошла непредвиденная ошибка") || postResponse.Contains("произошла ошибка") || postResponse.Contains("unexpected error"))
+                            throw new Exception($"Cant buy items for {login}");
+
+                        Program.GetForm.MyMainForm.AddLog($"{login} - DONE [{i + 1}/{loops}]");
+                        #endregion
+                        Thread.Sleep(delay);
+                    }
                 }
             });
             UnblockAll();
@@ -913,33 +941,6 @@ namespace Shatulsky_Farm {
                     VDSs.RemoveAt(i--);
             }
             #endregion
-            if (Program.GetForm.MyMainForm.RescanBotsCheckBox.Checked) {
-                Database.BOT_LIST = new List<Bot>();
-                Database.BOTS_LOADING = new List<bool>();
-                for (int i = 0; i < VDSs.Count; i++) {
-                    var VDS = VDSs[i];
-
-                    if (VDS != string.Empty) {
-#pragma warning disable CS4014
-                        Task.Run(() => {
-                            AddLog($"{VDS} - bots loading started");
-                            Bot.AllBotsToDatabase(VDS);
-                            Database.BOTS_LOADING.Add(true);
-                            AddLog($"{VDS} - bots loading done");
-                        });
-#pragma warning restore CS4014
-                    }
-                }
-                await Task.Run(() => {
-                    bool done = false;
-                    while (!done) {
-                        if (Database.BOTS_LOADING.Count == VDSs.Count)
-                            break;
-                        Thread.Sleep(1000);
-                    }
-                });
-            }
-
             #endregion
             var appID = Program.GetForm.MyMainForm.AppidTextBox.Text;
             await Task.Run(() => {
@@ -952,5 +953,94 @@ namespace Shatulsky_Farm {
             UnblockAll();
         }
 
+        private async void button1_Click_1(object sender, EventArgs e) {
+            BlockAll();
+
+            #region Загрузка VDS
+            var VDSs = ServersRichTextBox2.Text.Split('\n').ToList();
+            #region удалить пустые строки
+            for (int i = 0; i < VDSs.Count; i++) {
+                if (VDSs[i] == "" || VDSs[i] == "\n")
+                    VDSs.RemoveAt(i--);
+            }
+            #endregion
+
+            #endregion
+
+            await Task.Run(() => {
+                var totalCount = 0;
+                foreach (var VDS in VDSs) {
+                    var command = $"http://{VDS}/";
+                    var response = Request.getResponse(command + "Api/Bot/asf");
+                    var json = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(response);
+                    var bots = json["Result"];
+                    Database.ALL_BOTS_STEAMID_LOGIN = new Dictionary<string, string>();
+                    foreach (var bot in bots) {
+                        if (bot.SteamID.ToString() == "0") {
+                            Program.GetForm.MyMainForm.AddLogBold($"SteamID=0 - {VDS} {bot.BotName}");
+                        }
+                        else {
+                            Database.ALL_BOTS_STEAMID_LOGIN.Add(bot.SteamID.ToString(), bot.BotName.Value);
+                        }
+                    }
+                    foreach (var bot in Database.ALL_BOTS_STEAMID_LOGIN) {
+                        var lvlResponse = Request.getResponse($"http://api.steampowered.com/IPlayerService/GetSteamLevel/v1/?key={Program.GetForm.MyMainForm.ApikeyBox.Text}&steamid={bot.Key}");
+                        var lvlJson = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(lvlResponse);
+                        Program.GetForm.MyMainForm.AddLog($"{bot.Value} - {lvlJson.response.player_level.Value}");
+                    }
+                }
+                Program.GetForm.MyMainForm.AddLog($"Total items - {totalCount}.");
+            });
+            UnblockAll();
+        }
+
+        private async void UpdateBotsDatabseClick(object sender, EventArgs e) {
+            BlockAll();
+            #region Настройки Database
+            await Task.Run(() => {
+                Database.BOT_LIST = new List<Bot>();
+                Database.BOTS_LOADING = new List<bool>();
+            });
+            #endregion
+
+            #region Загрузка VDS
+            var VDSs = ServersRichTextBox.Text.Split('\n').ToList();
+            #region удалить пустые строки
+            for (int i = 0; i < VDSs.Count; i++) {
+                if (VDSs[i] == "" || VDSs[i] == "\n")
+                    VDSs.RemoveAt(i--);
+            }
+            #endregion
+
+            for (int i = 0; i < VDSs.Count; i++) {
+                var VDS = VDSs[i];
+
+                if (VDS != string.Empty) {
+#pragma warning disable CS4014
+                    Task.Run(() => {
+                        AddLog($"{VDS} - bots loading started");
+                        Bot.AllBotsToDatabase(VDS, false);
+                        Database.BOTS_LOADING.Add(true);
+                        AddLog($"{VDS} - bots loading done");
+                    });
+#pragma warning restore CS4014
+                }
+            }
+
+            await Task.Run(() => {
+                bool done = false;
+                while (!done) {
+                    if (Database.BOTS_LOADING.Count == VDSs.Count)
+                        break;
+                    Thread.Sleep(1000);
+                }
+            });
+            #endregion
+            UnblockAll();
+        }
+
+        private void RescanBotsCheckBox_CheckedChanged(object sender, EventArgs e) {
+
+        }
     }
 }
